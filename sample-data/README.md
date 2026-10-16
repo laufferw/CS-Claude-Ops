@@ -5,6 +5,7 @@ A fictional book of 12 accounts for one CSM, for trying the prompts and the scor
 | File | What it is |
 |---|---|
 | [`accounts.csv`](accounts.csv) | Raw signals per account, the input to scoring |
+| [`roi-inputs.json`](roi-inputs.json) | Inputs for the [ROI calculator](../tools/README.md#roi-calculator) for a fictional 8-CSM team |
 | [`scored-accounts.csv`](scored-accounts.csv) | The same accounts scored as of 2026-10-01, sorted by priority. The input to the [Weekly CSM Brief](../prompts/weekly-csm-brief.md) |
 
 Regenerate the scored file after changing the data or the rubric:

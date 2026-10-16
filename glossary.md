@@ -13,6 +13,7 @@ Terms as this repo uses them. Where a doc defines a term precisely, the entry li
 | **Downgrade** | A renewal at lower ARR: fewer seats, a smaller plan, or less scope. Treated as a risk, not a negotiation point |
 | **Expansion** | Added ARR from an existing customer: more seats, products, or teams. See [Expansion](playbooks/expansion.md) |
 | **Expansion signal** | Evidence an account may want to expand. It becomes an opportunity only after the [qualification checks](playbooks/expansion.md#qualify-first) |
+| **Gross churn rate** | ARR lost to churn and downgrades in a year, as a share of ARR at the start of the year. Expansion does not offset it |
 | **Renewal** | The customer signing for another term. See [Renewal](playbooks/renewal.md) |
 
 ## Health scoring
@@ -84,6 +85,18 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **SOW** | Statement of work: the scope, deliverables, and timeline for a specific piece of work |
 | **SLA** | Service level agreement: commitments on response times, uptime, or similar. See [SLA Pushback](playbooks/sla-pushback.md) |
 | **Redline** | A marked-up draft of a contract showing proposed changes. See [Contract Redline Summary](prompts/contract-redline-summary.md) |
+
+## Business case
+
+Used by the [ROI calculator](tools/README.md#roi-calculator).
+
+| Term | Meaning |
+|---|---|
+| **Loaded cost** | What an hour of an employee's time costs the company: salary plus benefits, taxes, and overhead |
+| **Capacity freed** | Hours a tool saves, valued at loaded cost. Worth money only if the hours are redeployed |
+| **Realization rate** | The share of estimated benefits that actually happens, once adoption is uneven |
+| **Ramp** | The months after rollout before benefits start |
+| **Payback** | Months until cumulative benefit covers cumulative cost |
 
 ## Roles
 

@@ -1,0 +1,31 @@
+{
+  "_comment": "Invented numbers for a fictional 8-CSM team. Replace with your own. Hours are per CSM per week.",
+  "ramp_months": 3,
+  "team": {
+    "csm_count": 8,
+    "loaded_cost_per_hour": 75,
+    "working_weeks_per_year": 46
+  },
+  "time_savings": [
+    {"task": "Weekly brief and book review", "hours_before": 3.0, "hours_after": 0.5},
+    {"task": "Account reviews", "hours_before": 2.0, "hours_after": 0.5},
+    {"task": "Renewal prep", "hours_before": 2.0, "hours_after": 0.75},
+    {"task": "Customer emails and internal updates", "hours_before": 4.0, "hours_after": 2.0},
+    {"task": "CRM notes and updates", "hours_before": 2.0, "hours_after": 1.0}
+  ],
+  "retention": {
+    "arr_under_management": 24000000,
+    "gross_churn_rate_pct": 12,
+    "churn_reduction_pct": 10
+  },
+  "costs": {
+    "license_per_user_per_month": 50,
+    "one_time_implementation": 20000,
+    "admin_hours_per_month": 10
+  },
+  "scenarios": {
+    "conservative": 0.5,
+    "base": 0.75,
+    "optimistic": 1.0
+  }
+}

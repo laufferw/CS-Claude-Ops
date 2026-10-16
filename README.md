@@ -12,14 +12,13 @@ This repo is markdown-first. Almost everything here is a document you can read, 
 | [`specs/`](specs/) | Design docs for tools worth building: the CSM Copilot and a HubSpot agent interface |
 | [`prompts/`](prompts/) | Reusable Claude prompts, each with inputs, output format, and known failure modes |
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
-| [`tools/`](tools/) | Small utilities that run on sample data, starting with a health score calculator |
+| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator and an ROI calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
+| [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
 | [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
 | [`.claude/skills/`](.claude/skills/) | Each prompt packaged as a Claude Code skill |
 
 Terms are defined in the [glossary](glossary.md).
-
-Planned, not yet started: `essays/` (opinionated writing on RevOps and CS Ops as disciplines).
 
 ## Index
 
@@ -70,7 +69,14 @@ Situational:
 ### Tools and sample data
 
 - [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts
-- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored
+- [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
+- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, plus sample ROI inputs
+
+### Essays
+
+- [CS Ops Is a Discipline, Not a Help Desk](essays/cs-ops-is-a-discipline.md)
+- [Health Scores Are for Deciding, Not Reporting](essays/health-scores-are-for-deciding.md)
+- [Claude Drafts, People Decide](essays/claude-drafts-people-decide.md)
 
 ## Ground rules
 
@@ -106,7 +112,7 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 - Start with [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
 - Score the [sample accounts](sample-data/README.md) with `python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01`, then paste the result into the [Weekly CSM Brief](prompts/weekly-csm-brief.md) prompt.
 - Pair scoring with the [Account Review prompt](prompts/account-review.md) to review a single account with Claude.
-- Read the [CSM Copilot spec](specs/csm-copilot-spec.md) for where this is headed.
+- Read the [CSM Copilot spec](specs/csm-copilot-spec.md) for where this is headed, and run `python3 tools/roi_calculator.py sample-data/roi-inputs.json` for a sample business case.
 
 ## Status
 
