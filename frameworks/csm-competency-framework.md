@@ -37,7 +37,7 @@ Each area is rated 1 to 4.
 
 ## How to use with Claude
 
-Give Claude a CSM's account plan or call notes plus this framework and ask for evidence per competency, not a score. Evidence first keeps the rating defensible.
+Give Claude a CSM's account plan or call notes plus this framework and ask for evidence per competency, not a score. Evidence first keeps the rating defensible. The [CSM Competency Evaluation](../prompts/csm-competency-evaluation.md) prompt does this.
 
 ## Failure modes
 

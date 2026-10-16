@@ -37,12 +37,12 @@ Each MCP server exposes read tools by default. Write tools are separate and requ
 
 | Capability | Description | Backing |
 |---|---|---|
-| Daily brief | Top accounts needing action today | scoring + crm |
-| Account review | One-page summary of any account | all servers |
+| Daily brief | Top accounts needing action today | scoring + crm, [weekly brief](../prompts/weekly-csm-brief.md) |
+| Account review | One-page summary of any account | all servers, [account review](../prompts/account-review.md) |
 | Health scoring | Compute the index with a breakdown | scoring-server |
 | Churn risk model | Probability plus the top drivers | scoring-server |
-| Renewal prep | Timeline, risks, and talking points | crm + usage |
-| Drafting | Emails, QBR outlines, internal updates | prompts/ |
+| Renewal prep | Timeline, risks, and talking points | crm + usage, [pre-renewal check](../prompts/pre-renewal-check.md), [renewal prep](../prompts/renewal-prep.md) |
+| Drafting | Emails, QBR outlines, internal updates | [customer email](../prompts/customer-email.md), [QBR outline](../prompts/qbr-outline.md), [internal update](../prompts/internal-account-update.md) |
 | CRM update | Propose note and field changes for approval | crm-server |
 
 ## Churn risk model (v1)

@@ -23,7 +23,7 @@ Deal moves to Closed Won.
 
 | Step | Owner | Timing |
 |---|---|---|
-| 1. Sales completes the packet | Sales rep | Within 2 business days of close |
+| 1. Sales completes the packet (the [Handoff Packet](../prompts/handoff-packet.md) prompt drafts it from deal notes) | Sales rep | Within 2 business days of close |
 | 2. RevOps checks completeness | RevOps | Within 1 business day |
 | 3. Internal handoff call | Sales and CSM | Within 5 business days |
 | 4. CSM sends the customer kickoff note | CSM | Within 7 business days |

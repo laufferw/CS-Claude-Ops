@@ -23,7 +23,7 @@ Planned, not yet started: `essays/` (opinionated writing on RevOps and CS Ops as
 
 - [Account Health Scoring](frameworks/account-health-scoring.md): the Account Success Index, its signals, weights, and bands
 - [Account Management Engine](frameworks/account-management-engine.md): the weekly loop from account data to ranked CSM actions
-- [Escalation Logic](frameworks/escalation-logic.md): triggers, levels, owners, and response targets
+- [Escalation Logic](frameworks/escalation-logic.md): triggers, levels, owners, response targets, and root cause tags
 - [CSM Competency Framework](frameworks/csm-competency-framework.md): what good looks like at each CSM level
 
 ### Specs
@@ -37,7 +37,14 @@ Planned, not yet started: `essays/` (opinionated writing on RevOps and CS Ops as
 - [Account Review](prompts/account-review.md): a one-page review of a single account
 - [Churn Risk Triage](prompts/churn-risk-triage.md): rank a book of accounts by churn risk, with drivers
 - [Renewal Prep](prompts/renewal-prep.md): get ready for a renewal conversation 90 to 120 days out
+- [Pre-Renewal Check](prompts/pre-renewal-check.md): readiness status for every account renewing in the next 120 days
 - [Contract Redline Summary](prompts/contract-redline-summary.md): plain-language summary of a customer's proposed contract changes
+- [Handoff Packet](prompts/handoff-packet.md): draft the closed-won handoff packet from deal notes
+- [Escalation Summary](prompts/escalation-summary.md): open an escalation with the required fields, and close it with a root cause tag
+- [Customer Email](prompts/customer-email.md): draft a customer email for the CSM to review and send
+- [QBR Outline](prompts/qbr-outline.md): a slide-by-slide QBR outline built on the customer's outcomes
+- [Internal Account Update](prompts/internal-account-update.md): a short status update on one account for managers or leadership
+- [CSM Competency Evaluation](prompts/csm-competency-evaluation.md): evidence from a CSM's work, mapped to the competency framework
 
 ### Playbooks
 

@@ -8,6 +8,8 @@ Prepare a CSM for a renewal conversation roughly 90 to 120 days out.
 
 Account summary, contract details (term, price, scope), usage and outcomes data, stakeholder list, any open issues.
 
+Run the [Pre-Renewal Check](pre-renewal-check.md) across the book first to find which accounts need this.
+
 ## Prompt
 
 ```

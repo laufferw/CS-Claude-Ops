@@ -38,8 +38,8 @@ Let an AI agent handle routine HubSpot work (lookups, updates, project board hyg
 ## Example workflows
 
 1. **Board hygiene:** find items missing an owner or stale for 14 days and propose updates. See [Projects Board Steps and Target Dates](../playbooks/hubspot-projects-board.md).
-2. **Pre-renewal check:** gather open tickets, usage trend, and last contact for accounts renewing in 90 days.
-3. **Handoff packet:** assemble a closed-won summary for the CSM from deal notes and associated contacts. See [Sales to CS Handoff](../playbooks/sales-to-cs-handoff.md).
+2. **Pre-renewal check:** gather open tickets, usage trend, and last contact for accounts renewing in 120 days. See the [Pre-Renewal Check](../prompts/pre-renewal-check.md) prompt.
+3. **Handoff packet:** assemble a closed-won summary for the CSM from deal notes and associated contacts. See [Sales to CS Handoff](../playbooks/sales-to-cs-handoff.md) and the [Handoff Packet](../prompts/handoff-packet.md) prompt.
 
 ## Open questions
 
