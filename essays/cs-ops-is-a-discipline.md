@@ -1,7 +1,5 @@
 # CS Ops Is a Discipline, Not a Help Desk
 
-> Draft essay.
-
 Most Customer Success Operations teams start the same way. Someone is good with the CRM, so they become the person who builds the reports. Then the dashboards. Then the fields, the workflows, the renewal tracker, the health score. Two years later they are a team, and their work is a queue of requests from people who know what they want to see but not what they are trying to decide.
 
 That is CS Ops as a help desk. It produces artifacts on demand, and it measures itself by tickets closed. It is useful, and it is a waste of the people doing it.
