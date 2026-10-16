@@ -12,6 +12,7 @@ Make escalation a rule-based decision, not a mood. Everyone should know what tri
 |---|---|
 | Health index drops into Red | L1 |
 | Exec sponsor leaves or goes silent for 30 days | L1 |
+| No first value 90 days after close (see [Onboarding](../playbooks/onboarding.md)) | L1 |
 | Customer formally raises a contract or SLA concern | L2 |
 | Renewal at risk within 90 days | L2 |
 | Threat of termination or legal involvement | L3 |
@@ -23,6 +24,8 @@ Make escalation a rule-based decision, not a mood. Everyone should know what tri
 | L1 | CSM | Plan within 3 business days | CSM, CS manager |
 | L2 | CS manager | Plan within 2 business days | Adds Sales, RevOps, Legal as needed |
 | L3 | VP / executive | Same business day | Adds executive sponsor on both sides |
+
+The plan is an [At-Risk Save Plan](../playbooks/at-risk-save-plan.md).
 
 ## Required fields on any escalation
 

@@ -28,6 +28,8 @@ Deal moves to Closed Won.
 | 3. Internal handoff call | Sales and CSM | Within 5 business days |
 | 4. CSM sends the customer kickoff note | CSM | Within 7 business days |
 
+Onboarding starts from the kickoff note. See [Customer Onboarding](onboarding.md).
+
 ## Quality check
 
 If the CSM cannot answer "why did they buy and what does success look like?" from the packet, it is incomplete.

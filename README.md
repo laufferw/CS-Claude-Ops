@@ -48,7 +48,18 @@ Planned, not yet started: `essays/` (opinionated writing on RevOps and CS Ops as
 
 ### Playbooks
 
+The customer lifecycle, in order:
+
 - [Sales to CS Handoff](playbooks/sales-to-cs-handoff.md): the handoff packet and steps after Closed Won
+- [Customer Onboarding](playbooks/onboarding.md): from kickoff to first value, with a success plan in place
+- [Quarterly Business Review](playbooks/qbr.md): reviewing outcomes with decision-makers and agreeing next quarter's plan
+- [Expansion](playbooks/expansion.md): qualifying expansion signals and handing them to Sales
+- [Renewal](playbooks/renewal.md): the 120-day renewal timeline and who owns each decision
+- [At-Risk Save Plan](playbooks/at-risk-save-plan.md): what goes into the plan for a Red or escalated account
+- [Churn and Offboarding](playbooks/churn-and-offboarding.md): offboarding, exit interviews, and feeding churn back into scoring
+
+Situational:
+
 - [Handling Customer SLA Pushback](playbooks/sla-pushback.md): responding to requests for stronger service-level commitments
 - [Projects Board Steps and Target Dates](playbooks/hubspot-projects-board.md): which board steps get due dates, and how to track the rest
 

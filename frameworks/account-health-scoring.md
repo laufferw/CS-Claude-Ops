@@ -152,4 +152,4 @@ Meridian Analytics shows the missing-data rule. Its usage export is broken and i
 
 ## Calibration
 
-Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes.
+Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes. The monthly churn review in [Churn and Offboarding](../playbooks/churn-and-offboarding.md) collects this data.

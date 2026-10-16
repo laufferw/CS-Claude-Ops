@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Draft a slide-by-slide outline for a quarterly business review that centers on the customer's outcomes, not our product's features.
+Draft a slide-by-slide outline for a quarterly business review that centers on the customer's outcomes, not our product's features. The [QBR](../playbooks/qbr.md) playbook covers scheduling, internal review, and follow-up.
 
 ## Inputs
 

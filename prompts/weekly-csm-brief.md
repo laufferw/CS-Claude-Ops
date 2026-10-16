@@ -88,6 +88,6 @@ From [`sample-data/scored-accounts.csv`](../sample-data/scored-accounts.csv), sc
 
 - Lists ten accounts. The 5-account cap and selection order prevent this. Check the count.
 - Ranks by ARR alone, so large healthy accounts crowd out small urgent ones. Priority weights for risk and urgency.
-- Recommends expansion on an account at risk. Section 3 excludes Red accounts.
+- Recommends expansion on an account at risk. Section 3 excludes Red accounts. The [Expansion](../playbooks/expansion.md) playbook adds the remaining qualification checks.
 - Treats Insufficient data as healthy because the index is high. The data gaps section calls it out.
 - Generic actions ("check in with the customer"). Each action needs an owner and a deadline. Reject the brief if they're missing.

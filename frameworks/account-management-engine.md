@@ -16,6 +16,8 @@ A repeatable loop that takes raw account data and returns a short, ranked list o
 6. **Deliver:** send the CSM a weekly brief with the top actions and the reasoning (see the [Weekly CSM Brief](../prompts/weekly-csm-brief.md) prompt).
 7. **Learn:** log what the CSM did and the outcome. Feed it back into calibration.
 
+The recommended actions come from the playbooks: [At-Risk Save Plan](../playbooks/at-risk-save-plan.md) for Red accounts and red flags, [Renewal](../playbooks/renewal.md) inside 120 days, and [Expansion](../playbooks/expansion.md) for qualified signals.
+
 ## Output: weekly CSM brief
 
 - Top 5 accounts needing attention, each with: why, recommended action, deadline
