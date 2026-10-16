@@ -1,6 +1,6 @@
 # Account Health Scoring (Account Success Index)
 
-> Draft. Weights and thresholds are starting points. Calibrate against your own churn and expansion history.
+> Weights and thresholds are starting points. Calibrate against your own churn and expansion history.
 
 ## Purpose
 
