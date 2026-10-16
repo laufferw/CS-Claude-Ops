@@ -8,7 +8,7 @@ Produce a one-page review of a single account for a CSM or manager.
 
 - Account name and ARR
 - Renewal date
-- Health index and band (see `frameworks/account-health-scoring.md`)
+- Health index and band (see [Account Health Scoring](../frameworks/account-health-scoring.md))
 - Usage trend, open tickets, recent meeting notes, key contacts
 
 ## Prompt
