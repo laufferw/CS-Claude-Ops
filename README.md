@@ -14,6 +14,10 @@ This repo is markdown-first. Almost everything here is a document you can read, 
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
 | [`tools/`](tools/) | Small utilities that run on sample data, starting with a health score calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
+| [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
+| [`.claude/skills/`](.claude/skills/) | Each prompt packaged as a Claude Code skill |
+
+Terms are defined in the [glossary](glossary.md).
 
 Planned, not yet started: `essays/` (opinionated writing on RevOps and CS Ops as disciplines).
 
@@ -75,6 +79,29 @@ Situational:
 3. **Judgment stays with the human.** Claude drafts, scores, and flags. A person decides on escalations, pricing, and commitments.
 
 ## How to use
+
+### With Claude Code
+
+Open this repo in Claude Code and ask in plain language: "write my weekly brief from sample-data/accounts.csv as of 2026-10-01", or "draft a handoff packet from these notes". Claude picks the matching skill, reads the prompt file, and follows it. You can also call a skill by name, such as `/cs-weekly-brief`.
+
+| Skill | Prompt |
+|---|---|
+| `cs-weekly-brief` | [Weekly CSM Brief](prompts/weekly-csm-brief.md) |
+| `cs-account-review` | [Account Review](prompts/account-review.md) |
+| `cs-churn-triage` | [Churn Risk Triage](prompts/churn-risk-triage.md) |
+| `cs-renewal-prep` | [Renewal Prep](prompts/renewal-prep.md) |
+| `cs-pre-renewal-check` | [Pre-Renewal Check](prompts/pre-renewal-check.md) |
+| `cs-redline-summary` | [Contract Redline Summary](prompts/contract-redline-summary.md) |
+| `cs-handoff-packet` | [Handoff Packet](prompts/handoff-packet.md) |
+| `cs-escalation-summary` | [Escalation Summary](prompts/escalation-summary.md) |
+| `cs-customer-email` | [Customer Email](prompts/customer-email.md) |
+| `cs-qbr-outline` | [QBR Outline](prompts/qbr-outline.md) |
+| `cs-account-update` | [Internal Account Update](prompts/internal-account-update.md) |
+| `cs-competency-evaluation` | [CSM Competency Evaluation](prompts/csm-competency-evaluation.md) |
+
+The skills only point at the prompt files, so editing a prompt changes its skill too.
+
+### By hand
 
 - Start with [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
 - Score the [sample accounts](sample-data/README.md) with `python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01`, then paste the result into the [Weekly CSM Brief](prompts/weekly-csm-brief.md) prompt.
