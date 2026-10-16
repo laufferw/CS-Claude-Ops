@@ -6,7 +6,9 @@ Commit and push directly to `main`. Do not create feature branches or pull reque
 
 ## Repo layout
 
-Markdown-first. Docs live in `frameworks/`, `specs/`, `prompts/`, and `playbooks/` (see the README for what each holds).
+Markdown-first. Docs live in `frameworks/`, `specs/`, `prompts/`, and `playbooks/`. Runnable utilities live in `tools/` (standard-library Python), and fictional data for them in `sample-data/`. See the README for what each holds.
+
+If you change the scoring rubric, update `tools/score_accounts.py` to match and regenerate `sample-data/scored-accounts.csv` (command in `sample-data/README.md`).
 
 When adding, renaming, or moving a doc:
 - Add or update its entry in the README index.

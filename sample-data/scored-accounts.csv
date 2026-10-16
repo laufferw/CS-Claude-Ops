@@ -1,0 +1,13 @@
+account_id,account,arr,renewal_date,days_to_renewal,usage_score,outcomes_score,engagement_score,support_score,sentiment_score,commercial_score,coverage_pct,index,band,prior_index,prior_band,band_change,overrides,missing_signals,top_drivers,priority,expansion_signal,notes
+A02,Cedar Health Partners,410000,2026-12-15,75,35,25,25,25,28,80,100,34,Red,52,Yellow,down,,,usage (35); outcomes (25),410000,,Exec sponsor has not replied since July. Contract flag: asked about termination for convenience
+A10,Sable Energy,280000,2026-12-31,91,75,60,35,100,60,60,100,67,Yellow,68,Yellow,same,,,engagement (35); outcomes (60),84000,,Contract flag: requested a downgrade to 250 seats at renewal
+A07,Pinecrest Manufacturing,520000,2027-03-31,181,60,50,55,50,60,100,100,60,Yellow,70,Yellow,same,,,usage (60); outcomes (50),78000,Opening a new plant in Q2 and asked about onboarding it,Open escalation on report load times
+A08,Quarry Lane Media,72000,2027-01-15,106,0,0,0,100,25,100,100,28,Red,41,Red,same,non_renewal_notice -> Red,,usage (0); outcomes (0),43200,,Sent notice of non-renewal on Sept 22. No exec contact on record
+A04,Larkspur Retail,60000,2026-11-20,50,75,50,70,100,50,60,100,69,Yellow,66,Yellow,same,payment_dispute (band already Yellow),,outcomes (50); usage (75),30000,,Disputing Q3 invoice over a seat count disagreement
+A03,Granite Payroll,95000,2027-02-28,150,75,67,70,100,73,100,100,79,Yellow,81,Green,down,exec_sponsor_departed -> capped at Yellow,,usage (75); outcomes (67),28500,,VP Finance (sponsor) left in September. Replacement not yet named
+A05,Meridian Analytics,150000,2027-09-30,364,,,100,100,73,100,50,95,Insufficient data,72,Yellow,n/a,,usage|outcomes,sentiment (73),22500,,Usage export broken since the SSO migration. No success plan on file
+A01,Bluefin Logistics,240000,2027-06-30,272,100,100,100,100,100,100,100,100,Green,90,Green,same,,,,7200,Asked for pricing on 50 more seats for the Denver team,Champion presented results at their all-hands
+A12,Willow Biotech,190000,2027-04-30,211,100,75,70,100,75,100,100,88,Green,80,Green,same,,,outcomes (75); engagement (70),5700,,No survey response this year
+A09,Riverbend Credit Union,130000,2027-05-31,242,100,100,70,75,88,100,100,91,Green,79,Green,same,,,engagement (70); support (75),3900,,One escalation open on an API timeout. Fix scheduled
+A06,Orchard Learning,38000,2026-10-31,30,100,100,100,100,100,100,100,100,Green,88,Green,same,,,,3800,,Renewal paperwork sent. Verbal yes from the buyer
+A11,Tidewater Clinics,55000,2027-08-31,334,35,100,100,100,88,100,100,79,Green,74,Yellow,up,,,usage (35); sentiment (88),1650,,Product is used at month-end close only. Low daily usage is normal for this account

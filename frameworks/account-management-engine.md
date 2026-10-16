@@ -12,8 +12,8 @@ A repeatable loop that takes raw account data and returns a short, ranked list o
 2. **Score:** compute the health index (see [Account Health Scoring](account-health-scoring.md)).
 3. **Detect:** flag changes: band moves, trend breaks, missing data, upcoming renewals.
 4. **Decide:** map each flag to a recommended action using rules (see [Escalation Logic](escalation-logic.md)).
-5. **Rank:** order actions by revenue at stake and time to deadline.
-6. **Deliver:** send the CSM a weekly brief with the top actions and the reasoning.
+5. **Rank:** order actions by revenue at stake and time to deadline (see the priority formula in the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority)).
+6. **Deliver:** send the CSM a weekly brief with the top actions and the reasoning (see the [Weekly CSM Brief](../prompts/weekly-csm-brief.md) prompt).
 7. **Learn:** log what the CSM did and the outcome. Feed it back into calibration.
 
 ## Output: weekly CSM brief
