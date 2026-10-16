@@ -1,7 +1,5 @@
 # Claude Drafts, People Decide
 
-> Draft essay.
-
 This repo has one rule that shapes everything else in it: Claude drafts, scores, and flags. A person decides on escalations, pricing, and commitments.
 
 It is worth explaining why that line sits where it does, because it is not a statement about what AI can't do. It is a statement about what a customer relationship is.
