@@ -1,7 +1,5 @@
 # Health Scores Are for Deciding, Not Reporting
 
-> Draft essay.
-
 Every CS team has a health score. Most of them are ignored.
 
 They are ignored for a predictable reason: the score was designed to be reported, not used. It shows up on a dashboard, colored green, yellow, or red, and it summarizes the account in a way that feels informative. But when a CSM looks at a Yellow account and asks "what should I do about this?", the score has no answer. And when an account that was Green for a year churns, nobody is surprised that the score missed it, because nobody believed it in the first place.
