@@ -6,6 +6,14 @@
 
 Make escalation a rule-based decision, not a mood. Everyone should know what triggers one, who owns it, and what happens next.
 
+## Inputs
+
+- Health band and red flags from [Account Health Scoring](account-health-scoring.md)
+- Pre-renewal status from the [Pre-Renewal Check](../prompts/pre-renewal-check.md)
+- Executive sponsor contact history
+- Onboarding milestones: close date and first-value date
+- Customer communications: formal concerns, termination threats, legal correspondence
+
 ## Triggers
 
 | Trigger | Level |
@@ -16,6 +24,10 @@ Make escalation a rule-based decision, not a mood. Everyone should know what tri
 | Customer formally raises a contract or SLA concern | L2 |
 | Renewal at risk within 90 days | L2 |
 | Threat of termination or legal involvement | L3 |
+
+If more than one trigger applies, use the highest level.
+
+**Renewal at risk** means the pre-renewal status is At risk: the band is Red, or the account has a red flag (notice of non-renewal, sponsor departure, payment dispute).
 
 ## Levels and owners
 
@@ -41,6 +53,17 @@ The plan is an [At-Risk Save Plan](../playbooks/at-risk-save-plan.md).
 2. Commitments on SLAs, pricing, or legal terms need sign-off from the function that owns them.
 3. Every escalation closes with a short written summary and a root cause tag. The [Escalation Summary](../prompts/escalation-summary.md) prompt drafts both the opening write-up and the closing summary.
 
+## Raising, lowering, and closing
+
+- **Raise a level** when a higher trigger appears, or when the save plan's checkpoint shows no improvement.
+- **Lower a level** only when the trigger that set it no longer applies, and the owner of the higher level agrees. Record the reason.
+- **Close** when one of these is true, and record which:
+  - **Resolved:** the trigger no longer applies and the customer has confirmed the fix, or the band is back out of Red for two consecutive weekly runs
+  - **Renewed:** the renewal signed, even if a downgrade
+  - **Lost:** the customer has confirmed they are leaving. Move to [Churn and Offboarding](../playbooks/churn-and-offboarding.md)
+
+An escalation that has had no update for two weeks past its next-update date goes to the owner's manager.
+
 ## Root cause tags
 
 Pick one primary tag when closing. Add a secondary tag only if it changed the outcome.
@@ -59,8 +82,17 @@ Pick one primary tag when closing. Add a secondary tag only if it changed the ou
 
 Review tag counts quarterly. A rising tag is a pattern to fix upstream, not a run of bad luck.
 
+## Outputs
+
+- An escalation record with the required fields, level, and owner
+- A save plan, within the level's response target
+- Updates at each next-update date
+- A closing summary with the outcome (resolved, renewed, or lost) and a root cause tag
+- Quarterly root cause tag counts
+
 ## Failure modes
 
 - Escalating without a clear ask.
 - No owner, so nothing moves.
-- Escalations never closed, so the data is useless.
+- Escalations never closed, so the data is useless. The two-week stale rule catches these.
+- Lowering a level to make the dashboard look better. Lowering needs the higher owner's agreement and a recorded reason.

@@ -8,7 +8,7 @@ Gather evidence from a CSM's real work against the [CSM Competency Framework](..
 
 ## Inputs
 
-- The competency framework (areas, levels, and any example behaviors)
+- The competency framework (areas, levels, and example behaviors)
 - Work samples from at least three accounts: account plans, call notes, customer emails, escalation write-ups, QBR decks
 - The CSM's current level, if the review is for promotion
 
@@ -48,5 +48,5 @@ Six labeled sections, each with evidence, a suggested level, and a development s
 
 - Rates on writing polish instead of what happened. The rules separate style from substance, but check the evidence lists for it.
 - Over-reads a single strong example. Three examples per area, from several accounts, is the target.
-- The framework only has example behaviors for Risk management, so levels in other areas rest on the general level descriptions. Treat those suggestions as rougher until the framework fills them in.
+- Matches a level on one sentence that resembles an example behavior. The framework's behaviors describe what a CSM does consistently, so check that the evidence covers several accounts.
 - Fills in a level for every area even when the samples don't cover it. "Insufficient evidence" is a valid answer and should appear.

@@ -15,7 +15,9 @@ When adding, renaming, or moving a doc:
 - For a new prompt, add a skill in `.claude/skills/cs-<name>/SKILL.md` that points at it (copy an existing one), and add it to the README's skills table. Skills point at prompt files; never copy prompt text into a skill.
 - Add new terms to `glossary.md`.
 - Add or update its entry in the README index.
-- Link to other docs with relative markdown links, and check they resolve.
+- Link to other docs with relative markdown links.
+
+Before every push, run `python3 tools/check_repo.py` and fix anything it reports. CI runs the same check on `main`.
 
 ## Content rules
 

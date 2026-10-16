@@ -10,6 +10,12 @@ Make sure a closed-won deal reaches the CSM with everything needed to start well
 
 Deal moves to Closed Won.
 
+## Inputs
+
+- Deal notes, call notes, and the email thread with the customer
+- Contacts and their roles from the CRM
+- The signed contract or order form
+
 ## Handoff packet (required)
 
 - Customer goals and the success criteria they were sold
@@ -33,6 +39,12 @@ Onboarding starts from the kickoff note. See [Customer Onboarding](onboarding.md
 ## Quality check
 
 If the CSM cannot answer "why did they buy and what does success look like?" from the packet, it is incomplete.
+
+## Outputs
+
+- A completed handoff packet, checked by RevOps, stored on the account
+- A list of commitments made during the sale, each confirmed with the rep
+- The kickoff note sent to the customer, which starts [Customer Onboarding](onboarding.md)
 
 ## Failure modes
 

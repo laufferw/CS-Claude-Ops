@@ -70,6 +70,7 @@ Situational:
 
 - [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts
 - [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
+- [Repo checker](tools/README.md#repo-checker): checks required sections, links, the index, skills, and tools. Runs in CI on every push
 - [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, plus sample ROI inputs
 
 ### Essays
@@ -114,6 +115,14 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 - Pair scoring with the [Account Review prompt](prompts/account-review.md) to review a single account with Claude.
 - Read the [CSM Copilot spec](specs/csm-copilot-spec.md) for where this is headed, and run `python3 tools/roi_calculator.py sample-data/roi-inputs.json` for a sample business case.
 
+## Contributing
+
+Start new docs from [`templates/`](templates/README.md), then run `python3 tools/check_repo.py` before pushing. CI runs the same check.
+
 ## Status
 
 Early drafts. Weights, thresholds, and rubrics are starting points to calibrate against your own data.
+
+## License
+
+[MIT](LICENSE).

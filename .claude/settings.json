@@ -4,7 +4,8 @@
       "Bash(git push origin main)",
       "Bash(git push -u origin main)",
       "Bash(python3 tools/score_accounts.py:*)",
-      "Bash(python3 tools/roi_calculator.py:*)"
+      "Bash(python3 tools/roi_calculator.py:*)",
+      "Bash(python3 tools/check_repo.py)"
     ]
   }
 }

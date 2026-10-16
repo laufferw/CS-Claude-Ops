@@ -6,6 +6,7 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 |---|---|
 | [`score_accounts.py`](score_accounts.py) | Scores accounts with the [Account Health Scoring](../frameworks/account-health-scoring.md) rubric and adds the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority) priority |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
+| [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
 
 ## Health score calculator
 
@@ -14,6 +15,22 @@ python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01
 ```
 
 Reads a CSV in the [`sample-data`](../sample-data/README.md) format and writes the scored CSV to stdout, sorted by priority. The rubric, outputs, and failure modes are documented in [Account Health Scoring](../frameworks/account-health-scoring.md).
+
+## Repo checker
+
+```
+python3 tools/check_repo.py
+```
+
+Prints "All checks passed." or a list of every problem, and exits non-zero on failure. It checks:
+
+- **Required sections** by folder. Frameworks need Purpose, Inputs, Outputs, and Failure modes. Prompts need Purpose, Inputs, Prompt, Output format, and Known failure modes. Playbooks need Purpose, Trigger, Inputs, Steps, Outputs, and Failure modes. Specs need Goals, Non-goals, Inputs, Outputs, Safety and trust, and Failure modes. These match the [templates](../templates/README.md)
+- **Links:** every relative link points at a file that exists, and every `#anchor` at a heading that exists
+- **Index:** the README links to every doc in `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
+- **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
+- **Tools:** both tools run on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
+
+It does not judge whether the content is right. That is still a review.
 
 ## ROI calculator
 

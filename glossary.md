@@ -31,6 +31,9 @@ All defined in [Account Health Scoring](frameworks/account-health-scoring.md).
 | **Top drivers** | The two signals pulling the index down the most: largest weight x (100 - score) |
 | **Seat utilization** | Active users divided by licensed seats |
 | **Band move** | A change in band since the last scoring run. A move down is always worth a look |
+| **Trend break** | Usage down 10% or more over 90 days, whatever the band. One of the [engine's flags](frameworks/account-management-engine.md#flags-and-actions) |
+| **Action log** | The record of each recommendation, what the CSM did with it, and the outcome. The calibration input for the [Account Management Engine](frameworks/account-management-engine.md) |
+| **Churn risk category** | High, Medium, Low, or Unclear, from the [v1 rules](specs/csm-copilot-spec.md#churn-risk-model-v1) |
 
 ## Escalation
 
@@ -40,6 +43,8 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 |---|---|
 | **L1, L2, L3** | Escalation levels. L1 is owned by the CSM, L2 by the CS manager, L3 by a VP or executive. Each has a response target |
 | **Trigger** | A condition that requires an escalation at a given level |
+| **Renewal at risk** | A pre-renewal status of At risk: a Red band, or a red flag. Within 90 days of renewal, an L2 trigger |
+| **Resolved, Renewed, Lost** | The three ways an escalation closes. See [raising, lowering, and closing](frameworks/escalation-logic.md#raising-lowering-and-closing) |
 | **Root cause tag** | One of nine labels recording why an escalation happened, such as `product-gap` or `sponsor-change` |
 | **Save plan** | The written plan for an at-risk account. See [At-Risk Save Plan](playbooks/at-risk-save-plan.md) |
 | **Walk-away point** | The condition, set in a save plan, at which you stop investing in the save |
