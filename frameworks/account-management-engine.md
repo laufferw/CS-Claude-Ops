@@ -9,9 +9,9 @@ A repeatable loop that takes raw account data and returns a short, ranked list o
 ## The loop
 
 1. **Ingest:** pull usage, support, CRM, and billing data.
-2. **Score:** compute the health index (see `account-health-scoring.md`).
+2. **Score:** compute the health index (see [Account Health Scoring](account-health-scoring.md)).
 3. **Detect:** flag changes: band moves, trend breaks, missing data, upcoming renewals.
-4. **Decide:** map each flag to a recommended action using rules (see `escalation-logic.md`).
+4. **Decide:** map each flag to a recommended action using rules (see [Escalation Logic](escalation-logic.md)).
 5. **Rank:** order actions by revenue at stake and time to deadline.
 6. **Deliver:** send the CSM a weekly brief with the top actions and the reasoning.
 7. **Learn:** log what the CSM did and the outcome. Feed it back into calibration.
