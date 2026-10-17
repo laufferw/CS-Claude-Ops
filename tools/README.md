@@ -5,6 +5,7 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 | Tool | What it does |
 |---|---|
 | [`score_accounts.py`](score_accounts.py) | Scores accounts with the [Account Health Scoring](../frameworks/account-health-scoring.md) rubric and adds the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority) priority |
+| [`renewal_window.py`](renewal_window.py) | Lists the accounts renewing in the next 120 days with the fields the [Pre-Renewal Check](../prompts/pre-renewal-check.md) needs |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
 
@@ -15,6 +16,38 @@ python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01
 ```
 
 Reads a CSV in the [`sample-data`](../sample-data/README.md) format and writes the scored CSV to stdout, sorted by priority. The rubric, outputs, and failure modes are documented in [Account Health Scoring](../frameworks/account-health-scoring.md).
+
+## Renewal window
+
+```
+python3 tools/renewal_window.py sample-data/accounts.csv --as-of 2026-10-01 --days 120
+```
+
+### Purpose
+
+Give the [Pre-Renewal Check](../prompts/pre-renewal-check.md) its input in one step, instead of matching rows across `scored-accounts.csv` and `accounts.csv` by hand.
+
+### Inputs
+
+A CSV in the [`sample-data`](../sample-data/README.md) format, an `--as-of` date (default today), and `--days`, the window length (default 120).
+
+### Outputs
+
+A CSV on stdout with one row per account renewing within the window, soonest first: ID, account, ARR, renewal date, days to renewal, band, index, overrides, top drivers, red flags, open escalations, days since executive contact, contract flags, and notes. Paste it into the prompt as-is. Scoring comes from [`score_accounts.py`](score_accounts.py), so the bands always match the rubric.
+
+A summary line goes to stderr: how many accounts are in the window, and their total ARR. Check that count against your renewal report.
+
+It does not assign readiness statuses. The prompt does that, and the CSM decides what to do with them.
+
+For the sample data as of 2026-10-01, five accounts with $860,000 ARR are in the window, the same five as the [prompt's example](../prompts/pre-renewal-check.md#example).
+
+### Failure modes
+
+- **Missing columns.** Exits with the list of missing columns and writes nothing.
+- **A row that can't be scored**, such as a renewal date not in YYYY-MM-DD format. The row is left out, a warning names it, and the tool exits non-zero, so a dropped account does not go unnoticed.
+- **Renewal date already passed.** The row is left out with a warning: either the account renewed and the date is stale, or the renewal slipped. Find out which.
+- **Empty window.** Writes only the header, and the summary line says 0 accounts. Check the `--as-of` date before concluding nothing is renewing.
+- **Stale data.** The window is only as current as the CSV. A renewal date that moved in the CRM but not in the export puts an account in the wrong window.
 
 ## Repo checker
 
@@ -28,7 +61,7 @@ Prints "All checks passed." or a list of every problem, and exits non-zero on fa
 - **Links:** every relative link points at a file that exists, and every `#anchor` at a heading that exists
 - **Index:** the README links to every doc in `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
 - **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
-- **Tools:** both tools run on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
+- **Tools:** each tool runs on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
 
 It does not judge whether the content is right. That is still a review.
 

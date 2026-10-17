@@ -15,6 +15,7 @@ Terms as this repo uses them. Where a doc defines a term precisely, the entry li
 | **Expansion signal** | Evidence an account may want to expand. It becomes an opportunity only after the [qualification checks](playbooks/expansion.md#qualify-first) |
 | **Gross churn rate** | ARR lost to churn and downgrades in a year, as a share of ARR at the start of the year. Expansion does not offset it |
 | **Renewal** | The customer signing for another term. See [Renewal](playbooks/renewal.md) |
+| **Renewal window** | The accounts renewing within a set number of days, 120 by default. The [renewal window tool](tools/README.md#renewal-window) lists them |
 
 ## Health scoring
 

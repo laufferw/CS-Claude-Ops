@@ -143,6 +143,9 @@ def check_tools(problems):
         problems.append(f"tools/score_accounts.py failed: {scored.stderr.strip()}")
     elif scored.stdout != (ROOT / "sample-data" / "scored-accounts.csv").read_text():
         problems.append("sample-data/scored-accounts.csv is stale: regenerate it (see sample-data/README.md)")
+    window = run(["tools/renewal_window.py", "sample-data/accounts.csv", "--as-of", "2026-10-01"])
+    if window.returncode != 0:
+        problems.append(f"tools/renewal_window.py failed: {window.stderr.strip()}")
     roi = run(["tools/roi_calculator.py", "sample-data/roi-inputs.json"])
     if roi.returncode != 0:
         problems.append(f"tools/roi_calculator.py failed: {roi.stderr.strip()}")

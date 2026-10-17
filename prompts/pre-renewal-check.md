@@ -8,7 +8,11 @@ Check every account renewing in the next 120 days for readiness, so problems sur
 
 For each account renewing in the window: ARR, renewal date, days to renewal, band and index, overrides, top drivers, open escalations, days since executive contact, contract flags, and recent notes.
 
-The [sample data](../sample-data/README.md) has all of these across two files: paste the matching rows from both `scored-accounts.csv` and `accounts.csv`.
+Get them in one step with the [renewal window tool](../tools/README.md#renewal-window), and paste its output:
+
+```
+python3 tools/renewal_window.py sample-data/accounts.csv --as-of 2026-10-01
+```
 
 ## Prompt
 
