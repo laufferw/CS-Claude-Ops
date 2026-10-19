@@ -32,7 +32,7 @@ An expansion signal is worth pursuing only if all of these are true:
 |---|---|
 | Band is Green or Yellow | Selling into an unhappy account damages the base renewal |
 | No open escalation | Fix what is broken first |
-| At least one success plan goal met, with evidence | Expansion needs a value story |
+| At least one success plan goal Met or On track and Proven (see the [adoption check](../frameworks/outcome-library.md#checking-adoption-behind-each-outcome)) | Expansion needs a value story the product can claim |
 | The customer has named a need, not just shown usage | Usage alone is a hypothesis |
 
 If any check fails, log the signal and revisit it when the account qualifies.

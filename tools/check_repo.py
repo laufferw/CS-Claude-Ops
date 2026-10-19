@@ -8,7 +8,8 @@ Checks:
 - Every prompt has a skill, every skill points at a prompt that exists, and
   the README's skills table lists every skill
 - The tools run, and sample-data/scored-accounts.csv matches a fresh run
-- Every outcome ID in sample-data/success-plans.csv is in the Outcome Library
+- Every outcome ID in sample-data/success-plans.csv is in the Outcome Library, and every
+  feature in sample-data/feature-adoption.csv is named in it
 
 Exits non-zero and lists every problem if anything fails. Standard library only.
 
@@ -149,16 +150,29 @@ def check_tools(problems):
     window = run(["tools/renewal_window.py", "sample-data/accounts.csv", *plans])
     if window.returncode != 0:
         problems.append(f"tools/renewal_window.py failed: {window.stderr.strip()}")
-    progress = run(["tools/outcome_progress.py", "sample-data/success-plans.csv", "--as-of", "2026-10-01"])
+    adoption = ["--adoption", "sample-data/feature-adoption.csv"]
+    progress = run(["tools/outcome_progress.py", "sample-data/success-plans.csv", *adoption, "--as-of", "2026-10-01"])
     if progress.returncode != 0:
         problems.append(f"tools/outcome_progress.py failed: {progress.stderr.strip()}")
+    report = run(["tools/value_report.py", "sample-data/accounts.csv", *plans, *adoption])
+    if report.returncode != 0:
+        problems.append(f"tools/value_report.py failed: {report.stderr.strip()}")
     roi = run(["tools/roi_calculator.py", "sample-data/roi-inputs.json"])
     if roi.returncode != 0:
         problems.append(f"tools/roi_calculator.py failed: {roi.stderr.strip()}")
 
 
 def check_outcome_ids(problems):
-    library = set(re.findall(r"^\| (OL-\d+) \|", (ROOT / "frameworks" / "outcome-library.md").read_text(), re.M))
+    sys.path.insert(0, str(ROOT / "tools"))
+    from outcome_progress import load_library
+    outcomes = load_library(ROOT / "frameworks" / "outcome-library.md")
+    library = set(outcomes)
+    features = {f for o in outcomes.values() for f in o["features"]}
+    with open(ROOT / "sample-data" / "feature-adoption.csv", newline="") as f:
+        for line, row in enumerate(csv.DictReader(f), start=2):
+            if row["feature"].strip().lower() not in features:
+                problems.append(f"sample-data/feature-adoption.csv line {line}: "
+                                f"feature '{row['feature']}' is not in the library's Depends on column")
     with open(ROOT / "sample-data" / "success-plans.csv", newline="") as f:
         for line, row in enumerate(csv.DictReader(f), start=2):
             if row["outcome_id"] != "custom" and row["outcome_id"] not in library:

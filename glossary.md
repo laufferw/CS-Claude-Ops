@@ -71,6 +71,16 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **Baseline** | A goal's measured starting value and date, taken within 30 days of kickoff from the same source as later measurements |
 | **Custom goal** | A success plan goal for an outcome the library does not cover. At most one per plan |
 | **Goal status** | Met, On track, Off track, Missed, Stale, or No baseline, computed from baseline, target, and the latest measurement. See [measuring progress](frameworks/outcome-library.md#measuring-progress) |
+| **Feature adoption** | The share of a feature's target users who used it for real work in the last 30 days. Below 40%, the feature is lightly used |
+| **Support** | Whether the features behind an outcome are in use: Supported, Unsupported, or Unknown. See [checking adoption](frameworks/outcome-library.md#checking-adoption-behind-each-outcome) |
+| **Proven** | A goal Met or On track with the features behind it in use. Only Proven goals count as value the product delivered |
+| **Unexplained progress** | A goal Met or On track while the features behind it are lightly used. Not claimed until the cause is known |
+| **Adoption gap** | A goal Off track or Missed with the features behind it lightly used. Fixed with adoption work |
+| **Not converting** | A goal Off track or Missed though the features behind it are in use. At 2 or more accounts, it goes to Product |
+| **Customer-agreed value** | What the customer agrees one unit of improvement on a goal is worth per year. Recorded only when they agree it |
+| **Value report** | The book-level roll-up of goal statuses, proven goals, and customer-agreed value. See the [value report tool](tools/README.md#value-report) |
+| **Outcome Review** | The quarterly review that takes outcome results to Product, Marketing, Sales, and the library. See [Outcome Review](playbooks/outcome-review.md) |
+| **Adoption as a Service** | A paid CS offering that takes a customer from adoption to measured outcomes. See the [spec](specs/adoption-as-a-service.md) |
 | **Value history** | Goals an account has met and retired from its success plan. Evidence for renewal, no longer scored |
 | **Go-live** | The point at which the customer starts using the product for real work |
 | **First value** | The first measured improvement on a success plan goal, from its baseline. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |

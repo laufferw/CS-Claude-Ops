@@ -1,0 +1,76 @@
+account_id,feature,adoption_pct
+A01,time capture,85
+A01,billing rules,90
+A01,invoice batching,78
+A01,charge capture,72
+A01,exception reports,64
+A01,workflow automation,81
+A01,imports,70
+A01,templates,88
+A01,bulk provisioning,60
+A02,reconciliation,22
+A02,period locking,15
+A02,validation rules,30
+A02,integrations,35
+A02,payment portal,74
+A02,automated reminders,80
+A02,approval workflows,82
+A02,mobile approvals,58
+A03,time capture,70
+A03,billing rules,66
+A03,invoice batching,52
+A03,validation rules,61
+A03,integrations,77
+A03,dashboards,18
+A04,workflow automation,55
+A04,imports,48
+A04,reconciliation,71
+A04,period locking,64
+A04,dashboards,25
+A04,scheduled reports,31
+A04,billing rules,45
+A04,charge capture,20
+A04,exception reports,12
+A07,budgeting,66
+A07,forecast alerts,41
+A07,reconciliation,68
+A07,period locking,59
+A07,templates,52
+A07,bulk provisioning,47
+A07,validation rules,28
+A07,integrations,44
+A08,billing rules,12
+A08,charge capture,8
+A08,exception reports,5
+A08,time capture,15
+A08,invoice batching,10
+A08,dashboards,9
+A08,scheduled reports,4
+A09,approval workflows,75
+A09,mobile approvals,62
+A09,validation rules,70
+A09,integrations,81
+A09,dashboards,66
+A09,scheduled reports,58
+A09,reconciliation,73
+A09,period locking,69
+A10,payment portal,62
+A10,automated reminders,70
+A10,budgeting,58
+A10,forecast alerts,49
+A10,workflow automation,18
+A10,imports,33
+A10,resource scheduling,54
+A10,time capture,61
+A11,reconciliation,92
+A11,period locking,88
+A11,payment portal,21
+A11,automated reminders,30
+A12,budgeting,72
+A12,forecast alerts,63
+A12,resource scheduling,69
+A12,time capture,80
+A12,billing rules,74
+A12,invoice batching,66
+A12,dashboards,77
+A12,scheduled reports,70

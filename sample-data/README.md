@@ -6,6 +6,7 @@ A fictional book of 12 accounts for one CSM, for trying the prompts and the scor
 |---|---|
 | [`accounts.csv`](accounts.csv) | Raw signals per account, the input to scoring |
 | [`success-plans.csv`](success-plans.csv) | Success plan goals, one row per goal, with baselines and targets. The source of the Outcomes signal |
+| [`feature-adoption.csv`](feature-adoption.csv) | Adoption of each feature per account, for the [adoption check](../frameworks/outcome-library.md#checking-adoption-behind-each-outcome) |
 | [`roi-inputs.json`](roi-inputs.json) | Inputs for the [ROI calculator](../tools/README.md#roi-calculator) for a fictional 8-CSM team |
 | [`scored-accounts.csv`](scored-accounts.csv) | The same accounts scored as of 2026-10-01, sorted by priority. The input to the [Weekly CSM Brief](../prompts/weekly-csm-brief.md) |
 
@@ -51,6 +52,17 @@ One row per goal. An account with no rows has no success plan. The rules that tu
 | `baseline_value`, `baseline_date` | The starting measurement. Blank means no baseline |
 | `target_value`, `target_date` | Agreed with the customer owner. Required |
 | `current_value`, `current_date` | The latest measurement. Both blank until the first one after the baseline |
+| `annual_value_per_unit` | Optional. What the customer agrees one unit of improvement is worth per year, in dollars. Blank unless agreed |
+
+## Fields in `feature-adoption.csv`
+
+One row per account and feature. A feature with no row has no adoption data.
+
+| Field | Meaning |
+|---|---|
+| `account_id` | Matches `accounts.csv` |
+| `feature` | A feature named in the library's "Depends on" column (case doesn't matter) |
+| `adoption_pct` | Share of the feature's target users who used it for real work in the last 30 days |
 
 ## What the accounts exercise
 
@@ -67,4 +79,8 @@ One row per goal. An account with no rows has no success plan. The rules that tu
 | Sable Energy | Downgrade request, renewal in 91 days, one goal with no baseline |
 | Tidewater Clinics | Low usage that is normal for the account, a custom goal |
 | Cedar Health Partners, Quarry Lane Media, Willow Biotech | Goals that passed their target date unmet (Missed) |
+| Cedar Health Partners | All four adoption readings in one plan: Proven, two Adoption gaps, and Not converting |
+| Larkspur Retail, Pinecrest Manufacturing | Faster month-end close Not converting at two accounts: a pattern for Product |
+| Larkspur Retail, Tidewater Clinics | Unexplained progress: on track while the features behind the goal are lightly used |
+| Orchard Learning | No adoption data, so its goals can't be proven |
 | Bluefin Logistics, Orchard Learning, Willow Biotech | Healthy accounts, each with a goal already Met |

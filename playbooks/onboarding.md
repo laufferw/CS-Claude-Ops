@@ -21,7 +21,7 @@ The CSM sends the kickoff note, the last step of the [Sales to CS Handoff](sales
 
 | Step | Owner | Timing |
 |---|---|---|
-| 1. Kickoff call: confirm goals, success criteria, and roles with the customer. Walk through the [Outcome Library](../frameworks/outcome-library.md) and have the customer pick 3 to 4 outcomes that matter most now | CSM | Within 10 business days of close |
+| 1. Kickoff call: confirm goals, success criteria, and roles with the customer. Walk through the [Outcome Library](../frameworks/outcome-library.md), starting from the outcomes sold in the handoff packet, and have the customer pick 3 to 4 that matter most now. Reset any result Sales promised that is outside the library's typical range | CSM | Within 10 business days of close |
 | 2. Write the success plan: for each outcome, the goal in the customer's words, a customer owner, a baseline measured from the outcome's data source, and a target value and date | CSM, with customer champion | Baselines within 30 days of kickoff; plan within 30 days of close |
 | 3. Technical setup and integrations | Implementation or Support | Per the plan, tracked weekly |
 | 4. Train the first users and admins | CSM or Enablement | Before go-live |

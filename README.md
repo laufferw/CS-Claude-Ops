@@ -9,10 +9,10 @@ This repo is markdown-first. Almost everything here is a document you can read, 
 | Folder | What it holds |
 |---|---|
 | [`frameworks/`](frameworks/) | The models: the outcome library, CSM competencies, account health scoring, escalation logic, the account management engine |
-| [`specs/`](specs/) | Design docs for tools worth building: the CSM Copilot and a HubSpot agent interface |
+| [`specs/`](specs/) | Design docs for what's worth building: the CSM Copilot, a HubSpot agent interface, and Adoption as a Service |
 | [`prompts/`](prompts/) | Reusable Claude prompts, each with inputs, output format, and known failure modes |
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
-| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator, an outcome progress report, a renewal window extractor, and an ROI calculator |
+| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator, an outcome progress report, a value report, a renewal window extractor, and an ROI calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
 | [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
 | [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
@@ -34,6 +34,7 @@ Terms are defined in the [glossary](glossary.md).
 
 - [CSM Copilot](specs/csm-copilot-spec.md): a Claude Code CLI copilot for CSMs, built on MCP servers
 - [HubSpot Agent Interface](specs/hubspot-agent-interface.md): what an agent may read and do in HubSpot, and the guardrails
+- [Adoption as a Service](specs/adoption-as-a-service.md): a paid CS offering that takes customers to measured outcomes, its pricing guardrails, and the value report
 
 ### Prompts
 
@@ -62,6 +63,10 @@ The customer lifecycle, in order:
 - [At-Risk Save Plan](playbooks/at-risk-save-plan.md): what goes into the plan for a Red or escalated account
 - [Churn and Offboarding](playbooks/churn-and-offboarding.md): offboarding, exit interviews, and feeding churn back into scoring
 
+Cross-functional:
+
+- [Outcome Review](playbooks/outcome-review.md): each quarter, take outcome results to Product, Marketing, Sales, and the Outcome Library
+
 Situational:
 
 - [Handling Customer SLA Pushback](playbooks/sla-pushback.md): responding to requests for stronger service-level commitments
@@ -70,17 +75,19 @@ Situational:
 ### Tools and sample data
 
 - [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts and their success plans
-- [Outcome progress](tools/README.md#outcome-progress): each success plan goal's progress from baseline to target, for QBRs and renewals
+- [Outcome progress](tools/README.md#outcome-progress): each success plan goal's progress from baseline to target, and whether the features behind it are in use, for QBRs and renewals
+- [Value report](tools/README.md#value-report): the value a book has realized: proven goals, customer-agreed value, and inputs for the Outcome Review
 - [Renewal window](tools/README.md#renewal-window): the accounts renewing in the next 120 days, ready to paste into the Pre-Renewal Check
 - [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
 - [Repo checker](tools/README.md#repo-checker): checks required sections, links, the index, skills, and tools. Runs in CI on every push
-- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, their success plans, plus sample ROI inputs
+- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, their success plans and feature adoption, plus sample ROI inputs
 
 ### Essays
 
 - [CS Ops Is a Discipline, Not a Help Desk](essays/cs-ops-is-a-discipline.md)
 - [Health Scores Are for Deciding, Not Reporting](essays/health-scores-are-for-deciding.md)
 - [Claude Drafts, People Decide](essays/claude-drafts-people-decide.md)
+- [Prove the Value, Then Sell It](essays/prove-the-value-then-sell-it.md)
 
 ## Ground rules
 
@@ -114,7 +121,8 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 ### By hand
 
 - Start with the [Outcome Library](frameworks/outcome-library.md) to see how value is defined and measured, then [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
-- Run `python3 tools/outcome_progress.py sample-data/success-plans.csv --as-of 2026-10-01` for each goal's progress from baseline, ready for a QBR.
+- Run `python3 tools/outcome_progress.py sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01` for each goal's progress from baseline and its adoption reading, ready for a QBR.
+- Run `python3 tools/value_report.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01` for the value the book has realized, and read [Adoption as a Service](specs/adoption-as-a-service.md) for how to sell it.
 - Score the [sample accounts](sample-data/README.md) with `python3 tools/score_accounts.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01`, then paste the result into the [Weekly CSM Brief](prompts/weekly-csm-brief.md) prompt.
 - Run `python3 tools/renewal_window.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01` and paste the result into the [Pre-Renewal Check](prompts/pre-renewal-check.md) prompt.
 - Pair scoring with the [Account Review prompt](prompts/account-review.md) to review a single account with Claude.

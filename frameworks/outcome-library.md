@@ -15,7 +15,7 @@ It gives the customer, CS, and Sales one definition of value. It also gives the 
 | The customer's priorities | Kickoff call, [handoff packet](../playbooks/sales-to-cs-handoff.md) | "We invoice two weeks late and lose track of billable charges" |
 | Baseline measurement | The outcome's data source, at or before kickoff | Invoice cycle time of 9 days on 2026-01-10 |
 | Ongoing measurements | The same source, read automatically | Invoice cycle time each month |
-| Feature adoption | Product analytics | Use of the features each outcome depends on |
+| Feature adoption | Product analytics | Share of each feature's target users who used it in the last 30 days |
 | Results across customers | Past success plans | How much accounts that met an outcome improved it |
 
 ## What earns a place in the library
@@ -64,6 +64,7 @@ Each goal records:
 | Baseline value and date | Measured before work starts, within 30 days of kickoff |
 | Target value and date | Agreed with the customer owner |
 | Current value and date | The latest measurement. Blank until the first one after the baseline |
+| Annual value per unit (optional) | What the customer agrees one unit of improvement is worth per year, such as $2,750 per weekly hour saved. Blank unless the customer agreed it |
 
 [`sample-data/success-plans.csv`](../sample-data/success-plans.csv) has this format.
 
@@ -92,10 +93,27 @@ The Outcomes signal is the share of counted goals that are Met or On track (see 
 
 [`tools/outcome_progress.py`](../tools/outcome_progress.py) applies these rules and writes the per-goal report.
 
+## Checking adoption behind each outcome
+
+A goal's number can move for reasons that have nothing to do with the product, and a goal can stall even when the product is used well. So each counted goal is checked against adoption of the features its outcome depends on (the library's "Depends on" column).
+
+A feature is **lightly used** when fewer than 40% of its target users used it in the last 30 days. An outcome is **Supported** when more than half of its features with adoption data are not lightly used, and **Unsupported** otherwise. With no adoption data for any of its features, support is **Unknown**. Custom goals have no feature link, so they are not checked.
+
+Status and support together give each counted goal a reading:
+
+| | Features in use (Supported) | Features lightly used (Unsupported) |
+|---|---|---|
+| **Met or On track** | **Proven.** Cite it as our result | **Unexplained progress.** The number moved, but not through the product. Find out why before claiming it |
+| **Off track or Missed** | **Not converting.** The features are used but the number isn't moving. Check configuration and process with the customer. If it happens at 2 or more accounts, it goes to Product through the [Outcome Review](../playbooks/outcome-review.md) | **Adoption gap.** The fix is adoption work on the named lightly used features |
+
+Only Proven goals count as evidence that the product delivered: in QBRs, renewal value stories, the [value report](../specs/adoption-as-a-service.md#outputs), and marketing. Goals with Unknown support are reported as data gaps until adoption data exists.
+
+With `--adoption`, `outcome_progress.py` adds each goal's support, its lightly used features, and its reading.
+
 ## Outputs
 
 - A success plan for each account: 3 to 4 goals, each with a baseline, a target, and the latest measurement
-- A per-goal progress report for QBRs, renewal value stories, and expansion evidence
+- A per-goal progress report for QBRs, renewal value stories, and expansion evidence, with an adoption reading for each goal
 - The Outcomes signal and the no-measured-outcomes override in [Account Health Scoring](account-health-scoring.md)
 - Across the book: which outcomes customers pick and how often they are met, as evidence for Sales, Marketing, and Product
 
@@ -116,6 +134,17 @@ The close goal (OL-06) passed its target date without being met, so it is Missed
 
 One of four goals counts as on track, so Cedar's Outcomes signal is 25. Every goal has a baseline and a recent measurement, so the QBR can show the customer each number.
 
+The adoption check splits the three goals that are behind into two different problems:
+
+| Outcome | Status | Features (adoption) | Reading |
+|---|---|---|---|
+| OL-06 | Missed | Reconciliation 22%, period locking 15% | Adoption gap |
+| OL-08 | Off track | Validation rules 30%, integrations 35% | Adoption gap |
+| OL-03 | On track | Payment portal 74%, automated reminders 80% | Proven |
+| OL-11 | Off track | Approval workflows 82%, mobile approvals 58% | Not converting |
+
+Two goals need adoption work on four named features. The approvals goal needs something else: the features are in use, so the CSM checks how approvals are configured and routed before asking anyone to use the product more.
+
 The sample data has the other statuses too. Riverbend Credit Union's goals were last measured in June, so all four are Stale, and its band is capped at Yellow. One of Sable Energy's goals never had a baseline, so it is left out of the count and listed as a data gap.
 
 ## Failure modes
@@ -123,7 +152,8 @@ The sample data has the other statuses too. Riverbend Credit Union's goals were 
 - **The library grows into a feature list.** Every request becomes an outcome, and the menu stops being a menu. The four tests and the cap of about 12 guard against this.
 - **Baselines set late or guessed.** A baseline taken after the product has already moved the number understates value. One estimated by hand can't be compared with automated measurements. Take it within 30 days of kickoff, from the same source as every later measurement.
 - **Easy targets, so everything is on track.** Check targets against the typical range. A CS manager reviews any target below the bottom of the range.
-- **Claiming credit for moves the product didn't make.** The customer's number can move because of a reorg or a new hire. Report progress next to adoption of the features the outcome depends on. If those features are barely used, say so rather than claiming the result.
+- **Claiming credit for moves the product didn't make.** The customer's number can move because of a reorg or a new hire. The adoption check marks such goals Unexplained progress, and only Proven goals count as our result.
+- **Adoption data that measures logins, not use.** "Used the feature" must mean doing the work in it, such as approving a request, not opening the screen. Otherwise every goal looks Supported.
 - **A broken data feed makes goals go quiet.** Stale is a status, it shows as a data gap, and an account with no measured outcomes cannot be Green.
 - **Goals picked for the CSM's convenience.** The customer picks, and every goal has a customer-side owner.
 - **Typical ranges sold as guarantees.** They are evidence, not commitments. Any promised result goes through Sales and Legal, like any other commitment.
@@ -133,3 +163,5 @@ The sample data has the other statuses too. Riverbend Credit Union's goals were 
 Each quarter, for each outcome: how many plans picked it, the share met by their target date, and the median improvement. Update the typical ranges from those results. Retire outcomes that are rarely picked or can't be measured reliably, and promote custom goals that recur with evidence.
 
 Check the tolerance too. If many goals marked On track halfway to their target end up Missed, tighten the 25 points.
+
+Check the feature lists. An outcome that is often Not converting despite good adoption either depends on features the list leaves out, or has a product gap. The [Outcome Review](../playbooks/outcome-review.md) decides which. Check the 40% light-use threshold the same way: Proven goals should rarely sit on features just above it.

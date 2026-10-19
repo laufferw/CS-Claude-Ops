@@ -7,7 +7,7 @@ Draft a slide-by-slide outline for a quarterly business review that centers on t
 ## Inputs
 
 - The customer's goals and success criteria (the success plan, or the [handoff packet](handoff-packet.md) for a new account)
-- Outcomes this quarter, with evidence (metrics, quotes, milestones)
+- Outcomes this quarter, with evidence: the per-goal report from [`tools/outcome_progress.py`](../tools/outcome_progress.py) with adoption readings, plus quotes and milestones
 - Usage and adoption data, and the trend
 - Support summary: tickets, escalations, and how they were resolved
 - Who will attend from the customer side
@@ -32,6 +32,7 @@ For each slide give a title, three to five bullets, and the evidence behind each
 Rules:
 - Lead with their goals, not our features.
 - If outcomes are thin, say so on slide 2 and make slide 5 carry the plan. Do not dress up weak results.
+- Present a result as delivered by the product only when its reading is Proven. For Unexplained progress, report the number and say we are confirming what drove it. For an Adoption gap, slide 3 names the lightly used features and slide 5 the adoption plan. Do not show the reading labels themselves to the customer.
 - Make no roadmap promises or pricing statements. Mark any slide that needs Product or Sales input with [NEEDS REVIEW: who].
 - Include an ask on slide 7 only if the evidence supports it. Do not ask for expansion or a reference from an account with open escalations or a Red band.
 - Tailor the depth to the attendees: executives get outcomes and plan; practitioners get adoption detail.
@@ -50,5 +51,5 @@ Numbered slides, each with a title, bullets, and evidence. Skipped slides are li
 ## Known failure modes
 
 - Turns into a product update. The first rule puts their goals first. Count how many bullets are about features.
-- Overstates outcomes. The prompt asks for evidence per bullet. Check each against the data.
+- Overstates outcomes. The prompt asks for evidence per bullet, and claims only Proven goals as our result. Check each against the data.
 - Puts an expansion ask in front of an unhappy customer. The ask rule blocks this for open escalations and Red accounts. Use judgment for Yellow.

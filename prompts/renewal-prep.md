@@ -6,7 +6,7 @@ Prepare a CSM for a renewal conversation roughly 90 to 120 days out.
 
 ## Inputs
 
-Account summary, contract details (term, price, scope), usage and outcomes data, stakeholder list, any open issues.
+Account summary, contract details (term, price, scope), usage data, the per-goal outcome report with adoption readings (from [`tools/outcome_progress.py`](../tools/outcome_progress.py)), stakeholder list, any open issues.
 
 Run the [Pre-Renewal Check](pre-renewal-check.md) across the book first to find which accounts need this. The [Renewal](../playbooks/renewal.md) playbook sets the timeline this prep feeds.
 
@@ -27,6 +27,7 @@ Rules:
 - Use only the information provided. Mark assumptions clearly.
 - Do not propose pricing or discounts. Flag where Sales or Finance input is needed.
 - Keep the value story honest. If outcomes are thin, say so.
+- Count a goal as value we delivered only if its adoption reading is Proven. Give each goal's baseline, latest value, and any customer-agreed annual value.
 
 INPUT:
 {paste here}

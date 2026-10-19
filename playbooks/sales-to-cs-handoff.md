@@ -19,6 +19,7 @@ Deal moves to Closed Won.
 ## Handoff packet (required)
 
 - Customer goals and the success criteria they were sold
+- Outcomes sold: which [Outcome Library](../frameworks/outcome-library.md) outcomes were discussed, the customer's current value for each if known (with its source, as a provisional baseline), and any target or result Sales mentioned
 - Key stakeholders, roles, and who the champion and executive sponsor are
 - Commitments made during the sale (scope, timelines, terms, anything promised informally)
 - Contract summary: term, renewal date, ARR, special clauses
@@ -38,7 +39,7 @@ Onboarding starts from the kickoff note. See [Customer Onboarding](onboarding.md
 
 ## Quality check
 
-If the CSM cannot answer "why did they buy and what does success look like?" from the packet, it is incomplete.
+If the CSM cannot answer "why did they buy and what does success look like?" from the packet, it is incomplete. Success should be described as outcomes from the library, so onboarding starts from what was sold.
 
 ## Outputs
 
@@ -49,5 +50,7 @@ If the CSM cannot answer "why did they buy and what does success look like?" fro
 ## Failure modes
 
 - Informal promises that never reach the CSM.
+- A typical range presented as a promise ("you'll cut invoicing time in half"). Any expected result Sales stated is listed as a commitment, so the CSM can confirm or reset it at kickoff.
+- Outcomes sold that aren't in the library, so nobody can measure them. Flag them at the handoff call.
 - Packet filled with copy-paste instead of real answers.
 - No check, so gaps surface at the first customer call.

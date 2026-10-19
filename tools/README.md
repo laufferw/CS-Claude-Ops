@@ -6,6 +6,7 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 |---|---|
 | [`score_accounts.py`](score_accounts.py) | Scores accounts with the [Account Health Scoring](../frameworks/account-health-scoring.md) rubric and adds the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority) priority |
 | [`outcome_progress.py`](outcome_progress.py) | Measures each success plan goal against its baseline and target, per the [Outcome Library](../frameworks/outcome-library.md#measuring-progress) rules |
+| [`value_report.py`](value_report.py) | Rolls goal statuses and adoption readings up into a book-level report of the value realized, for CS leadership and the [Outcome Review](../playbooks/outcome-review.md) |
 | [`renewal_window.py`](renewal_window.py) | Lists the accounts renewing in the next 120 days with the fields the [Pre-Renewal Check](../prompts/pre-renewal-check.md) needs |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
@@ -21,20 +22,24 @@ Reads the accounts and success plans in the [`sample-data`](../sample-data/READM
 ## Outcome progress
 
 ```
-python3 tools/outcome_progress.py sample-data/success-plans.csv --as-of 2026-10-01
+python3 tools/outcome_progress.py sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01
 ```
 
 ### Purpose
 
-Show each success plan goal's progress from baseline to target, so a CSM can bring the numbers to a QBR or renewal, and give the health score the goal statuses behind its Outcomes signal.
+Show each success plan goal's progress from baseline to target, and whether the features behind it are in use, so a CSM can bring the numbers to a QBR or renewal. It also gives the health score the goal statuses behind its Outcomes signal.
 
 ### Inputs
 
 A success plans CSV in the [`sample-data`](../sample-data/README.md#fields-in-success-planscsv) format, and an `--as-of` date (default today), used to judge staleness and missed targets.
 
+Optional: `--adoption`, a [feature adoption CSV](../sample-data/README.md#fields-in-feature-adoptioncsv), and `--library`, the Outcome Library file (default [`frameworks/outcome-library.md`](../frameworks/outcome-library.md)). The tool reads each outcome's features from the library table's "Depends on" column, so keep that table's columns in place.
+
 ### Outputs
 
-A CSV on stdout with one row per goal: account, outcome, goal, owner, unit, baseline, target and target date, latest value and date, progress and expected progress (in percent), and status. The status rules are in the [Outcome Library](../frameworks/outcome-library.md#measuring-progress).
+A CSV on stdout with one row per goal: account, outcome, goal, owner, unit, baseline, target and target date, latest value and date, progress and expected progress (in percent), and status. With `--adoption`, three more columns: support, the lightly used features with their adoption, and the reading (Proven, Unexplained progress, Adoption gap, or Not converting). The rules are in the [Outcome Library](../frameworks/outcome-library.md#measuring-progress).
+
+For the sample data with adoption: 16 goals are Proven, 2 show Unexplained progress, 9 have an Adoption gap, and 4 are Not converting.
 
 A summary line goes to stderr with the count of goals in each status. For the sample data as of 2026-10-01: 11 accounts and 40 goals, with 3 met, 19 on track, 10 off track, 3 missed, 1 with no baseline, and 4 stale.
 
@@ -44,7 +49,41 @@ A summary line goes to stderr with the count of goals in each status. For the sa
 - **Plans outside 3 to 4 goals.** A warning names the account. The goals are still measured.
 - **Unknown outcome IDs.** The tool does not read the library. The [repo checker](#repo-checker) checks the sample file's IDs against it; check your own file the same way.
 - **Straight-line expectations.** Expected progress assumes steady improvement. The 25-point tolerance absorbs some lag, but a goal that improves late in its window can show Off track early. Read the trend, not just one status.
+- **Feature names that don't match.** A feature in the adoption file that isn't spelled as in the library is ignored, which can make an outcome's support Unknown. The repo checker checks the sample file's names.
 - **Measurements that aren't comparable.** The tool trusts that the baseline and later values come from the same source and definition. It can't tell if they don't.
+
+## Value report
+
+```
+python3 tools/value_report.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01
+```
+
+### Purpose
+
+Show what a book of accounts has realized from its success plans, in the customer's numbers, with proof the product delivered it. It is the CS value case described in [Adoption as a Service](../specs/adoption-as-a-service.md#outputs), and the input to the [Outcome Review](../playbooks/outcome-review.md).
+
+### Inputs
+
+The accounts CSV (for names and ARR), `--plans` (required), `--adoption` (needed to prove any goal), `--library` (default [`frameworks/outcome-library.md`](../frameworks/outcome-library.md)), and `--as-of`. Run it on one CSM's accounts or the whole book.
+
+### Outputs
+
+Markdown on stdout, in four sections:
+
+- **Book summary:** accounts with a success plan and their ARR, goals counted, goals met or on track, Proven goals, ARR on accounts with at least one Proven outcome, the customer-agreed annual value of Proven goals, and data gaps.
+- **By outcome:** for each outcome picked, the plans that picked it, counts by status, median progress, and counts by reading.
+- **Customer-agreed value:** each goal with an agreed value per unit, its improvement so far, the annual value, and whether it is counted (Proven goals only) or why not.
+- **For the outcome review:** outcomes not converting at 2 or more accounts, for Product. Lightly used features behind adoption gaps, for enablement. Met and Proven goals, for Marketing to ask permission to use. Unexplained progress not to claim.
+
+For the sample data as of 2026-10-01: 11 of 12 accounts have a plan, 22 of 35 counted goals are met or on track, and 16 are Proven. $1,850,000 of $2,240,000 ARR (83%) is on accounts with at least one Proven outcome, and Proven goals carry $625,500 of customer-agreed annual value. Faster month-end close is not converting at two accounts.
+
+### Failure modes
+
+- **No adoption file.** Nothing can be Proven, so the Proven counts and value are zero. A warning says so.
+- **Reading the value total as revenue.** It is the customer's own estimate of what the improvement is worth to them. It supports the value story, and it is not a number to book or add to the [ROI calculator](#roi-calculator)'s results.
+- **ARR with a proven outcome read as ARR saved.** An account with one Proven goal can still churn. The figure shows how much of the book can see evidence, not how much is safe.
+- **Small numbers.** Median progress and status counts on an outcome picked by 2 or 3 plans are anecdotes. The outcome review's 2-account and 5-account rules apply.
+- **Plans for unknown accounts.** Goals whose account isn't in the accounts CSV are still counted, with the ID in place of a name, and a warning lists them.
 
 ## Renewal window
 
@@ -92,6 +131,7 @@ Prints "All checks passed." or a list of every problem, and exits non-zero on fa
 - **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
 - **Tools:** each tool runs on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
 - **Outcome IDs:** every `outcome_id` in `sample-data/success-plans.csv` is in the [Outcome Library](../frameworks/outcome-library.md), or is `custom`
+- **Feature names:** every feature in `sample-data/feature-adoption.csv` is named in the library's "Depends on" column
 
 It does not judge whether the content is right. That is still a review.
 

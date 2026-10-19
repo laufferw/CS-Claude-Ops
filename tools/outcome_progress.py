@@ -1,24 +1,36 @@
 """Measure success plan goals against their baselines and targets.
 
-Implements the progress and status rules in frameworks/outcome-library.md.
-Writes one row per goal, for QBRs and renewal value stories, and gives
-score_accounts.py the goal statuses behind the Outcomes signal. Standard
-library only.
+Implements the progress, status, and adoption rules in
+frameworks/outcome-library.md. Writes one row per goal, for QBRs and renewal
+value stories, and gives score_accounts.py the goal statuses behind the
+Outcomes signal. With --adoption, it also checks whether the features each
+outcome depends on are in use. Standard library only.
 
 Usage:
-    python3 tools/outcome_progress.py sample-data/success-plans.csv --as-of 2026-10-01
+    python3 tools/outcome_progress.py sample-data/success-plans.csv \
+        --adoption sample-data/feature-adoption.csv --as-of 2026-10-01
 """
 
 import argparse
 import csv
 import sys
 from datetime import date
+from pathlib import Path
+
+LIBRARY = Path(__file__).resolve().parent.parent / "frameworks" / "outcome-library.md"
 
 STALE_DAYS = 60  # a goal not measured for longer than this is Stale
 TOLERANCE = 0.25  # how far behind the straight line to target a goal can be and still be On track
 MIN_GOALS, MAX_GOALS = 3, 4
 SCORED_STATUSES = ("Met", "On track", "Off track", "Missed")
 GOOD_STATUSES = ("Met", "On track")
+LIGHT_USE = 40  # a feature used by fewer than this % of its target users is lightly used
+READINGS = {  # (goal is Met or On track, features are in use) -> reading
+    (True, True): "Proven",
+    (True, False): "Unexplained progress",
+    (False, False): "Adoption gap",
+    (False, True): "Not converting",
+}
 REQUIRED_COLUMNS = ["account_id", "outcome_id", "goal", "customer_owner", "unit",
                     "baseline_value", "baseline_date", "target_value", "target_date",
                     "current_value", "current_date"]
@@ -96,6 +108,56 @@ def load_plans(path, as_of):
     return plans
 
 
+def load_library(path=LIBRARY):
+    """Read the library table. Return {outcome_id: {"name": ..., "features": [...]}}."""
+    library, columns = {}, None
+    for line in Path(path).read_text().splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if cells[:2] == ["ID", "Outcome"]:
+            columns = cells
+        elif columns and len(cells) == len(columns) and cells[0].startswith("OL-"):
+            row = dict(zip(columns, cells))
+            features = [f.strip().lower() for f in row["Depends on"].split(",")]
+            library[row["ID"]] = {"name": row["Outcome"], "features": features}
+    if not library:
+        raise ValueError(f"{path}: no outcome table found")
+    return library
+
+
+def load_adoption(path):
+    """Read a feature adoption CSV. Return {account_id: {feature: adoption %}}."""
+    adoption = {}
+    with open(path, newline="") as f:
+        for line, row in enumerate(csv.DictReader(f), start=2):
+            pct_used = num(row["adoption_pct"])
+            if pct_used is None:
+                raise ValueError(f"{path} line {line}: adoption_pct is blank")
+            adoption.setdefault(row["account_id"], {})[row["feature"].strip().lower()] = pct_used
+    return adoption
+
+
+def add_support(plans, library, adoption):
+    """Add support, light_features, and reading to each goal, in place."""
+    for account_id, goals in plans.items():
+        used = adoption.get(account_id, {})
+        for goal in goals:
+            outcome = library.get(goal["outcome_id"])
+            if outcome is None:  # custom goal: no feature link to check
+                goal.update(support="n/a", light_features="", reading="")
+                continue
+            measured = {f: used[f] for f in outcome["features"] if f in used}
+            light = [f for f, value in measured.items() if value < LIGHT_USE]
+            if not measured:
+                support = "Unknown"
+            else:
+                support = "Supported" if len(measured) - len(light) > len(measured) / 2 else "Unsupported"
+            reading = ""
+            if support in ("Supported", "Unsupported") and goal["status"] in SCORED_STATUSES:
+                reading = READINGS[(goal["status"] in GOOD_STATUSES, support == "Supported")]
+            goal.update(support=support, reading=reading,
+                        light_features="; ".join(f"{f} {round_half_up(measured[f])}%" for f in light))
+
+
 def summarize(goals):
     """One-line goal summary, such as '2 of 3 on track; 1 no baseline'."""
     scored = [g for g in goals if g["status"] in SCORED_STATUSES]
@@ -117,16 +179,22 @@ def main():
     parser.add_argument("plans_csv")
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today(),
                         help="date to judge staleness and missed targets from (YYYY-MM-DD)")
+    parser.add_argument("--adoption", help="feature adoption CSV, to check the features behind each goal")
+    parser.add_argument("--library", default=LIBRARY, help="the Outcome Library markdown file")
     args = parser.parse_args()
 
     try:
         plans = load_plans(args.plans_csv, args.as_of)
+        if args.adoption:
+            add_support(plans, load_library(args.library), load_adoption(args.adoption))
     except ValueError as e:
         sys.exit(str(e))
 
     fields = ["account_id", "outcome_id", "goal", "customer_owner", "unit", "baseline_value",
               "target_value", "target_date", "current_value", "current_date",
               "progress_pct", "expected_pct", "status"]
+    if args.adoption:
+        fields += ["support", "light_features", "reading"]
     writer = csv.DictWriter(sys.stdout, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
     writer.writeheader()
     for account_id, goals in plans.items():
