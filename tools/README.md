@@ -17,6 +17,7 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 | [`forecast_backtest.py`](forecast_backtest.py) | Back-tests the renewal forecast: accuracy by quarter, and how much of each category renewed |
 | [`run_evals.py`](run_evals.py) | Checks prompt outputs against the cases in [`evals/`](../evals/README.md), and self-tests every case |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
+| [`build_skills.py`](build_skills.py) | Builds the self-contained Claude skills in `skills/` from the prompts, and zips them for the Claude apps |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
 
 ## Import data
@@ -177,6 +178,32 @@ For the sample data as of 2026-10-01, five accounts with $860,000 ARR are in the
 - **Empty window.** Writes only the header, and the summary line says 0 accounts. Check the `--as-of` date before concluding nothing is renewing.
 - **Stale data.** The window is only as current as the CSV. A renewal date that moved in the CRM but not in the export puts an account in the wrong window.
 
+## Build skills
+
+```
+python3 tools/build_skills.py
+python3 tools/build_skills.py --check
+python3 tools/build_skills.py --zip dist
+```
+
+### Purpose
+
+Keep one source of truth for each skill (its prompt) while shipping skills that work on their own: in the Claude Code plugin, copied into a skills folder, or uploaded to the Claude apps as a zip.
+
+### Inputs
+
+[`tools/skills.json`](skills.json): for each skill, its name, title, description, source prompt, the frameworks it bundles, and the tool commands that can build its input.
+
+### Outputs
+
+`skills/<name>/` for each skill: a `SKILL.md` whose frontmatter uses only the Agent Skills fields (`name`, `description`, `license`), and `references/` holding the prompt and frameworks, with links rewritten to work inside the folder or point to GitHub. `--check` exits non-zero if `skills/` differs from a fresh build; the repo checker runs it. `--zip DIR` also writes one zip per skill and `outcome-led-cs-ops-all-skills.zip`; the release workflow attaches them to each GitHub release.
+
+### Failure modes
+
+- **Editing `skills/` by hand.** The next build overwrites it, and the check fails until it does. Edit the prompt or `tools/skills.json`.
+- **A bundled doc that links to a file the skill doesn't bundle.** The link points to GitHub, so it needs a network connection. Bundle the file if the skill can't work without it.
+- **Plugin-only instructions in the Claude apps.** The "Building the input" section names `${CLAUDE_PLUGIN_ROOT}`, which only Claude Code fills in. Elsewhere the skill tells Claude to ask for pasted input instead.
+
 ## Repo checker
 
 ```
@@ -188,7 +215,7 @@ Prints "All checks passed." or a list of every problem, and exits non-zero on fa
 - **Required sections** by folder. Guides need Who it's for, What you need, Your week, What you get, Start here, and Failure modes. Frameworks need Purpose, Inputs, Outputs, and Failure modes. Prompts need Purpose, Inputs, Prompt, Output format, and Known failure modes. Playbooks need Purpose, Trigger, Inputs, Steps, Outputs, and Failure modes. Specs need Goals, Non-goals, Inputs, Outputs, Safety and trust, and Failure modes. These match the [templates](../templates/README.md)
 - **Links:** every relative link points at a file that exists, and every `#anchor` at a heading that exists
 - **Index:** the README links to every doc in `guides/`, `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
-- **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
+- **Skills:** each prompt has exactly one skill in `tools/skills.json`, names and descriptions fit the Agent Skills limits, `skills/` matches a fresh build, the README's skills table lists every skill, and the plugin and marketplace manifests agree with each other and with `CHANGELOG.md`
 - **Tools:** each tool runs on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
 - **Outcome IDs:** every `outcome_id` in `sample-data/success-plans.csv` is in the [Outcome Library](../frameworks/outcome-library.md), or is `custom`
 - **Feature names:** every feature in `sample-data/feature-adoption.csv` is named in the library's "Depends on" column

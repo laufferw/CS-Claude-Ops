@@ -103,23 +103,23 @@ def main():
              f"{len(scored)} accounts: {bands['Green']} Green, {bands['Yellow']} Yellow, {bands['Red']} Red, "
              f"{bands['Insufficient data']} Insufficient data. Band drops: {', '.join(drops) or 'none'}.", "",
              "## Do this week", "",
-             "1. **Weekly brief.** Run `/cs-weekly-brief` on `scored.csv`."]
+             "1. **Weekly brief.** Run the `cs-weekly-brief` skill on `scored.csv`."]
     step = 2
     if window:
-        lines.append(f"{step}. **Renewals.** {len(window)} renewing within 120 days. Run `/cs-pre-renewal-check` on "
-                     f"`renewal-window.csv`, then `/cs-renewal-prep` for each one that needs work: "
+        lines.append(f"{step}. **Renewals.** {len(window)} renewing within 120 days. Run the `cs-pre-renewal-check` skill on "
+                     f"`renewal-window.csv`, then the `cs-renewal-prep` skill for each one that needs work: "
                      + ", ".join(r["account"] for r in window) + ".")
         step += 1
     if gaps:
         lines.append(f"{step}. **Adoption plans.** Goals with an adoption gap at {', '.join(gaps)}. "
-                     "Run `/cs-adoption-plan` with those rows of `outcome-progress.csv`.")
+                     "Run the `cs-adoption-plan` skill with those rows of `outcome-progress.csv`.")
         step += 1
     if no_plan or unbaselined:
         parts = ([f"no success plan: {', '.join(no_plan)}"] if no_plan else []) + \
                 ([f"goals with no baseline or gone stale: {', '.join(unbaselined)}"] if unbaselined else [])
         text = "; ".join(parts)
         lines.append(f"{step}. **Success plans.** {text[0].upper()}{text[1:]}. "
-                     "Run `/cs-success-plan` to draft or repair them.")
+                     "Run the `cs-success-plan` skill to draft or repair them.")
         step += 1
     lines.append(f"{step}. **Forecast.** Check `forecast.md`, and update your call for anything under \"Calls to review\".")
     lines += ["", "## Files", "",

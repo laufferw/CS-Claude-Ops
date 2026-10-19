@@ -18,10 +18,10 @@ A director or manager responsible for a team's retention, forecast, and people. 
 |---|---|---|
 | Monday | Team rollup: health, risk, renewals, outcomes, and workload by CSM | [`tools/team_rollup.py`](../tools/team_rollup.py) |
 | Monday | Renewal forecast and calls that disagree with the data | [`tools/renewal_forecast.py`](../tools/renewal_forecast.py) |
-| Monday | Draft the team brief, then run the review | `/cs-team-brief`, [Weekly Team Review](../playbooks/weekly-team-review.md) |
+| Monday | Draft the team brief, then run the review | the `cs-team-brief` skill, [Weekly Team Review](../playbooks/weekly-team-review.md) |
 | Within 3 days of a band drop to Red | Confirm the escalation and save plan | [Escalation Logic](../frameworks/escalation-logic.md), [At-Risk Save Plan](../playbooks/at-risk-save-plan.md) |
 | Monthly | Review CSM band overrides and their reasons | [Account Health Scoring](../frameworks/account-health-scoring.md#override-rules) |
-| Quarterly | Coaching evidence for each CSM | `/cs-competency-evaluation` |
+| Quarterly | Coaching evidence for each CSM | the `cs-competency-evaluation` skill |
 | Quarterly | Outcome Review with Product, Marketing, and Sales | [Outcome Review](../playbooks/outcome-review.md) |
 
 Try it on the sample team:

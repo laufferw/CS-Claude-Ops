@@ -1,0 +1,224 @@
+[
+  {
+    "name": "cs-weekly-brief",
+    "title": "Weekly CSM Brief",
+    "prompt": "prompts/weekly-csm-brief.md",
+    "description": "Write a weekly brief for one CSM's book of accounts: top accounts to act on, renewals in 120 days, expansion signals, and data gaps. Use when the user asks for a weekly brief, a book review, or what to focus on this week, and provides account data.",
+    "references": [
+      "frameworks/account-health-scoring.md"
+    ],
+    "tools": [
+      {
+        "for": "score one CSM's book and write every weekly report (use its scored.csv)",
+        "run": "tools/run_week.py <accounts.csv> --plans <success-plans.csv> --csm \"<name>\" --as-of <date>"
+      },
+      {
+        "for": "score a whole book",
+        "run": "tools/score_accounts.py <accounts.csv> --plans <success-plans.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-account-review",
+    "title": "Account Review",
+    "prompt": "prompts/account-review.md",
+    "description": "Write a one-page review of a single customer account: snapshot, what's going well, risks, stakeholder map, next actions, and data gaps. Use when the user asks to review, summarize, or assess one account.",
+    "references": [
+      "frameworks/account-health-scoring.md"
+    ],
+    "tools": [
+      {
+        "for": "score the book",
+        "run": "tools/score_accounts.py <accounts.csv> --plans <success-plans.csv> --as-of <date>"
+      },
+      {
+        "for": "measure the account's goals",
+        "run": "tools/outcome_progress.py <success-plans.csv> --adoption <feature-adoption.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-churn-triage",
+    "title": "Churn Risk Triage",
+    "prompt": "prompts/churn-risk-triage.md",
+    "description": "Rank a list of accounts by churn risk with the top drivers and a recommended action for each. Use when the user asks which accounts are at risk of churning, or to triage a book by risk.",
+    "references": [
+      "frameworks/account-health-scoring.md"
+    ],
+    "tools": [
+      {
+        "for": "score the book",
+        "run": "tools/score_accounts.py <accounts.csv> --plans <success-plans.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-renewal-prep",
+    "title": "Renewal Prep",
+    "prompt": "prompts/renewal-prep.md",
+    "description": "Prepare a CSM for one account's renewal conversation: timeline, value story, risks, objections, expansion, and questions. Use when the user is preparing for a specific renewal.",
+    "references": [
+      "frameworks/outcome-library.md"
+    ],
+    "tools": [
+      {
+        "for": "measure the account's goals",
+        "run": "tools/outcome_progress.py <success-plans.csv> --adoption <feature-adoption.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-pre-renewal-check",
+    "title": "Pre-Renewal Check",
+    "prompt": "prompts/pre-renewal-check.md",
+    "description": "Check every account renewing in the next 120 days and give each a readiness status (Ready, Needs work, At risk, Unclear). Use when the user asks about upcoming renewals across a book.",
+    "references": [
+      "frameworks/account-health-scoring.md"
+    ],
+    "tools": [
+      {
+        "for": "list the accounts renewing in 120 days",
+        "run": "tools/renewal_window.py <accounts.csv> --plans <success-plans.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-redline-summary",
+    "title": "Contract Redline Summary",
+    "prompt": "prompts/contract-redline-summary.md",
+    "description": "Summarize a customer's proposed contract changes (MSA, SOW, SLA) in plain language and route each to the function that owns it. Use when the user shares a redline or a list of contract changes. Not legal advice.",
+    "references": [],
+    "tools": []
+  },
+  {
+    "name": "cs-handoff-packet",
+    "title": "Handoff Packet",
+    "prompt": "prompts/handoff-packet.md",
+    "description": "Draft the Sales-to-CS handoff packet for a closed-won deal from deal notes, calls, and emails. Use when the user asks to prepare a handoff or summarize a new customer for the CSM.",
+    "references": [
+      "frameworks/outcome-library.md"
+    ],
+    "tools": []
+  },
+  {
+    "name": "cs-escalation-summary",
+    "title": "Escalation Summary",
+    "prompt": "prompts/escalation-summary.md",
+    "description": "Draft the write-up that opens a customer escalation (level, required fields, gaps), or the summary that closes one (outcome, root cause tag). Use when the user is opening or closing an escalation.",
+    "references": [
+      "frameworks/escalation-logic.md"
+    ],
+    "tools": []
+  },
+  {
+    "name": "cs-customer-email",
+    "title": "Customer Email",
+    "prompt": "prompts/customer-email.md",
+    "description": "Draft a customer-facing email for a CSM to review and send. Use when the user asks for a follow-up, update, meeting request, or other email to a customer.",
+    "references": [],
+    "tools": []
+  },
+  {
+    "name": "cs-qbr-outline",
+    "title": "QBR Outline",
+    "prompt": "prompts/qbr-outline.md",
+    "description": "Draft a slide-by-slide outline for a quarterly business review built on the customer's goals and outcomes. Use when the user is preparing a QBR or business review.",
+    "references": [
+      "frameworks/outcome-library.md"
+    ],
+    "tools": [
+      {
+        "for": "measure the account's goals",
+        "run": "tools/outcome_progress.py <success-plans.csv> --adoption <feature-adoption.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-account-update",
+    "title": "Internal Account Update",
+    "prompt": "prompts/internal-account-update.md",
+    "description": "Write a short internal status update on one account for a manager, account team, or leadership. Use when the user asks for an account update, status note, or summary for internal stakeholders.",
+    "references": [],
+    "tools": []
+  },
+  {
+    "name": "cs-competency-evaluation",
+    "title": "CSM Competency Evaluation",
+    "prompt": "prompts/csm-competency-evaluation.md",
+    "description": "Gather evidence from a CSM's work samples against the CSM competency framework, area by area. Use when a manager asks to assess, coach, or prepare a review for a CSM.",
+    "references": [
+      "frameworks/csm-competency-framework.md"
+    ],
+    "tools": []
+  },
+  {
+    "name": "cs-success-plan",
+    "title": "Success Plan Builder",
+    "prompt": "prompts/success-plan-builder.md",
+    "description": "Draft a success plan from kickoff material: 3 to 4 outcomes from the Outcome Library, each with a customer owner, baseline, and target, or repair goals with no baseline or gone stale. Use when the user is starting a customer's success plan or fixing an unmeasured one.",
+    "references": [
+      "frameworks/outcome-library.md"
+    ],
+    "tools": [
+      {
+        "for": "find goals with no baseline or gone stale, for a repair",
+        "run": "tools/outcome_progress.py <success-plans.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-adoption-plan",
+    "title": "Adoption Plan",
+    "prompt": "prompts/adoption-plan.md",
+    "description": "Turn success plan goals with an adoption gap into a plan by feature: who, action, owners, and dates, plus what to check for goals that are not converting. Use when the user asks how to get a customer using the features behind their outcomes.",
+    "references": [
+      "frameworks/outcome-library.md"
+    ],
+    "tools": [
+      {
+        "for": "measure goals and their adoption",
+        "run": "tools/outcome_progress.py <success-plans.csv> --adoption <feature-adoption.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-value-narrative",
+    "title": "Value Narrative",
+    "prompt": "prompts/value-narrative.md",
+    "description": "Write the story of value delivered from a value report or one account's outcome progress, for a customer executive, CS leadership, the exec team, or the board. Use when the user asks to show or report the value CS or the product has delivered.",
+    "references": [
+      "frameworks/outcome-library.md",
+      "frameworks/cs-metrics-scorecard.md"
+    ],
+    "tools": [
+      {
+        "for": "build the value report",
+        "run": "tools/value_report.py <accounts.csv> --plans <success-plans.csv> --adoption <feature-adoption.csv> --as-of <date>"
+      },
+      {
+        "for": "add the scorecard, for leadership audiences",
+        "run": "tools/cs_scorecard.py <accounts.csv> --plans <success-plans.csv> --adoption <feature-adoption.csv> --history <renewal-history.csv> --as-of <date>"
+      }
+    ]
+  },
+  {
+    "name": "cs-team-brief",
+    "title": "Team Brief",
+    "prompt": "prompts/team-brief.md",
+    "description": "Draft a CS director's weekly brief across the team from the team rollup and renewal forecast: calls to challenge, risk by CSM, capacity, and data gaps. Use when a director or manager asks for a team review, team brief, or forecast review.",
+    "references": [
+      "frameworks/renewal-forecast.md",
+      "frameworks/capacity-model.md"
+    ],
+    "tools": [
+      {
+        "for": "roll the book up by CSM",
+        "run": "tools/team_rollup.py <accounts.csv> --plans <success-plans.csv> --capacity <capacity.json> --as-of <date>"
+      },
+      {
+        "for": "forecast renewals",
+        "run": "tools/renewal_forecast.py <accounts.csv> --plans <success-plans.csv> --calls <forecast-calls.csv> --as-of <date>"
+      }
+    ]
+  }
+]

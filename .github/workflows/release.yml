@@ -1,0 +1,31 @@
+name: Release skills
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the repo
+        run: python3 tools/check_repo.py
+      - name: Check the tag matches the plugin version
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          test "${GITHUB_REF_NAME}" = "v${version}" || { echo "Tag ${GITHUB_REF_NAME} does not match plugin version ${version}"; exit 1; }
+      - name: Build skill zips
+        run: python3 tools/build_skills.py --zip dist
+      - name: Create the release with one zip per skill
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=$(python3 -c "import re,sys; t=open('CHANGELOG.md').read(); v='${GITHUB_REF_NAME}'[1:]; m=re.search(r'^## '+re.escape(v)+r'\n(.*?)(?=^## |\Z)', t, re.S|re.M); print(m.group(1).strip() if m else '')")
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip --title "Outcome-Led CS Ops ${GITHUB_REF_NAME}" --notes "${notes}"

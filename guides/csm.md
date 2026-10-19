@@ -17,14 +17,14 @@ A CSM who owns a book of accounts. It helps you decide where to spend this week,
 | When | Do | With |
 |---|---|---|
 | Monday | Run your week. It writes every report and a `week.md` that lists what to do | [`tools/run_week.py`](../tools/run_week.py) with `--csm "<your name>"` |
-| Monday | Read your brief: top accounts, renewals, expansion, data gaps | `/cs-weekly-brief` on `scored.csv` |
+| Monday | Read your brief: top accounts, renewals, expansion, data gaps | the `cs-weekly-brief` skill on `scored.csv` |
 | Monday | Update forecast calls for anything in "Calls to review" | `forecast.md`, then your calls file |
-| As needed | Accounts renewing within 120 days | `/cs-pre-renewal-check`, then `/cs-renewal-prep` |
-| As needed | A goal with an adoption gap | `/cs-adoption-plan` |
-| As needed | A new customer, or a plan with no baselines | `/cs-success-plan` |
-| As needed | QBR prep, then the follow-up email | `/cs-qbr-outline`, `/cs-customer-email` |
-| As needed | A Red band or red flag | `/cs-escalation-summary`, then the [At-Risk Save Plan](../playbooks/at-risk-save-plan.md) |
-| As needed | Status for your manager | `/cs-account-update` |
+| As needed | Accounts renewing within 120 days | the `cs-pre-renewal-check` skill, then the `cs-renewal-prep` skill |
+| As needed | A goal with an adoption gap | the `cs-adoption-plan` skill |
+| As needed | A new customer, or a plan with no baselines | the `cs-success-plan` skill |
+| As needed | QBR prep, then the follow-up email | the `cs-qbr-outline` skill, the `cs-customer-email` skill |
+| As needed | A Red band or red flag | the `cs-escalation-summary` skill, then the [At-Risk Save Plan](../playbooks/at-risk-save-plan.md) |
+| As needed | Status for your manager | the `cs-account-update` skill |
 
 Try it on the sample: ask Claude "run my week as Sam Example as of 2026-10-01", or run:
 

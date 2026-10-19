@@ -5,8 +5,8 @@ Checks:
   inputs, outputs, and failure modes)
 - Every relative link, and every #anchor, resolves
 - Every doc is listed in the README index
-- Every prompt has a skill, every skill points at a prompt that exists, and
-  the README's skills table lists every skill
+- Every prompt has one skill in tools/skills.json, skills/ matches a fresh build,
+  the README's skills table lists every skill, and the plugin manifests agree
 - The tools run, sample-data/scored-accounts.csv matches a fresh run, and importing
   the sample exports reproduces sample-data/accounts.csv
 - Every sample CSV row has as many fields as its header
@@ -21,6 +21,7 @@ Usage:
 """
 
 import csv
+import json
 import re
 import subprocess
 import sys
@@ -116,29 +117,42 @@ def check_index(problems):
 
 def check_skills(problems):
     readme = (ROOT / "README.md").read_text()
+    skills = json.loads((ROOT / "tools" / "skills.json").read_text())
+    names = [s["name"] for s in skills]
+    for name in sorted({n for n in names if names.count(n) > 1}):
+        problems.append(f"tools/skills.json: skill {name} is listed twice")
     pointed_at = {}
-    for skill in sorted((ROOT / ".claude" / "skills").glob("*/SKILL.md")):
-        name = skill.parent.name
-        text = skill.read_text()
-        front = re.match(r"---\n(.*?)\n---\n", text, re.S)
-        if not front or f"name: {name}\n" not in front.group(1) + "\n":
-            problems.append(f"{skill.relative_to(ROOT)}: frontmatter name must be '{name}'")
-        if front and not re.search(r'^description: ".+"$', front.group(1), re.M):
-            problems.append(f"{skill.relative_to(ROOT)}: description must be a quoted string")
-        prompts = re.findall(r"`(prompts/[\w-]+\.md)`", text)
-        if len(prompts) != 1:
-            problems.append(f"{skill.relative_to(ROOT)}: must point at exactly one prompt file")
-        for prompt in prompts:
-            if not (ROOT / prompt).exists():
-                problems.append(f"{skill.relative_to(ROOT)}: {prompt} does not exist")
-            pointed_at.setdefault(prompt, []).append(name)
+    for skill in skills:
+        name = skill["name"]
+        if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", name) or len(name) > 64:
+            problems.append(f"tools/skills.json: skill name '{name}' must be lowercase words joined by hyphens, at most 64 characters")
+        if not 0 < len(skill["description"]) <= 1024:
+            problems.append(f"tools/skills.json: {name} description must be 1 to 1024 characters")
+        for path in [skill["prompt"], *skill["references"]]:
+            if not (ROOT / path).exists():
+                problems.append(f"tools/skills.json: {name} names {path}, which does not exist")
+        pointed_at.setdefault(skill["prompt"], []).append(name)
         if f"`{name}`" not in readme:
             problems.append(f"README.md: skills table does not list {name}")
     for path in sorted((ROOT / "prompts").glob("*.md")):
         rel = path.relative_to(ROOT).as_posix()
         count = len(pointed_at.get(rel, []))
         if count != 1:
-            problems.append(f"{rel}: has {count} skills pointing at it, expected 1")
+            problems.append(f"{rel}: has {count} skills in tools/skills.json, expected 1")
+    built = run(["tools/build_skills.py", "--check"])
+    if built.returncode != 0:
+        problems.append(built.stdout.strip() or built.stderr.strip())
+
+    plugin = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())
+    market = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
+    entries = [e["name"] for e in market.get("plugins", [])]
+    if entries != [plugin["name"]]:
+        problems.append(f".claude-plugin/marketplace.json: plugin entries {entries} should be exactly ['{plugin['name']}']")
+    if not plugin.get("version"):
+        problems.append(".claude-plugin/plugin.json: set a version")
+    changelog = (ROOT / "CHANGELOG.md").read_text() if (ROOT / "CHANGELOG.md").exists() else ""
+    if f"## {plugin.get('version')}" not in changelog:
+        problems.append(f"CHANGELOG.md: no section for version {plugin.get('version')} from plugin.json")
 
 
 def run(args):

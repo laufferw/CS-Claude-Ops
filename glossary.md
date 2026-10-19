@@ -101,6 +101,8 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **Charter** | The written statement of what CS is for, owns, and doesn't own. See [CS Charter](frameworks/cs-charter.md) |
 | **Ownership map** | Who does the work (R), decides (A), is consulted (C), and is informed (I) for each activity across functions |
 | **Data class** | The policy category a piece of customer data falls in: allowed, minimum necessary, check the contract first, or never. See [AI Usage Policy](frameworks/ai-usage-policy.md) |
+| **Skill** | A folder with a `SKILL.md` that teaches Claude one task. Here, each skill wraps one prompt and the docs it needs. See [`skills/`](skills/) |
+| **Plugin** | A package of skills that Claude Code installs from a marketplace. This repo is both the plugin and its marketplace |
 | **Value history** | Goals an account has met and retired from its success plan. Evidence for renewal, no longer scored |
 | **Go-live** | The point at which the customer starts using the product for real work |
 | **First value** | The first measured improvement on a success plan goal, from its baseline. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |

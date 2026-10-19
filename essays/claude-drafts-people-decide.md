@@ -30,7 +30,7 @@ Saying "people decide" is easy. Building it into the tools takes specific choice
 - **Placeholders instead of promises.** The [customer email](../prompts/customer-email.md) prompt writes `[NEEDS APPROVAL: what and from whom]` wherever a commitment would go. The draft cannot be sent as-is without someone resolving it.
 - **Routing instead of recommending.** The [contract redline](../prompts/contract-redline-summary.md) prompt says who needs to weigh in on each change. It does not say whether to accept it.
 - **Evidence instead of verdicts.** The [competency evaluation](../prompts/csm-competency-evaluation.md) gathers examples per area. A manager decides what they add up to.
-- **Read by default, writes confirmed.** The [HubSpot agent interface](../specs/hubspot-agent-interface.md) lets an agent read freely, propose changes as a diff, and apply them only after a person confirms each batch.
+- **Read by default, writes confirmed.** The [CRM agent interface](../specs/crm-agent-interface.md) lets an agent read freely, propose changes as a diff, and apply them only after a person confirms each batch.
 
 The pattern is the same everywhere: the model does the work up to the point of decision, makes the decision easy to see, and stops.
 

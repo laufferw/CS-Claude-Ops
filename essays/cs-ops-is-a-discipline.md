@@ -23,7 +23,7 @@ The help desk builds it.
 
 The discipline asks what decision the dashboard is for, who will make it, and what they will do differently. Often the answer is that the decision is already covered by an existing rule, and the person asking didn't know. Sometimes the answer is that nobody will act on it, and the dashboard would just be another screen to ignore. Occasionally the request reveals a real gap, and the right response is a new rule or a new step in a playbook, with the dashboard as a by-product.
 
-The projects board playbook in this repo makes the same argument at small scale: [before adding target dates, ask](../playbooks/hubspot-projects-board.md#before-adding-target-dates-ask) what decision the dates will inform and who will act when one is missed. It is a good question to ask about everything.
+The [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md) in this repo applies the same test to metrics: a metric earns its place only if someone will act differently because of it. It is a good question to ask about everything.
 
 ## Why RevOps got here first
 

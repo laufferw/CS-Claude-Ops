@@ -19,7 +19,7 @@ A VP of Customer Success, Chief Customer Officer, or COO. It helps you report CS
 |---|---|---|
 | Weekly | Read each director's note: forecast changes and new risks | [Weekly Team Review](../playbooks/weekly-team-review.md) outputs |
 | Monthly | Scorecard: retention, book health, value realized, forecast, capacity | [`tools/cs_scorecard.py`](../tools/cs_scorecard.py), [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md) |
-| Quarterly | Value story for the exec team or board | [`tools/value_report.py`](../tools/value_report.py), then `/cs-value-narrative` |
+| Quarterly | Value story for the exec team or board | [`tools/value_report.py`](../tools/value_report.py), then the `cs-value-narrative` skill |
 | Quarterly | Outcome Review decisions for Product, Marketing, and Sales | [Outcome Review](../playbooks/outcome-review.md) |
 | Once, then yearly | Charter and ownership map, signed by every function; AI policy approved | [CS Charter](../frameworks/cs-charter.md), [AI Usage Policy](../frameworks/ai-usage-policy.md) |
 | Planning | Headcount from the capacity model; Adoption as a Service pilot | [Capacity Model](../frameworks/capacity-model.md), [Adoption as a Service](../specs/adoption-as-a-service.md) |

@@ -38,7 +38,7 @@ Healthcare and financial-services customers need particular care: notes and tick
 ### 3. Human review
 
 - **Nothing reaches a customer without a person reading it.** Drafts mark commitments with `[NEEDS APPROVAL]` (see the [Customer Email](../prompts/customer-email.md) prompt), and the sender resolves each one.
-- **Nothing writes to a system of record without confirmation.** Agents propose changes as a diff, and a person applies them (see the [HubSpot Agent Interface](../specs/hubspot-agent-interface.md)).
+- **Nothing writes to a system of record without confirmation.** Agents propose changes as a diff, and a person applies them (see the [CRM Agent Interface](../specs/crm-agent-interface.md)).
 - **People decide** on escalations, pricing, contract terms, commitments, and anything about a person's performance. Claude drafts, scores, and flags.
 - **The sender owns what they send.** Whether or not AI helped, a CSM is accountable for every word in their name. Follow the company's policy on disclosing AI use to customers: {disclosure policy}.
 

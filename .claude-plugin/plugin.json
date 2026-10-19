@@ -1,0 +1,14 @@
+{
+  "name": "outcome-led-cs-ops",
+  "displayName": "Outcome-Led CS Ops",
+  "version": "0.1.0",
+  "description": "Outcome-led Customer Success operations, built for Claude: skills for weekly briefs, renewals, success plans with baselines, adoption plans, value stories, and team forecasts.",
+  "author": {
+    "name": "laufferw",
+    "url": "https://github.com/laufferw"
+  },
+  "homepage": "https://github.com/laufferw/outcome-led-cs-ops",
+  "repository": "https://github.com/laufferw/outcome-led-cs-ops",
+  "license": "MIT",
+  "keywords": ["customer-success", "cs-ops", "revops", "renewals", "outcomes", "churn"]
+}

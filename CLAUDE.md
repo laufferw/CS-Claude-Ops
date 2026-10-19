@@ -6,16 +6,20 @@ Commit and push directly to `main`. Do not create feature branches or pull reque
 
 ## Repo layout
 
-Markdown-first. Docs live in `frameworks/`, `specs/`, `prompts/`, and `playbooks/`, with opinion pieces in `essays/` and start-here guides by role in `guides/`. Runnable utilities live in `tools/` (standard-library Python), and fictional data for them in `sample-data/`. See the README for what each holds.
+This repo is Outcome-Led CS Ops, an open-source Claude plugin and marketplace (`.claude-plugin/`). Markdown-first. Docs live in `frameworks/`, `specs/`, `prompts/`, and `playbooks/`, with opinion pieces in `essays/` and start-here guides by role in `guides/`. Runnable utilities live in `tools/` (standard-library Python), and fictional data for them in `sample-data/`. See the README for what each holds.
 
 If you change the scoring rubric, update `tools/score_accounts.py` to match and regenerate `sample-data/scored-accounts.csv` (command in `sample-data/README.md`).
 
 When adding, renaming, or moving a doc:
 - Start new docs from the matching file in `templates/`.
-- For a new prompt, add a skill in `.claude/skills/cs-<name>/SKILL.md` that points at it (copy an existing one), and add it to the README's skills table. Skills point at prompt files; never copy prompt text into a skill.
+- For a new prompt, add its skill to `tools/skills.json` (name, title, prompt, description, bundled references, tool commands), run `python3 tools/build_skills.py`, and add it to the README's skills table.
 - Add new terms to `glossary.md`.
 - Add or update its entry in the README index.
 - Link to other docs with relative markdown links.
+
+`skills/` is generated from `tools/skills.json` and the prompts and frameworks it bundles. Never edit it by hand. After changing a prompt or a bundled framework, run `python3 tools/build_skills.py`. To use the skills while working here, start Claude Code with `claude --plugin-dir .`.
+
+For a release, bump `version` in `.claude-plugin/plugin.json`, add a matching section to `CHANGELOG.md`, and push a `v<version>` tag: the release workflow attaches one zip per skill.
 
 When you change a prompt, run its evals (`python3 tools/run_evals.py --list` shows the cases; see `evals/README.md`), and update the eval's checks and reference outputs if the correct output changes.
 

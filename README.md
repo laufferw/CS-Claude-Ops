@@ -1,33 +1,87 @@
-# CS-Claude-Ops
+# Outcome-Led CS Ops
 
-Claude-powered Customer Success Operations: frameworks, specs, prompts, and playbooks for running a CS org with an AI copilot.
+**Customer Success operations that prove the value customers get. Built for Claude.**
 
-This repo is markdown-first. Almost everything here is a document you can read, copy into Claude, or adapt, not code you have to run.
+Outcome-Led CS Ops is an open-source set of Claude skills, frameworks, playbooks, and small tools for running Customer Success around measurable customer outcomes: success plans with baselines, health scores you can explain, renewal forecasts you can defend, and value reports that claim only what's proven.
+
+It's built first for small CS teams without a CS platform, and it works for any team. Take the whole set, or pull out just the skills and docs you need.
+
+## Get it
+
+### In Claude Code: install the plugin
+
+```
+/plugin marketplace add laufferw/outcome-led-cs-ops
+/plugin install outcome-led-cs-ops@outcome-led-cs-ops
+```
+
+Then ask in plain language ("write my weekly brief from this export", "draft a success plan from these kickoff notes"), or call a skill by name, such as `/outcome-led-cs-ops:cs-weekly-brief`. The plugin includes the tools, so Claude can score a raw export before it writes.
+
+### In the Claude apps: upload the skills you want
+
+Download one skill's zip from the table below, or [all of them in one zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/outcome-led-cs-ops-all-skills.zip), and upload it under Skills in your Claude settings. Each skill carries its own prompt and reference docs, so it works on its own with data you paste in.
+
+### Take only what you need
+
+- **One skill:** every folder in [`skills/`](skills/) is self-contained. Copy it into `~/.claude/skills/` for yourself, or into a project's `.claude/skills/` for a team.
+- **One doc:** frameworks, playbooks, and prompts are plain markdown. Copy, adapt, and share them.
+- **The tools:** standard-library Python, nothing to install. Clone the repo and run them.
+
+### Try it on the sample data
+
+```
+git clone https://github.com/laufferw/outcome-led-cs-ops.git && cd outcome-led-cs-ops
+python3 tools/run_week.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --calls sample-data/forecast-calls.csv --csm "Sam Example" --as-of 2026-10-01
+```
+
+Open `out/2026-10-01-sam-example/week.md` for a CSM's week: band drops, renewals, adoption gaps, and which skill to use next.
+
+## Skills
+
+| Skill | What it does | Source prompt | Download |
+|---|---|---|---|
+| `cs-weekly-brief` | Write a weekly brief for one CSM's book of accounts: top accounts to act on, renewals in 120 days, expansion signals, and data gaps | [Weekly CSM Brief](prompts/weekly-csm-brief.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-weekly-brief.zip) |
+| `cs-account-review` | Write a one-page review of a single customer account: snapshot, what's going well, risks, stakeholder map, next actions, and data gaps | [Account Review](prompts/account-review.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-account-review.zip) |
+| `cs-churn-triage` | Rank a list of accounts by churn risk with the top drivers and a recommended action for each | [Churn Risk Triage](prompts/churn-risk-triage.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-churn-triage.zip) |
+| `cs-renewal-prep` | Prepare a CSM for one account's renewal conversation: timeline, value story, risks, objections, expansion, and questions | [Renewal Prep](prompts/renewal-prep.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-renewal-prep.zip) |
+| `cs-pre-renewal-check` | Check every account renewing in the next 120 days and give each a readiness status (Ready, Needs work, At risk, Unclear) | [Pre-Renewal Check](prompts/pre-renewal-check.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-pre-renewal-check.zip) |
+| `cs-redline-summary` | Summarize a customer's proposed contract changes (MSA, SOW, SLA) in plain language and route each to the function that owns it | [Contract Redline Summary](prompts/contract-redline-summary.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-redline-summary.zip) |
+| `cs-handoff-packet` | Draft the Sales-to-CS handoff packet for a closed-won deal from deal notes, calls, and emails | [Handoff Packet](prompts/handoff-packet.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-handoff-packet.zip) |
+| `cs-escalation-summary` | Draft the write-up that opens a customer escalation (level, required fields, gaps), or the summary that closes one (outcome, root cause tag) | [Escalation Summary](prompts/escalation-summary.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-escalation-summary.zip) |
+| `cs-customer-email` | Draft a customer-facing email for a CSM to review and send | [Customer Email](prompts/customer-email.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-customer-email.zip) |
+| `cs-qbr-outline` | Draft a slide-by-slide outline for a quarterly business review built on the customer's goals and outcomes | [QBR Outline](prompts/qbr-outline.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-qbr-outline.zip) |
+| `cs-account-update` | Write a short internal status update on one account for a manager, account team, or leadership | [Internal Account Update](prompts/internal-account-update.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-account-update.zip) |
+| `cs-competency-evaluation` | Gather evidence from a CSM's work samples against the CSM competency framework, area by area | [CSM Competency Evaluation](prompts/csm-competency-evaluation.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-competency-evaluation.zip) |
+| `cs-success-plan` | Draft a success plan from kickoff material: 3 to 4 outcomes from the Outcome Library, each with a customer owner, baseline, and target, or repair goals with no baseline or gone stale | [Success Plan Builder](prompts/success-plan-builder.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-success-plan.zip) |
+| `cs-adoption-plan` | Turn success plan goals with an adoption gap into a plan by feature: who, action, owners, and dates, plus what to check for goals that are not converting | [Adoption Plan](prompts/adoption-plan.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-adoption-plan.zip) |
+| `cs-value-narrative` | Write the story of value delivered from a value report or one account's outcome progress, for a customer executive, CS leadership, the exec team, or the board | [Value Narrative](prompts/value-narrative.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-value-narrative.zip) |
+| `cs-team-brief` | Draft a CS director's weekly brief across the team from the team rollup and renewal forecast: calls to challenge, risk by CSM, capacity, and data gaps | [Team Brief](prompts/team-brief.md) | [zip](https://github.com/laufferw/outcome-led-cs-ops/releases/latest/download/cs-team-brief.zip) |
 
 ## Start here
 
-| You are | Read | Then run |
+| You are | Read | Then use |
 |---|---|---|
-| A CSM | [CSM guide](guides/csm.md) | `run_week.py` for your book, then `/cs-weekly-brief` |
+| A CSM | [CSM guide](guides/csm.md) | `run_week.py` for your book, then the `cs-weekly-brief` skill |
 | CS Ops or RevOps | [CS Ops guide](guides/cs-ops.md) | `import_data.py` on your exports ([Connect Your Data](playbooks/connect-your-data.md)) |
-| A CS director or manager | [Director guide](guides/cs-director.md) | `team_rollup.py` and `renewal_forecast.py`, then `/cs-team-brief` |
-| A VP or COO | [Executive guide](guides/cs-executive.md) | `cs_scorecard.py`, then `/cs-value-narrative` |
+| A CS director or manager | [Director guide](guides/cs-director.md) | `team_rollup.py` and `renewal_forecast.py`, then the `cs-team-brief` skill |
+| A VP or COO | [Executive guide](guides/cs-executive.md) | `cs_scorecard.py`, then the `cs-value-narrative` skill |
 
 ## What's inside
 
 | Folder | What it holds |
 |---|---|
+| [`skills/`](skills/) | The Claude skills, one self-contained folder each. Generated from `prompts/` by `tools/build_skills.py` |
 | [`guides/`](guides/) | Start-here guides by role: CSM, CS Ops, director, and executive |
-| [`frameworks/`](frameworks/) | The models: the outcome library, account health scoring, the renewal forecast, capacity, the metrics scorecard, escalation logic, the account management engine, CSM competencies |
-| [`specs/`](specs/) | Design docs for what's worth building: the CSM Copilot, a HubSpot agent interface, and Adoption as a Service |
-| [`prompts/`](prompts/) | Reusable Claude prompts, each with inputs, output format, and known failure modes |
+| [`frameworks/`](frameworks/) | The models: the outcome library, account health scoring, the renewal forecast, capacity, the metrics scorecard, the CS charter, the AI usage policy, escalation logic, the account management engine, CSM competencies |
+| [`specs/`](specs/) | Design docs for what's worth building: the CSM Copilot, a CRM agent interface, and Adoption as a Service |
+| [`prompts/`](prompts/) | The source prompt behind each skill, with inputs, output format, and known failure modes |
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
-| [`tools/`](tools/) | Small utilities, standard-library Python: a data importer, a weekly run, health scoring, outcome progress, a value report, a renewal window, a renewal forecast, a team rollup, a CS scorecard, and an ROI calculator |
-| [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
+| [`tools/`](tools/) | Small utilities, standard-library Python: a data importer, a weekly run, health scoring, outcome progress, a value report, a renewal window, a renewal forecast, a team rollup, a CS scorecard, back-tests, evals, and an ROI calculator |
+| [`sample-data/`](sample-data/) | A fictional book of accounts for trying the skills and tools |
 | [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
 | [`evals/`](evals/README.md) | Test cases for the prompts, with good and bad reference outputs |
-| [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
-| [`.claude/skills/`](.claude/skills/) | Each prompt packaged as a Claude Code skill |
+| [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, specs, and guides |
+| [`.claude-plugin/`](.claude-plugin/plugin.json) | The Claude Code plugin and marketplace manifests |
 
 Terms are defined in the [glossary](glossary.md).
 
@@ -56,7 +110,7 @@ Terms are defined in the [glossary](glossary.md).
 ### Specs
 
 - [CSM Copilot](specs/csm-copilot-spec.md): a Claude Code CLI copilot for CSMs, built on MCP servers
-- [HubSpot Agent Interface](specs/hubspot-agent-interface.md): what an agent may read and do in HubSpot, and the guardrails
+- [CRM Agent Interface](specs/crm-agent-interface.md): what a Claude agent may read and do in a CRM through MCP, and the guardrails
 - [Adoption as a Service](specs/adoption-as-a-service.md): a paid CS offering that takes customers to measured outcomes, its pricing guardrails, and the value report
 
 ### Prompts
@@ -99,7 +153,6 @@ Team and cross-functional:
 Situational:
 
 - [Handling Customer SLA Pushback](playbooks/sla-pushback.md): responding to requests for stronger service-level commitments
-- [Projects Board Steps and Target Dates](playbooks/hubspot-projects-board.md): which board steps get due dates, and how to track the rest
 
 ### Tools and sample data
 
@@ -132,34 +185,7 @@ Situational:
 2. **Every artifact states its inputs, outputs, and failure modes.** A prompt or framework without these is not finished.
 3. **Judgment stays with the human.** Claude drafts, scores, and flags. A person decides on escalations, pricing, and commitments.
 
-## How to use
-
-### With Claude Code
-
-Open this repo in Claude Code and ask in plain language: "run my week as Sam Example as of 2026-10-01", "write the team brief for the sample team", or "draft a handoff packet from these notes". Claude picks the matching skill, reads the prompt file, and follows it. You can also call a skill by name, such as `/cs-weekly-brief`.
-
-| Skill | Prompt |
-|---|---|
-| `cs-weekly-brief` | [Weekly CSM Brief](prompts/weekly-csm-brief.md) |
-| `cs-account-review` | [Account Review](prompts/account-review.md) |
-| `cs-churn-triage` | [Churn Risk Triage](prompts/churn-risk-triage.md) |
-| `cs-renewal-prep` | [Renewal Prep](prompts/renewal-prep.md) |
-| `cs-pre-renewal-check` | [Pre-Renewal Check](prompts/pre-renewal-check.md) |
-| `cs-redline-summary` | [Contract Redline Summary](prompts/contract-redline-summary.md) |
-| `cs-handoff-packet` | [Handoff Packet](prompts/handoff-packet.md) |
-| `cs-escalation-summary` | [Escalation Summary](prompts/escalation-summary.md) |
-| `cs-customer-email` | [Customer Email](prompts/customer-email.md) |
-| `cs-qbr-outline` | [QBR Outline](prompts/qbr-outline.md) |
-| `cs-account-update` | [Internal Account Update](prompts/internal-account-update.md) |
-| `cs-success-plan` | [Success Plan Builder](prompts/success-plan-builder.md) |
-| `cs-adoption-plan` | [Adoption Plan](prompts/adoption-plan.md) |
-| `cs-value-narrative` | [Value Narrative](prompts/value-narrative.md) |
-| `cs-team-brief` | [Team Brief](prompts/team-brief.md) |
-| `cs-competency-evaluation` | [CSM Competency Evaluation](prompts/csm-competency-evaluation.md) |
-
-The skills only point at the prompt files, so editing a prompt changes its skill too.
-
-### By hand
+## Run the tools yourself
 
 - Start with the guide for your role in [Start here](#start-here). Each has the commands to run on the sample data.
 - To use your own data, follow [Connect Your Data](playbooks/connect-your-data.md).
@@ -173,11 +199,11 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 
 ## Contributing
 
-Start new docs from [`templates/`](templates/README.md). If you change a prompt, run its [evals](evals/README.md). Run `python3 tools/check_repo.py` before pushing. CI runs the same check.
+Contributions are welcome, especially Outcome Library entries for other kinds of products. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Status
 
-Early drafts. Weights, thresholds, and rubrics are starting points to calibrate against your own data.
+Version 0.1.0, an early release. Weights, thresholds, and rubrics are starting points to calibrate against your own data, with the back-tests in `tools/`. See the [changelog](CHANGELOG.md).
 
 ## License
 

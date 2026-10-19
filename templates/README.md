@@ -16,6 +16,6 @@ To use one:
 2. Replace every `{placeholder}` and delete the guidance in `>` quote blocks.
 3. Keep every section. If one doesn't apply, write why instead of deleting it.
 4. Add the doc to the README index, and link it to and from the docs it depends on.
-5. For a new prompt, add a matching skill in `.claude/skills/` (see the existing ones for the pattern).
+5. For a new prompt, add its skill to [`tools/skills.json`](../tools/skills.json) and run `python3 tools/build_skills.py` (see [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 A doc is finished when a reader can use it without asking its author anything.

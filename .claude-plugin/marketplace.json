@@ -1,0 +1,15 @@
+{
+  "name": "outcome-led-cs-ops",
+  "description": "Outcome-Led CS Ops: Customer Success skills and tools, built for Claude.",
+  "owner": {
+    "name": "laufferw",
+    "url": "https://github.com/laufferw"
+  },
+  "plugins": [
+    {
+      "name": "outcome-led-cs-ops",
+      "source": "./",
+      "description": "Outcome-led Customer Success operations, built for Claude: skills for weekly briefs, renewals, success plans with baselines, adoption plans, value stories, and team forecasts."
+    }
+  ]
+}
