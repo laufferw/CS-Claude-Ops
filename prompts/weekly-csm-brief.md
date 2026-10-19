@@ -9,7 +9,7 @@ Turn a CSM's scored book of accounts into the weekly brief described in the [Acc
 One CSM's accounts, already scored with [Account Health Scoring](../frameworks/account-health-scoring.md). Each row needs:
 
 - Account, ARR, renewal date, days to renewal
-- Index, band, coverage, missing signals, overrides, top drivers
+- Index, band, coverage, missing signals, overrides, top drivers, success plan summary
 - Last week's band, and whether the band moved
 - Priority (see below)
 - Expansion signals and recent notes, if any
@@ -54,7 +54,7 @@ Write these sections:
    Accounts with an expansion signal and a band of Green or Yellow. Say what the signal is and the next step. Leave out Red accounts; note that you did.
 
 4. Data gaps
-   Accounts with Insufficient data, missing signals, or notes that contradict the score. Say what is missing and who could fix it.
+   Accounts with Insufficient data, missing signals, success plan goals with no baseline or gone stale, or notes that contradict the score. Say what is missing and who could fix it.
 
 Rules:
 - Every claim cites a field from the data. Do not invent contacts, dates, or history.
@@ -76,13 +76,12 @@ Four headed sections. Section 1 is a numbered list. Sections 2 to 4 are short bu
 From [`sample-data/scored-accounts.csv`](../sample-data/scored-accounts.csv), scored as of 2026-10-01, a correct brief has:
 
 - **Top accounts:**
-  - Band moves down: Cedar Health Partners (Yellow to Red) and Granite Payroll (Green to Yellow, capped by the sponsor departure).
+  - Band moves down: Cedar Health Partners (Yellow to Red), Granite Payroll (Green to Yellow, capped by the sponsor departure), and Riverbend Credit Union (Green to Yellow, capped because its success plan has not been measured since June).
   - Red-flag overrides: Quarry Lane Media (non-renewal notice) and Larkspur Retail (payment dispute).
-  - Highest remaining priority: Sable Energy.
-  - Pinecrest Manufacturing has a higher priority than three of these, but it neither moved band nor has a red flag, so it misses the cut.
+  - That makes 5, so Sable Energy and Pinecrest Manufacturing miss the cut despite higher priorities than several of these. Neither moved band nor has a red flag.
 - **Renewals in 120 days:** Orchard Learning (30 days), Larkspur Retail (50), Cedar Health Partners (75), Sable Energy (91), and Quarry Lane Media (106).
 - **Expansion:** Bluefin Logistics (50 more seats) and Pinecrest Manufacturing (new plant).
-- **Data gaps:** Meridian Analytics (usage and outcomes missing, coverage 50%). Tidewater Clinics' low usage is normal per the notes, so suggest an override.
+- **Data gaps:** Meridian Analytics (usage and outcomes missing, coverage 50%, no success plan). Riverbend Credit Union (all 4 goals stale: fix the metrics feed). Sable Energy (1 goal with no baseline). Tidewater Clinics' low usage is normal per the notes, so suggest an override.
 
 ## Known failure modes
 

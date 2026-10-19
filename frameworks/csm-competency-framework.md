@@ -46,9 +46,9 @@ What each level looks like in practice. A CSM is at a level in an area when the 
 ### Customer outcomes
 
 - **1:** Records the goals the customer states, when asked to.
-- **2:** Writes a success plan with measurable goals, owners, and dates for every account, agreed with the customer.
+- **2:** Writes a success plan for every account: 3 to 4 goals from the [Outcome Library](outcome-library.md), each with a baseline, a target, and a customer owner, agreed with the customer.
 - **3:** Ties outcomes to the customer's business results and uses them as evidence in QBRs and renewals.
-- **4:** Defines outcome measures by segment that other CSMs adopt.
+- **4:** Proposes new outcomes for the library, with the measurement and evidence to back them, that other CSMs adopt.
 
 ### Relationship depth
 

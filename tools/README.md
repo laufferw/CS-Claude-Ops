@@ -5,6 +5,7 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 | Tool | What it does |
 |---|---|
 | [`score_accounts.py`](score_accounts.py) | Scores accounts with the [Account Health Scoring](../frameworks/account-health-scoring.md) rubric and adds the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority) priority |
+| [`outcome_progress.py`](outcome_progress.py) | Measures each success plan goal against its baseline and target, per the [Outcome Library](../frameworks/outcome-library.md#measuring-progress) rules |
 | [`renewal_window.py`](renewal_window.py) | Lists the accounts renewing in the next 120 days with the fields the [Pre-Renewal Check](../prompts/pre-renewal-check.md) needs |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
@@ -12,15 +13,43 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 ## Health score calculator
 
 ```
-python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01
+python3 tools/score_accounts.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01
 ```
 
-Reads a CSV in the [`sample-data`](../sample-data/README.md) format and writes the scored CSV to stdout, sorted by priority. The rubric, outputs, and failure modes are documented in [Account Health Scoring](../frameworks/account-health-scoring.md).
+Reads the accounts and success plans in the [`sample-data`](../sample-data/README.md) format and writes the scored CSV to stdout, sorted by priority. The Outcomes signal comes from `--plans`. Without it, Outcomes is missing for every account, the no-measured-outcomes override caps them all at Yellow, and a warning says so. The rubric, outputs, and failure modes are documented in [Account Health Scoring](../frameworks/account-health-scoring.md).
+
+## Outcome progress
+
+```
+python3 tools/outcome_progress.py sample-data/success-plans.csv --as-of 2026-10-01
+```
+
+### Purpose
+
+Show each success plan goal's progress from baseline to target, so a CSM can bring the numbers to a QBR or renewal, and give the health score the goal statuses behind its Outcomes signal.
+
+### Inputs
+
+A success plans CSV in the [`sample-data`](../sample-data/README.md#fields-in-success-planscsv) format, and an `--as-of` date (default today), used to judge staleness and missed targets.
+
+### Outputs
+
+A CSV on stdout with one row per goal: account, outcome, goal, owner, unit, baseline, target and target date, latest value and date, progress and expected progress (in percent), and status. The status rules are in the [Outcome Library](../frameworks/outcome-library.md#measuring-progress).
+
+A summary line goes to stderr with the count of goals in each status. For the sample data as of 2026-10-01: 11 accounts and 40 goals, with 3 met, 19 on track, 10 off track, 3 missed, 1 with no baseline, and 4 stale.
+
+### Failure modes
+
+- **Invalid goal rows.** A missing target, a target equal to the baseline, a target date before the baseline date, or a current value without a date. The tool exits with the file, line, and account, and writes nothing.
+- **Plans outside 3 to 4 goals.** A warning names the account. The goals are still measured.
+- **Unknown outcome IDs.** The tool does not read the library. The [repo checker](#repo-checker) checks the sample file's IDs against it; check your own file the same way.
+- **Straight-line expectations.** Expected progress assumes steady improvement. The 25-point tolerance absorbs some lag, but a goal that improves late in its window can show Off track early. Read the trend, not just one status.
+- **Measurements that aren't comparable.** The tool trusts that the baseline and later values come from the same source and definition. It can't tell if they don't.
 
 ## Renewal window
 
 ```
-python3 tools/renewal_window.py sample-data/accounts.csv --as-of 2026-10-01 --days 120
+python3 tools/renewal_window.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01 --days 120
 ```
 
 ### Purpose
@@ -29,11 +58,11 @@ Give the [Pre-Renewal Check](../prompts/pre-renewal-check.md) its input in one s
 
 ### Inputs
 
-A CSV in the [`sample-data`](../sample-data/README.md) format, an `--as-of` date (default today), and `--days`, the window length (default 120).
+The accounts and success plans in the [`sample-data`](../sample-data/README.md) format (`--plans`, as for the health score calculator), an `--as-of` date (default today), and `--days`, the window length (default 120).
 
 ### Outputs
 
-A CSV on stdout with one row per account renewing within the window, soonest first: ID, account, ARR, renewal date, days to renewal, band, index, overrides, top drivers, red flags, open escalations, days since executive contact, contract flags, and notes. Paste it into the prompt as-is. Scoring comes from [`score_accounts.py`](score_accounts.py), so the bands always match the rubric.
+A CSV on stdout with one row per account renewing within the window, soonest first: ID, account, ARR, renewal date, days to renewal, band, index, overrides, top drivers, success plan summary, red flags, open escalations, days since executive contact, contract flags, and notes. Paste it into the prompt as-is. Scoring comes from [`score_accounts.py`](score_accounts.py), so the bands always match the rubric.
 
 A summary line goes to stderr: how many accounts are in the window, and their total ARR. Check that count against your renewal report.
 
@@ -62,6 +91,7 @@ Prints "All checks passed." or a list of every problem, and exits non-zero on fa
 - **Index:** the README links to every doc in `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
 - **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
 - **Tools:** each tool runs on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
+- **Outcome IDs:** every `outcome_id` in `sample-data/success-plans.csv` is in the [Outcome Library](../frameworks/outcome-library.md), or is `custom`
 
 It does not judge whether the content is right. That is still a review.
 

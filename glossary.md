@@ -28,7 +28,8 @@ All defined in [Account Health Scoring](frameworks/account-health-scoring.md).
 | **Band** | Green (75 to 100), Yellow (50 to 74), Red (0 to 49), or Insufficient data |
 | **Coverage** | The share of total signal weight that had data. Below 70%, the band is Insufficient data |
 | **Red flag** | An event that overrides the index: notice of non-renewal (forces Red), executive sponsor departure or payment dispute (caps at Yellow) |
-| **Override** | A change to the band from a red flag, or from a CSM with a written reason |
+| **No measured outcomes** | No success plan, or no goal with a baseline and a measurement in the last 60 days. Caps the band at Yellow |
+| **Override** | A change to the band from a red flag, from no measured outcomes, or from a CSM with a written reason |
 | **Top drivers** | The two signals pulling the index down the most: largest weight x (100 - score) |
 | **Seat utilization** | Active users divided by licensed seats |
 | **Band move** | A change in band since the last scoring run. A move down is always worth a look |
@@ -65,9 +66,14 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 |---|---|
 | **Closed won** | A deal that has been signed. Starts the [Sales to CS Handoff](playbooks/sales-to-cs-handoff.md) |
 | **Handoff packet** | Everything Sales passes to the CSM at close: goals, stakeholders, commitments, contract summary, risks |
-| **Success plan** | The customer's goals, each measurable, with an owner and target date, agreed with the customer. It feeds the Outcomes signal |
+| **Success plan** | 3 to 4 goals the customer picks from the [Outcome Library](frameworks/outcome-library.md), each with a customer owner, a baseline, and a target value and date. It feeds the Outcomes signal |
+| **Outcome Library** | The fixed list of measurable outcomes the company offers and is prepared to prove, each with a metric, data source, and the features that move it. See [Outcome Library](frameworks/outcome-library.md) |
+| **Baseline** | A goal's measured starting value and date, taken within 30 days of kickoff from the same source as later measurements |
+| **Custom goal** | A success plan goal for an outcome the library does not cover. At most one per plan |
+| **Goal status** | Met, On track, Off track, Missed, Stale, or No baseline, computed from baseline, target, and the latest measurement. See [measuring progress](frameworks/outcome-library.md#measuring-progress) |
+| **Value history** | Goals an account has met and retired from its success plan. Evidence for renewal, no longer scored |
 | **Go-live** | The point at which the customer starts using the product for real work |
-| **First value** | The customer reaching the first goal in their success plan. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |
+| **First value** | The first measured improvement on a success plan goal, from its baseline. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |
 | **QBR** | Quarterly business review: a review of outcomes with the customer's decision-makers. See [QBR](playbooks/qbr.md) |
 | **Pre-renewal status** | Ready, Needs work, At risk, or Unclear, set 120 days before renewal by the [Pre-Renewal Check](prompts/pre-renewal-check.md) |
 | **Notice period** | How far ahead of the renewal date either side must give notice to change or end the contract |

@@ -15,11 +15,11 @@ A single, explainable score per account that tells a CSM where to spend time, an
 | Support | Ticketing | Open escalations, time-to-resolution trend |
 | Sentiment | Surveys, CSM judgment | NPS or CSAT, CSM confidence rating |
 | Commercial | CRM, billing | Payment delays, contract flags |
-| Outcomes | Success plan | Share of agreed goals on track |
+| Outcomes | Success plan, measured against the [Outcome Library](outcome-library.md) | Share of measured goals met or on track |
 
 Days to renewal is not a health signal: a healthy account can renew next month. It sets urgency instead (see the [Weekly CSM Brief](../prompts/weekly-csm-brief.md)).
 
-The field-level format these inputs take is defined in [sample-data](../sample-data/README.md).
+The field-level format these inputs take is defined in [sample-data](../sample-data/README.md). Success plan goals are a separate file, one row per goal.
 
 ## Scoring model
 
@@ -27,12 +27,14 @@ Each signal is scored 0 to 100 with the rubric below, then weighted.
 
 | Signal | Starting weight |
 |---|---|
-| Product usage | 30% |
-| Outcomes | 20% |
+| Product usage | 25% |
+| Outcomes | 25% |
 | Engagement | 15% |
 | Support | 15% |
 | Sentiment | 10% |
 | Commercial | 10% |
+
+Outcomes weighs as much as usage. Usage only matters if it is delivering the outcomes the customer agreed to, and usage alone can look healthy while nothing the customer cares about improves.
 
 **Index = sum of (signal score x weight) / sum of weights scored**, rounded to a whole number. With every signal present, the divisor is 100%. Signal scores are not rounded before weighting.
 
@@ -57,7 +59,7 @@ Every result is clamped to the range 0 to 100.
 | Down 10 to 24% | -15 |
 | Down 25% or more | -30 |
 
-**Outcomes.** Goals on track / goals in the success plan x 100. No success plan means the signal is missing, not zero.
+**Outcomes.** Goals Met or On track / goals counted x 100, with each goal's status measured from its baseline, target, and latest value under the [Outcome Library](outcome-library.md#measuring-progress) rules. Goals with no baseline, or not measured in 60 days, are not counted: they are data gaps. No counted goals (including no success plan) means the signal is missing, not zero, and the no-measured-outcomes override below applies.
 
 **Engagement.** Meetings in the last 60 days, plus points for recency of executive sponsor contact.
 
@@ -103,13 +105,16 @@ Missing data is unknown, not bad. Scoring it as zero creates false reds.
 
 ## Override rules
 
-Some single events matter more than any index. Apply these after banding:
+Some single events, and one missing piece of evidence, matter more than any index. Apply these after banding:
 
-| Red flag | Effect |
+| Condition | Effect |
 |---|---|
 | Notice of non-renewal | Band is Red, whatever the index or coverage |
 | Executive sponsor departure | Band is at most Yellow |
 | Payment dispute | Band is at most Yellow |
+| No measured outcomes: no success plan, or no goal with a baseline and a measurement in the last 60 days | Band is at most Yellow |
+
+The last rule closes a gap in the missing-data rule. Without it, an account with no measured outcomes still has 75% coverage, enough to be Green on usage and relationship signals alone. Green means the account is healthy, and an account can't be called healthy when nobody can show it is getting value. The cap does not make it Red: unknown is still not bad.
 
 A CSM can also override a band with a written reason (for example, low usage that is normal for the account). Overrides are reviewed monthly.
 
@@ -121,6 +126,7 @@ For each account:
 - Score for each signal, and which signals were missing
 - Coverage
 - Overrides applied
+- Success plan summary: goals counted, how many are on track, and any with no baseline or gone stale
 - Top two drivers: the scored signals with the largest weighted gap, weight x (100 - score)
 
 [`tools/score_accounts.py`](../tools/score_accounts.py) implements this rubric and produces all of the above.
@@ -131,25 +137,28 @@ Cedar Health Partners, from the [sample data](../sample-data/accounts.csv):
 
 | Signal | Data | Score | Weight | Contribution |
 |---|---|---|---|---|
-| Usage | 230 of 500 seats (46%), down 18% | 50 - 15 = 35 | 30% | 10.5 |
-| Outcomes | 1 of 4 goals on track | 25 | 20% | 5.0 |
+| Usage | 230 of 500 seats (46%), down 18% | 50 - 15 = 35 | 25% | 8.75 |
+| Outcomes | 1 of 4 goals on track ([worked example](outcome-library.md#worked-example)) | 25 | 25% | 6.25 |
 | Engagement | 1 meeting, exec contact 95 days ago | 25 + 0 = 25 | 15% | 3.75 |
 | Support | 2 escalations, resolution worsening | 100 - 50 - 25 = 25 | 15% | 3.75 |
 | Sentiment | NPS 5, CSM confidence 2 | (30 + 25) / 2 = 27.5 | 10% | 2.75 |
 | Commercial | Paid on time, 1 contract flag | 100 - 20 = 80 | 10% | 8.0 |
-| **Index** | | | | **33.75, rounds to 34: Red** |
+| **Index** | | | | **33.25, rounds to 33: Red** |
 
-Coverage is 100%. The top drivers are usage (gap 30 x 65 = 1,950) and outcomes (20 x 75 = 1,500). Last week the index was 52 (Yellow), so this is a band drop.
+Coverage is 100%. The top drivers are outcomes (gap 25 x 75 = 1,875) and usage (25 x 65 = 1,625). Last week the index was 52 (Yellow), so this is a band drop.
 
 Meridian Analytics shows the missing-data rule. Its usage export is broken and it has no success plan, so usage and outcomes are missing. The four remaining signals score an index of 95, but coverage is 50%, so the band is Insufficient data rather than Green.
+
+Riverbend Credit Union shows the no-measured-outcomes override. Its four goals were last measured in June, so all are Stale and none is counted. The other five signals give an index of 87 at 75% coverage, which would be Green. The override caps it at Yellow, and the fix is to measure the success plan again, not to change how the account is managed.
 
 ## Failure modes
 
 - Usage can mislead for products where low usage is normal. Use a CSM override with a reason, or recalibrate usage for that segment.
 - Missing data scored as zero creates false reds. The missing-data rule prevents this. Watch coverage instead.
+- An account looks healthy on usage while delivering nothing the customer cares about. Equal weight for outcomes and the no-measured-outcomes cap guard against this.
 - Weights drift out of date. Re-test quarterly against actual outcomes.
 - Thresholds create cliffs: 79% utilization scores 75 and 80% scores 100. Look at the breakdown, not just the band, for accounts near a boundary.
 
 ## Calibration
 
-Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes. The monthly churn review in [Churn and Offboarding](../playbooks/churn-and-offboarding.md) collects this data.
+Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes. Outcomes moved from 20% to 25% and usage from 30% to 25% on the argument above, not on a back-test. Test that change first. The monthly churn review in [Churn and Offboarding](../playbooks/churn-and-offboarding.md) collects this data.

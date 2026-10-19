@@ -41,6 +41,7 @@ Each flag maps to one recommended action and the playbook or prompt that carries
 | Renewal window | 120 days or fewer to renewal | Run the pre-renewal check and start the renewal timeline | Day -120 | [Renewal](../playbooks/renewal.md), [Pre-Renewal Check](../prompts/pre-renewal-check.md) |
 | Executive contact gap | No executive sponsor contact in 60 days, or never | Book a meeting with the sponsor | 2 weeks | [Customer Email](../prompts/customer-email.md) |
 | Data gap | Band is Insufficient data, or any signal is missing | Name an owner to fix the data source (usually RevOps) | 10 business days | [Account Health Scoring](account-health-scoring.md#missing-data) |
+| Outcomes unmeasured | A success plan goal has no baseline or has not been measured in 60 days | Restore the measurement: take the baseline, or fix the data feed | 10 business days | [Outcome Library](outcome-library.md#measuring-progress) |
 | Onboarding stall | No success plan 30 days after close, or no first value at 90 | Finish the success plan; at day 90, open an L1 escalation | Immediately | [Customer Onboarding](../playbooks/onboarding.md) |
 | Expansion signal | Expansion signal on a Green or Yellow account | Qualify it before anything goes to Sales | 5 business days | [Expansion](../playbooks/expansion.md) |
 

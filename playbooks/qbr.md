@@ -13,7 +13,7 @@ Calendar cadence. For accounts above your QBR threshold, hold one each quarter. 
 ## Inputs
 
 - The success plan: goals, owners, and target dates
-- Outcomes this quarter, with evidence
+- Outcomes this quarter, with evidence: the per-goal report from [`tools/outcome_progress.py`](../tools/outcome_progress.py), showing baseline, target, and latest value
 - Usage and adoption data, and the trend
 - Support summary: tickets, escalations, resolutions
 - Health band and drivers (for internal prep only, never shown to the customer)

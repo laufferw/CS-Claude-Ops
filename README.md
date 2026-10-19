@@ -8,11 +8,11 @@ This repo is markdown-first. Almost everything here is a document you can read, 
 
 | Folder | What it holds |
 |---|---|
-| [`frameworks/`](frameworks/) | The models: CSM competencies, account health scoring, escalation logic, the account management engine |
+| [`frameworks/`](frameworks/) | The models: the outcome library, CSM competencies, account health scoring, escalation logic, the account management engine |
 | [`specs/`](specs/) | Design docs for tools worth building: the CSM Copilot and a HubSpot agent interface |
 | [`prompts/`](prompts/) | Reusable Claude prompts, each with inputs, output format, and known failure modes |
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
-| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator, a renewal window extractor, and an ROI calculator |
+| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator, an outcome progress report, a renewal window extractor, and an ROI calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
 | [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
 | [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
@@ -24,6 +24,7 @@ Terms are defined in the [glossary](glossary.md).
 
 ### Frameworks
 
+- [Outcome Library](frameworks/outcome-library.md): the measurable outcomes customers pick for their success plans, and how progress from baseline is measured
 - [Account Health Scoring](frameworks/account-health-scoring.md): the Account Success Index, its signals, weights, and bands
 - [Account Management Engine](frameworks/account-management-engine.md): the weekly loop from account data to ranked CSM actions
 - [Escalation Logic](frameworks/escalation-logic.md): triggers, levels, owners, response targets, and root cause tags
@@ -68,11 +69,12 @@ Situational:
 
 ### Tools and sample data
 
-- [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts
+- [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts and their success plans
+- [Outcome progress](tools/README.md#outcome-progress): each success plan goal's progress from baseline to target, for QBRs and renewals
 - [Renewal window](tools/README.md#renewal-window): the accounts renewing in the next 120 days, ready to paste into the Pre-Renewal Check
 - [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
 - [Repo checker](tools/README.md#repo-checker): checks required sections, links, the index, skills, and tools. Runs in CI on every push
-- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, plus sample ROI inputs
+- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, their success plans, plus sample ROI inputs
 
 ### Essays
 
@@ -111,9 +113,10 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 
 ### By hand
 
-- Start with [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
-- Score the [sample accounts](sample-data/README.md) with `python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01`, then paste the result into the [Weekly CSM Brief](prompts/weekly-csm-brief.md) prompt.
-- Run `python3 tools/renewal_window.py sample-data/accounts.csv --as-of 2026-10-01` and paste the result into the [Pre-Renewal Check](prompts/pre-renewal-check.md) prompt.
+- Start with the [Outcome Library](frameworks/outcome-library.md) to see how value is defined and measured, then [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
+- Run `python3 tools/outcome_progress.py sample-data/success-plans.csv --as-of 2026-10-01` for each goal's progress from baseline, ready for a QBR.
+- Score the [sample accounts](sample-data/README.md) with `python3 tools/score_accounts.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01`, then paste the result into the [Weekly CSM Brief](prompts/weekly-csm-brief.md) prompt.
+- Run `python3 tools/renewal_window.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01` and paste the result into the [Pre-Renewal Check](prompts/pre-renewal-check.md) prompt.
 - Pair scoring with the [Account Review prompt](prompts/account-review.md) to review a single account with Claude.
 - Read the [CSM Copilot spec](specs/csm-copilot-spec.md) for where this is headed, and run `python3 tools/roi_calculator.py sample-data/roi-inputs.json` for a sample business case.
 

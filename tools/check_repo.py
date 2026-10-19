@@ -8,6 +8,7 @@ Checks:
 - Every prompt has a skill, every skill points at a prompt that exists, and
   the README's skills table lists every skill
 - The tools run, and sample-data/scored-accounts.csv matches a fresh run
+- Every outcome ID in sample-data/success-plans.csv is in the Outcome Library
 
 Exits non-zero and lists every problem if anything fails. Standard library only.
 
@@ -15,6 +16,7 @@ Usage:
     python3 tools/check_repo.py
 """
 
+import csv
 import re
 import subprocess
 import sys
@@ -138,22 +140,35 @@ def run(args):
 
 
 def check_tools(problems):
-    scored = run(["tools/score_accounts.py", "sample-data/accounts.csv", "--as-of", "2026-10-01"])
+    plans = ["--plans", "sample-data/success-plans.csv", "--as-of", "2026-10-01"]
+    scored = run(["tools/score_accounts.py", "sample-data/accounts.csv", *plans])
     if scored.returncode != 0:
         problems.append(f"tools/score_accounts.py failed: {scored.stderr.strip()}")
     elif scored.stdout != (ROOT / "sample-data" / "scored-accounts.csv").read_text():
         problems.append("sample-data/scored-accounts.csv is stale: regenerate it (see sample-data/README.md)")
-    window = run(["tools/renewal_window.py", "sample-data/accounts.csv", "--as-of", "2026-10-01"])
+    window = run(["tools/renewal_window.py", "sample-data/accounts.csv", *plans])
     if window.returncode != 0:
         problems.append(f"tools/renewal_window.py failed: {window.stderr.strip()}")
+    progress = run(["tools/outcome_progress.py", "sample-data/success-plans.csv", "--as-of", "2026-10-01"])
+    if progress.returncode != 0:
+        problems.append(f"tools/outcome_progress.py failed: {progress.stderr.strip()}")
     roi = run(["tools/roi_calculator.py", "sample-data/roi-inputs.json"])
     if roi.returncode != 0:
         problems.append(f"tools/roi_calculator.py failed: {roi.stderr.strip()}")
 
 
+def check_outcome_ids(problems):
+    library = set(re.findall(r"^\| (OL-\d+) \|", (ROOT / "frameworks" / "outcome-library.md").read_text(), re.M))
+    with open(ROOT / "sample-data" / "success-plans.csv", newline="") as f:
+        for line, row in enumerate(csv.DictReader(f), start=2):
+            if row["outcome_id"] != "custom" and row["outcome_id"] not in library:
+                problems.append(f"sample-data/success-plans.csv line {line}: "
+                                f"outcome {row['outcome_id']} is not in frameworks/outcome-library.md")
+
+
 def main():
     problems = []
-    for check in (check_sections, check_links, check_index, check_skills, check_tools):
+    for check in (check_sections, check_links, check_index, check_skills, check_tools, check_outcome_ids):
         check(problems)
     if problems:
         print(f"{len(problems)} problem(s):")

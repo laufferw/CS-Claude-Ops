@@ -1,10 +1,12 @@
 """Score accounts with the Account Success Index.
 
 Implements the rubric in frameworks/account-health-scoring.md and the
-priority formula in prompts/weekly-csm-brief.md. Standard library only.
+priority formula in prompts/weekly-csm-brief.md. The Outcomes signal comes
+from success plan goals, measured by outcome_progress.py. Standard library only.
 
 Usage:
-    python3 tools/score_accounts.py sample-data/accounts.csv --as-of 2026-10-01 > scored.csv
+    python3 tools/score_accounts.py sample-data/accounts.csv \
+        --plans sample-data/success-plans.csv --as-of 2026-10-01 > scored.csv
 """
 
 import argparse
@@ -12,9 +14,11 @@ import csv
 import sys
 from datetime import date
 
+from outcome_progress import GOOD_STATUSES, SCORED_STATUSES, load_plans, summarize
+
 WEIGHTS = {
-    "usage": 30,
-    "outcomes": 20,
+    "usage": 25,
+    "outcomes": 25,
     "engagement": 15,
     "support": 15,
     "sentiment": 10,
@@ -133,16 +137,17 @@ def score_commercial(row):
     return clamp(100 - penalty - 20 * flags)
 
 
-def score_outcomes(row):
-    total, on_track = num(row["goals_total"]), num(row["goals_on_track"])
-    if not total or on_track is None:
+def score_outcomes(goals):
+    """Share of measured goals that are Met or On track. No measured goals means missing."""
+    scored = [g for g in goals if g["status"] in SCORED_STATUSES]
+    if not scored:
         return None
-    return clamp(100 * on_track / total)
+    return 100 * sum(1 for g in scored if g["status"] in GOOD_STATUSES) / len(scored)
 
 
+# Signals scored from the account row. Outcomes is scored from the success plan.
 SCORERS = {
     "usage": score_usage,
-    "outcomes": score_outcomes,
     "engagement": score_engagement,
     "support": score_support,
     "sentiment": score_sentiment,
@@ -166,8 +171,10 @@ def urgency_for(days_to_renewal):
     return 0.3
 
 
-def score_account(row, as_of):
+def score_account(row, as_of, goals=()):
+    """Score one account. goals is its success plan, as load_plans() returns it."""
     scores = {name: scorer(row) for name, scorer in SCORERS.items()}
+    scores["outcomes"] = score_outcomes(goals)
     scored = {name: s for name, s in scores.items() if s is not None}
     missing = [name for name in WEIGHTS if name not in scored]
     coverage = sum(WEIGHTS[name] for name in scored)
@@ -185,6 +192,13 @@ def score_account(row, as_of):
             overrides.append(f"{flag} -> capped at Yellow")
         elif flag in red_flags:
             overrides.append(f"{flag} (band already {band})")
+    # Applied last, so it reads the band after the red flags.
+    if scores["outcomes"] is None:
+        if band == "Green":
+            band = "Yellow"
+            overrides.append("no_measured_outcomes -> capped at Yellow")
+        else:
+            overrides.append(f"no_measured_outcomes (band already {band})")
 
     gaps = sorted(
         ((WEIGHTS[name] * (100 - s), name, s) for name, s in scored.items() if s < 100),
@@ -222,6 +236,7 @@ def score_account(row, as_of):
         "band_change": band_change,
         "overrides": "; ".join(overrides),
         "missing_signals": "|".join(missing),
+        "goals": summarize(goals),
         "top_drivers": "; ".join(drivers),
         "priority": priority,
         "expansion_signal": row["expansion_signal"],
@@ -235,10 +250,22 @@ def main():
     parser.add_argument("accounts_csv")
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today(),
                         help="date to measure days to renewal from (YYYY-MM-DD)")
+    parser.add_argument("--plans", help="success plans CSV, the source of the Outcomes signal")
     args = parser.parse_args()
 
+    plans = {}
+    if args.plans:
+        try:
+            plans = load_plans(args.plans, args.as_of)
+        except ValueError as e:
+            sys.exit(str(e))
+    else:
+        print("warning: no --plans file, so Outcomes is missing and no account can be Green",
+              file=sys.stderr)
+
     with open(args.accounts_csv, newline="") as f:
-        rows = [score_account(row, args.as_of) for row in csv.DictReader(f)]
+        rows = [score_account(row, args.as_of, plans.get(row["account_id"], []))
+                for row in csv.DictReader(f)]
     rows.sort(key=lambda r: r["priority"], reverse=True)
 
     writer = csv.DictWriter(sys.stdout, fieldnames=list(rows[0]), lineterminator="\n")
