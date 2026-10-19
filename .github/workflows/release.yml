@@ -1,8 +1,11 @@
 name: Release skills
 
+# Runs when a v* tag is pushed, or from the Actions tab ("Run workflow"),
+# which creates the v<version> tag from .claude-plugin/plugin.json itself.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,15 +20,18 @@ jobs:
           python-version: "3.12"
       - name: Check the repo
         run: python3 tools/check_repo.py
-      - name: Check the tag matches the plugin version
+      - name: Work out the tag from the plugin version
         run: |
           version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
-          test "${GITHUB_REF_NAME}" = "v${version}" || { echo "Tag ${GITHUB_REF_NAME} does not match plugin version ${version}"; exit 1; }
+          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+            test "${GITHUB_REF_NAME}" = "v${version}" || { echo "Tag ${GITHUB_REF_NAME} does not match plugin version ${version}"; exit 1; }
+          fi
+          echo "TAG=v${version}" >> "$GITHUB_ENV"
       - name: Build skill zips
         run: python3 tools/build_skills.py --zip dist
       - name: Create the release with one zip per skill
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          notes=$(python3 -c "import re,sys; t=open('CHANGELOG.md').read(); v='${GITHUB_REF_NAME}'[1:]; m=re.search(r'^## '+re.escape(v)+r'\n(.*?)(?=^## |\Z)', t, re.S|re.M); print(m.group(1).strip() if m else '')")
-          gh release create "${GITHUB_REF_NAME}" dist/*.zip --title "Outcome-Led CS Ops ${GITHUB_REF_NAME}" --notes "${notes}"
+          notes=$(python3 -c "import re; t=open('CHANGELOG.md').read(); v='${TAG}'[1:]; m=re.search(r'^## '+re.escape(v)+r'\n(.*?)(?=^## |\Z)', t, re.S|re.M); print(m.group(1).strip() if m else '')")
+          gh release create "${TAG}" dist/*.zip --target "${GITHUB_SHA}" --title "Outcome-Led CS Ops ${TAG}" --notes "${notes}"

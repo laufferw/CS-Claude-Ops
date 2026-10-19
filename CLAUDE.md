@@ -19,7 +19,7 @@ When adding, renaming, or moving a doc:
 
 `skills/` is generated from `tools/skills.json` and the prompts and frameworks it bundles. Never edit it by hand. After changing a prompt or a bundled framework, run `python3 tools/build_skills.py`. To use the skills while working here, start Claude Code with `claude --plugin-dir .`.
 
-For a release, bump `version` in `.claude-plugin/plugin.json`, add a matching section to `CHANGELOG.md`, and push a `v<version>` tag: the release workflow attaches one zip per skill.
+For a release, bump `version` in `.claude-plugin/plugin.json`, add a matching section to `CHANGELOG.md`, then push a `v<version>` tag or run the "Release skills" workflow from the Actions tab. The workflow creates the release and attaches one zip per skill.
 
 When you change a prompt, run its evals (`python3 tools/run_evals.py --list` shows the cases; see `evals/README.md`), and update the eval's checks and reference outputs if the correct output changes.
 
