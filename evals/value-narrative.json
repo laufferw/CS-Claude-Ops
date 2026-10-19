@@ -1,0 +1,20 @@
+{
+  "prompt": "prompts/value-narrative.md",
+  "cases": [
+    {
+      "name": "board",
+      "description": "Board version of the sample book's value story as of 2026-10-01.",
+      "input": "python3 tools/value_report.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01, plus the cs_scorecard.py output; audience: board",
+      "checks": [
+        {"type": "contains", "values": ["16", "83%", "$625,500", "customer-agreed"], "why": "the headline numbers, with agreed value labeled as the customer's estimate"},
+        {"type": "contains", "values": ["Bluefin"], "why": "the top met and proven result"},
+        {"type": "contains", "values": ["month-end close"], "why": "what isn't working must be stated: the outcome not converting at two accounts"},
+        {"type": "not_contains", "section": "delivered", "values": ["Larkspur", "Tidewater"], "why": "Unexplained progress is never claimed as delivered"},
+        {"type": "not_contains", "values": ["$625,500 in revenue", "$625,500 of revenue", "revenue of $625,500"], "why": "customer-agreed value is not revenue"},
+        {"type": "max_words", "value": 250, "why": "the board version's length limit"}
+      ],
+      "good": "evals/outputs/value-narrative-board-good.md",
+      "bad": "evals/outputs/value-narrative-board-bad.md"
+    }
+  ]
+}

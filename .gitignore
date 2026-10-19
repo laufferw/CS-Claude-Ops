@@ -5,3 +5,6 @@ __pycache__/
 
 # Output folders from tools/run_week.py
 out/
+
+# Real customer data stays out of git (see frameworks/ai-usage-policy.md)
+private/

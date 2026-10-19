@@ -1,0 +1,18 @@
+{
+  "prompt": "prompts/pre-renewal-check.md",
+  "cases": [
+    {
+      "name": "sample-book",
+      "description": "The five accounts renewing within 120 days of 2026-10-01: one Ready, one Needs work, three At risk.",
+      "input": "python3 tools/renewal_window.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01, and paste its output",
+      "checks": [
+        {"type": "order", "values": ["Orchard Learning", "Larkspur Retail", "Cedar Health Partners", "Sable Energy", "Quarry Lane Media"], "why": "accounts soonest renewal first"},
+        {"type": "contains", "values": ["$38,000", "$280,000", "$542,000"], "why": "the ARR summary: Ready, Needs work, and At risk"},
+        {"type": "contains", "values": ["escalation"], "why": "Cedar is Red, so escalation logic applies and must be named"},
+        {"type": "not_contains", "values": ["discount", "price reduction"], "why": "no pricing proposals"}
+      ],
+      "good": "evals/outputs/pre-renewal-check-sample-book-good.md",
+      "bad": "evals/outputs/pre-renewal-check-sample-book-bad.md"
+    }
+  ]
+}

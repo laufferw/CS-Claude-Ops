@@ -12,6 +12,7 @@ CS Ops, RevOps, or whoever owns CS data and process. You make the tools run on t
 - One account ID every system can export
 - Finance's definitions of retention, to reconcile with the [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md)
 - Python 3 (standard library only; nothing to install)
+- An approved [AI Usage Policy](../frameworks/ai-usage-policy.md) before any real data goes into Claude
 
 ## Your week
 
@@ -21,7 +22,9 @@ CS Ops, RevOps, or whoever owns CS data and process. You make the tools run on t
 | Monday, early | Refresh exports, import, and score | `import_data.py`, then [`tools/score_accounts.py`](../tools/score_accounts.py) |
 | Monday | Run each CSM's week, and the team rollup and forecast for the director | [`tools/run_week.py`](../tools/run_week.py), [`tools/team_rollup.py`](../tools/team_rollup.py), [`tools/renewal_forecast.py`](../tools/renewal_forecast.py) |
 | Monthly | Scorecard and value report for leadership; review CSM overrides | [`tools/cs_scorecard.py`](../tools/cs_scorecard.py), [`tools/value_report.py`](../tools/value_report.py) |
-| Quarterly | Outcome Review, and calibration of weights, ranges, and forecast weights | [Outcome Review](../playbooks/outcome-review.md), each framework's Calibration section |
+| Quarterly | Outcome Review, and calibration of weights, ranges, and forecast weights | [Outcome Review](../playbooks/outcome-review.md), [`tools/backtest.py`](../tools/backtest.py), [`tools/forecast_backtest.py`](../tools/forecast_backtest.py) |
+| Weekly | Save a scoring snapshot for future back-tests | Keep each week's `scored-accounts.csv` signal scores (see [score history](../sample-data/README.md#fields-in-score-historycsv)) |
+| On every prompt change | Run the prompt's evals | [`evals/`](../evals/README.md) |
 | On every change | Keep docs and tools consistent | `python3 tools/check_repo.py` |
 
 ## What you get
@@ -35,7 +38,7 @@ CS Ops, RevOps, or whoever owns CS data and process. You make the tools run on t
 
 1. Run [`tools/import_data.py`](../tools/import_data.py) on the [sample exports](../sample-data/exports/mapping.json) and see it reproduce `sample-data/accounts.csv`.
 2. Fill in the field table in [Connect Your Data](../playbooks/connect-your-data.md#where-each-field-usually-lives) for your systems.
-3. Read the [Calibration](../frameworks/account-health-scoring.md#calibration) sections, and book the first back-test.
+3. Run [`tools/backtest.py`](../tools/README.md#back-test) on the sample, then start saving weekly snapshots so you can run it on your own history.
 
 ## Failure modes
 

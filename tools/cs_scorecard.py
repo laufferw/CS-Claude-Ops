@@ -11,7 +11,8 @@ Usage:
         --adoption sample-data/feature-adoption.csv \
         --history sample-data/renewal-history.csv \
         --calls sample-data/forecast-calls.csv \
-        --capacity sample-data/capacity-inputs.json --as-of 2026-10-01
+        --capacity sample-data/capacity-inputs.json \
+        --forecast-history sample-data/forecast-history.csv --as-of 2026-10-01
 """
 
 import argparse
@@ -21,6 +22,7 @@ import sys
 from datetime import date, timedelta
 
 from outcome_progress import GOOD_STATUSES, SCORED_STATUSES, add_support, load_adoption, load_library
+from forecast_backtest import accuracy, load_history
 from renewal_forecast import build_forecast, load_calls
 from score_accounts import load_book
 from team_rollup import at_risk, build_rollup
@@ -65,6 +67,7 @@ def main():
     parser.add_argument("--history", help="renewal history CSV, for retention rates")
     parser.add_argument("--calls", help="CSM forecast calls CSV")
     parser.add_argument("--capacity", help="capacity model JSON")
+    parser.add_argument("--forecast-history", help="past forecasts and outcomes CSV, for forecast accuracy")
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today(),
                         help="scorecard date (YYYY-MM-DD)")
     args = parser.parse_args()
@@ -76,7 +79,8 @@ def main():
         calls = load_calls(args.calls)
         capacity = json.load(open(args.capacity)) if args.capacity else None
         history = retention(args.history, args.as_of) if args.history else None
-    except ValueError as e:
+        forecasts = load_history(args.forecast_history) if args.forecast_history else None
+    except (ValueError, KeyError) as e:
         sys.exit(str(e))
 
     total_arr = sum(float(r["arr"]) for r in raw)
@@ -127,7 +131,14 @@ def main():
             f"| Up for renewal in {label} | {money(t['up_for_renewal'])} across {t['accounts']} accounts |",
             f"| Commit | {money(t['commit'])} ({pct(t['commit'], t['up_for_renewal'])}) |",
             f"| Weighted forecast | {money(t['weighted'])} ({pct(t['weighted'], t['up_for_renewal'])}) |",
-            f"| Calls that disagree with signals | {sum(1 for r in rows if r['gap'] and r['gap'] != 'no call')} |", ""]
+            f"| Calls that disagree with signals | {sum(1 for r in rows if r['gap'] and r['gap'] != 'no call')} |"]
+    if forecasts:
+        quarters, (kept, weighted) = accuracy(forecasts)
+        last, (last_kept, last_weighted) = list(quarters.items())[-1]
+        out += [f"| Forecast accuracy, {last} | {pct(last_kept, last_weighted)} ({money(last_kept)} renewed of "
+                f"{money(last_weighted)} weighted) |",
+                f"| Forecast accuracy, last {len(quarters)} quarters | {pct(kept, weighted)} |"]
+    out.append("")
 
     if capacity:
         _, team = build_rollup(raw, scored, plans, capacity)

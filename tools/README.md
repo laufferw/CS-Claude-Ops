@@ -13,6 +13,9 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 | [`renewal_forecast.py`](renewal_forecast.py) | Forecasts renewal ARR by quarter per the [Renewal Forecast](../frameworks/renewal-forecast.md), and lists CSM calls that disagree with the data |
 | [`team_rollup.py`](team_rollup.py) | Rolls the book up by CSM: health, risk, renewals, outcomes, data gaps, and workload per the [Capacity Model](../frameworks/capacity-model.md) |
 | [`cs_scorecard.py`](cs_scorecard.py) | Computes the [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md): retention, book health, value realized, forecast, and capacity |
+| [`backtest.py`](backtest.py) | Back-tests the health score: were lost renewals flagged 90 days ahead? Compares two weight sets |
+| [`forecast_backtest.py`](forecast_backtest.py) | Back-tests the renewal forecast: accuracy by quarter, and how much of each category renewed |
+| [`run_evals.py`](run_evals.py) | Checks prompt outputs against the cases in [`evals/`](../evals/README.md), and self-tests every case |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
 
@@ -191,6 +194,7 @@ Prints "All checks passed." or a list of every problem, and exits non-zero on fa
 - **Feature names:** every feature in `sample-data/feature-adoption.csv` is named in the library's "Depends on" column
 - **Import round trip:** importing `sample-data/exports` with its mapping reproduces `sample-data/accounts.csv` exactly
 - **CSV shape:** every row of every sample CSV has as many fields as its header
+- **Evals:** every case's good reference output passes its checks, and its bad one fails
 
 It does not judge whether the content is right. That is still a review.
 
@@ -255,7 +259,7 @@ The monthly one-page scorecard for a VP or COO, computed with the fixed definiti
 
 ### Inputs
 
-The accounts and `--plans` (required); optionally `--adoption`, `--history` (a [renewal history CSV](../sample-data/README.md#fields-in-renewal-historycsv)), `--calls`, and `--capacity`; `--as-of`. Each section appears only when its inputs are given.
+The accounts and `--plans` (required); optionally `--adoption`, `--history` (a [renewal history CSV](../sample-data/README.md#fields-in-renewal-historycsv)), `--calls`, `--capacity`, and `--forecast-history` (a [forecast history CSV](../sample-data/README.md#fields-in-forecast-historycsv), for forecast accuracy); `--as-of`. Each section appears only when its inputs are given.
 
 ### Outputs
 
@@ -265,8 +269,85 @@ Markdown in five sections: retention (renewal-cohort GRR, NRR, and logo retentio
 
 - **Retention that differs from Finance's.** These are renewal-cohort rates. Reconcile and label them before they reach the board.
 - **History with an unknown outcome.** It exits naming the value. Outcomes must be Renewed, Expanded, Downgraded, or Churned.
-- **Metrics it can't compute.** Time to first value and forecast accuracy need data the sample doesn't hold. The scorecard says so instead of showing a number.
+- **Metrics it can't compute.** Time to first value needs close and first-value dates the sample doesn't hold, and forecast accuracy needs `--forecast-history`. The scorecard says so instead of showing a number.
 - **Small windows.** With few renewals in 12 months, one account moves GRR by points. Show the renewal count with the rate.
+
+## Back-test
+
+```
+python3 tools/backtest.py --history sample-data/renewal-history.csv --scores sample-data/score-history.csv --as-of 2026-10-01 --compare usage=30,outcomes=20,engagement=15,support=15,sentiment=10,commercial=10
+```
+
+### Purpose
+
+Answer the calibration question in [Account Health Scoring](../frameworks/account-health-scoring.md#calibration): did the accounts that churned or downgraded score Red, or at least Yellow, 90 days before renewal? And would a different set of weights have done better?
+
+### Inputs
+
+`--history` (the renewal history), `--scores` (a [score history CSV](../sample-data/README.md#fields-in-score-historycsv): each account's signal scores from past scoring runs), `--as-of` (the end of the 12-month window), and optionally `--lead-days` (default 90), `--window-days` (how far from the lead date a snapshot may be, default 21), and `--compare` (all six weights, summing to 100).
+
+### Outputs
+
+Markdown: for each weight set, the lost ARR flagged Red and flagged Red or Yellow, the misses (lost while Green), and the false alarms (Red that renewed in full); renewals by band and outcome; each miss to review; and, with `--compare`, the accounts whose band changes. Bands use the same rules as scoring, overrides included.
+
+For the sample: current weights flag all $180,000 of lost ARR Red or Yellow, with no misses and one false alarm (Quarry Lane Media). The old 30/20 weights leave Aspen Freight's $120,000 churn Green.
+
+### Failure modes
+
+- **No snapshot near the lead date.** The renewal is listed as not tested. Save a scoring snapshot every week, or the back-test has nothing to read.
+- **Too few renewals.** Under 30, the tool says the rates are anecdotes. Change weights on patterns, not on one account.
+- **Tuning to the past.** Weights that catch last year's churn perfectly may not catch next year's. Prefer simple changes that make sense on their own, such as the outcomes weight, over fine-tuning.
+- **Snapshots scored with an older rubric.** The tool re-bands from signal scores, so weights and overrides are current, but a changed signal rubric makes old signal scores incomparable. Note rubric changes next to the snapshots.
+
+## Forecast back-test
+
+```
+python3 tools/forecast_backtest.py sample-data/forecast-history.csv
+```
+
+### Purpose
+
+Check the [Renewal Forecast](../frameworks/renewal-forecast.md) against what happened, and gather the evidence for replacing its placeholder weights.
+
+### Inputs
+
+A [forecast history CSV](../sample-data/README.md#fields-in-forecast-historycsv): each renewal's category and expected ARR at the start of its quarter, and the ARR that actually renewed.
+
+### Outputs
+
+Markdown: forecast accuracy by quarter and overall (renewed ARR, excluding expansion, over the weighted forecast); for each category, the share of expected ARR that renewed, the current weight, and a suggested weight once the category has 10 or more renewals; and every Commit or Best case renewal that churned. For the sample: 110% accuracy over four quarters (too cautious), and Aspen Freight churned from Best case.
+
+### Failure modes
+
+- **Weights from a handful of renewals.** Below 10 renewals, the tool says to keep the current weight.
+- **Mid-quarter re-forecasts recorded as the start.** Accuracy is only meaningful against the forecast made before the quarter began. Save it on day one.
+- **Expansion counted as renewal.** Renewed ARR is capped at the ARR up for renewal, so expansion doesn't flatter accuracy.
+
+## Evals
+
+```
+python3 tools/run_evals.py --list
+python3 tools/run_evals.py evals/weekly-csm-brief.json --case sam --output out/brief.md
+python3 tools/run_evals.py --self-test
+```
+
+### Purpose
+
+Catch a prompt change that breaks its output. The cases and check types are described in [`evals/`](../evals/README.md).
+
+### Inputs
+
+An eval file and case, and an output file from Claude to check. Or `--list`, or `--self-test`.
+
+### Outputs
+
+For a check: one line per failing check with its reason, and a count of checks passed. It exits non-zero on any failure. For `--self-test`: whether every case's good reference output passes and its bad one fails.
+
+### Failure modes
+
+- **It doesn't run Claude.** A person generates the output. CI only self-tests the cases.
+- **Wording checks.** Checks should test facts and rules, not phrasing, or good outputs fail.
+- **A pass is not a review.** Read the output too.
 
 ## ROI calculator
 

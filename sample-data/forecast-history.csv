@@ -1,0 +1,15 @@
+quarter,account_id,account,arr,category,expected_arr,actual_arr
+2025-Q4,A06,Orchard Learning,35000,Commit,35000,38000
+2025-Q4,A04,Larkspur Retail,60000,Commit,60000,60000
+2025-Q4,A02,Cedar Health Partners,410000,Best case,410000,410000
+2025-Q4,A10,Sable Energy,280000,Commit,280000,280000
+2026-Q1,A08,Quarry Lane Media,72000,At risk,72000,72000
+2026-Q1,A03,Granite Payroll,110000,Best case,110000,95000
+2026-Q1,X01,Aspen Freight,120000,Best case,120000,0
+2026-Q1,A07,Pinecrest Manufacturing,450000,Commit,450000,520000
+2026-Q2,A12,Willow Biotech,190000,Commit,190000,190000
+2026-Q2,A09,Riverbend Credit Union,130000,Commit,130000,130000
+2026-Q2,A01,Bluefin Logistics,200000,Commit,200000,240000
+2026-Q3,X02,Cobalt Studios,45000,At risk,45000,0
+2026-Q3,A11,Tidewater Clinics,55000,Commit,55000,55000
+2026-Q3,A05,Meridian Analytics,150000,Best case,150000,150000

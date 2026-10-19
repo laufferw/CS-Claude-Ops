@@ -83,4 +83,4 @@ Two of the four calls are above the signals. Sable is called Commit while it's Y
 
 ## Calibration
 
-Each quarter, for each category, compare forecast ARR at the start of the quarter with what renewed. Set each weight to that share once you have 4 quarters. Also report **forecast accuracy**: actual renewed ARR divided by the weighted forecast at the start of the quarter. See the [CS Metrics Scorecard](cs-metrics-scorecard.md).
+Each quarter, for each category, compare forecast ARR at the start of the quarter with what renewed. Set each weight to that share once a category has at least 10 renewals. [`tools/forecast_backtest.py`](../tools/forecast_backtest.py) does this from [`sample-data/forecast-history.csv`](../sample-data/forecast-history.csv): in the sample, Best case realized 83% against a 70% weight, but on only 4 renewals, so the weight stays. Also report **forecast accuracy**: actual renewed ARR divided by the weighted forecast at the start of the quarter. See the [CS Metrics Scorecard](cs-metrics-scorecard.md).

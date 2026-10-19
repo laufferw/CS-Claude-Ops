@@ -21,6 +21,7 @@ A VP of Customer Success, Chief Customer Officer, or COO. It helps you report CS
 | Monthly | Scorecard: retention, book health, value realized, forecast, capacity | [`tools/cs_scorecard.py`](../tools/cs_scorecard.py), [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md) |
 | Quarterly | Value story for the exec team or board | [`tools/value_report.py`](../tools/value_report.py), then `/cs-value-narrative` |
 | Quarterly | Outcome Review decisions for Product, Marketing, and Sales | [Outcome Review](../playbooks/outcome-review.md) |
+| Once, then yearly | Charter and ownership map, signed by every function; AI policy approved | [CS Charter](../frameworks/cs-charter.md), [AI Usage Policy](../frameworks/ai-usage-policy.md) |
 | Planning | Headcount from the capacity model; Adoption as a Service pilot | [Capacity Model](../frameworks/capacity-model.md), [Adoption as a Service](../specs/adoption-as-a-service.md) |
 
 Try it on the sample:
@@ -42,7 +43,7 @@ python3 tools/cs_scorecard.py sample-data/accounts.csv --plans sample-data/succe
 2. Run the scorecard above, and compare its definitions with how your company reports retention today.
 3. Pick one team to pilot the weekly routine for a quarter, then compare its forecast accuracy and data coverage with the rest.
 
-Not covered yet: a CS charter and an ownership map across Sales, CS, Support, and Services, and a policy for using AI with customer data. Settle both with Legal, Security, and your peers before rolling this out widely.
+Before rolling this out widely, agree the [CS Charter and Ownership Map](../frameworks/cs-charter.md) with your peers, and get the [AI Usage Policy](../frameworks/ai-usage-policy.md) approved by Legal and Security.
 
 ## Failure modes
 

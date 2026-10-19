@@ -17,6 +17,10 @@ When adding, renaming, or moving a doc:
 - Add or update its entry in the README index.
 - Link to other docs with relative markdown links.
 
+When you change a prompt, run its evals (`python3 tools/run_evals.py --list` shows the cases; see `evals/README.md`), and update the eval's checks and reference outputs if the correct output changes.
+
+Never commit real customer data. Real exports go in `private/` or outside the repo (see `frameworks/ai-usage-policy.md`).
+
 Before every push, run `python3 tools/check_repo.py` and fix anything it reports. CI runs the same check on `main`.
 
 ## Content rules

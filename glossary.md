@@ -92,6 +92,15 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **Logo retention** | Accounts that renewed divided by accounts due |
 | **Mapping** | A JSON file that tells [`import_data.py`](tools/README.md#import-data) where each field comes from in raw exports. See [Connect Your Data](playbooks/connect-your-data.md) |
 | **Coverage report** | What the importer prints: how many rows have a value for each field |
+| **Back-test** | Checking a model against what happened: whether lost renewals scored Red or Yellow 90 days ahead. See the [back-test tool](tools/README.md#back-test) |
+| **Miss** | A renewal that was lost while its account scored Green 90 days before |
+| **False alarm** | An account that scored Red 90 days before renewal and then renewed in full |
+| **Realization** | The share of a forecast category's expected ARR that actually renewed. With enough renewals, the category's weight |
+| **Forecast accuracy** | Renewed ARR, excluding expansion, divided by the weighted forecast at the start of the quarter |
+| **Eval** | A test case for a prompt: an input and checks a correct output must pass. See [evals](evals/README.md) |
+| **Charter** | The written statement of what CS is for, owns, and doesn't own. See [CS Charter](frameworks/cs-charter.md) |
+| **Ownership map** | Who does the work (R), decides (A), is consulted (C), and is informed (I) for each activity across functions |
+| **Data class** | The policy category a piece of customer data falls in: allowed, minimum necessary, check the contract first, or never. See [AI Usage Policy](frameworks/ai-usage-policy.md) |
 | **Value history** | Goals an account has met and retired from its success plan. Evidence for renewal, no longer scored |
 | **Go-live** | The point at which the customer starts using the product for real work |
 | **First value** | The first measured improvement on a success plan goal, from its baseline. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |

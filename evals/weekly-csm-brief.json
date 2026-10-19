@@ -1,0 +1,22 @@
+{
+  "prompt": "prompts/weekly-csm-brief.md",
+  "cases": [
+    {
+      "name": "sam",
+      "description": "Sam Example's six accounts: three band drops, two red-flag overrides, four renewals, no expansion signals.",
+      "input": "python3 tools/run_week.py sample-data/accounts.csv --plans sample-data/success-plans.csv --csm \"Sam Example\" --as-of 2026-10-01, then paste scored.csv",
+      "checks": [
+        {"type": "sections", "values": ["Top accounts", "Renewals", "Expansion", "Data gaps"], "why": "the four sections the prompt requires"},
+        {"type": "contains", "section": "Top accounts", "values": ["Cedar Health Partners", "Granite Payroll", "Riverbend Credit Union", "Quarry Lane Media", "Larkspur Retail"], "why": "three band drops and two red-flag overrides fill the 5 slots"},
+        {"type": "order", "section": "Renewals", "values": ["Larkspur Retail", "Cedar Health Partners", "Sable Energy", "Quarry Lane Media"], "why": "renewals soonest first"},
+        {"type": "contains", "section": "Expansion", "values": ["None this week"], "why": "no account in Sam's book has an expansion signal"},
+        {"type": "contains", "section": "Data gaps", "values": ["Riverbend Credit Union", "Sable Energy"], "why": "stale goals and a goal with no baseline"},
+        {"type": "not_contains", "values": ["Bluefin", "Pinecrest", "Orchard", "Meridian", "Tidewater", "Willow"], "why": "these accounts belong to other CSMs"},
+        {"type": "not_contains", "values": ["discount"], "why": "no pricing proposals"},
+        {"type": "max_words", "value": 500, "why": "the prompt's length limit"}
+      ],
+      "good": "evals/outputs/weekly-csm-brief-sam-good.md",
+      "bad": "evals/outputs/weekly-csm-brief-sam-bad.md"
+    }
+  ]
+}

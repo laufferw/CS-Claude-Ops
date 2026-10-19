@@ -10,6 +10,7 @@ Checks:
 - The tools run, sample-data/scored-accounts.csv matches a fresh run, and importing
   the sample exports reproduces sample-data/accounts.csv
 - Every sample CSV row has as many fields as its header
+- Every eval case's good reference output passes its checks, and its bad one fails
 - Every outcome ID in sample-data/success-plans.csv is in the Outcome Library, and every
   feature in sample-data/feature-adoption.csv is named in it
 
@@ -178,6 +179,18 @@ def check_tools(problems):
         result = run(args)
         if result.returncode != 0:
             problems.append(f"{args[0]} failed: {result.stderr.strip()}")
+    history = ["--history", "sample-data/renewal-history.csv"]
+    for args in (["tools/backtest.py", *history, "--scores", "sample-data/score-history.csv", "--as-of", "2026-10-01",
+                  "--compare", "usage=30,outcomes=20,engagement=15,support=15,sentiment=10,commercial=10"],
+                 ["tools/forecast_backtest.py", "sample-data/forecast-history.csv"],
+                 ["tools/cs_scorecard.py", "sample-data/accounts.csv", *plans, *calls,
+                  "--forecast-history", "sample-data/forecast-history.csv"]):
+        result = run(args)
+        if result.returncode != 0:
+            problems.append(f"{args[0]} failed: {result.stderr.strip()}")
+    evals = run(["tools/run_evals.py", "--self-test"])
+    if evals.returncode != 0:
+        problems.append(f"tools/run_evals.py --self-test failed:\n{evals.stdout.strip()}")
     with tempfile.TemporaryDirectory() as out:
         week = run(["tools/run_week.py", "sample-data/accounts.csv", *plans, *adoption, *calls,
                     "--csm", "Sam Example", "--out", out])

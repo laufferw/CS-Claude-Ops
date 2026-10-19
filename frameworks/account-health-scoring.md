@@ -161,4 +161,4 @@ Riverbend Credit Union shows the no-measured-outcomes override. Its four goals w
 
 ## Calibration
 
-Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes. Outcomes moved from 20% to 25% and usage from 30% to 25% on the argument above, not on a back-test. Test that change first. The monthly churn review in [Churn and Offboarding](../playbooks/churn-and-offboarding.md) collects this data.
+Back-test on the last 12 months: did accounts that churned score Red 90 days before renewal? Adjust weights until the answer is mostly yes. [`tools/backtest.py`](../tools/backtest.py) runs this test from saved scoring snapshots, and compares a second weight set side by side. Outcomes moved from 20% to 25% and usage from 30% to 25% on the argument above. In the sample back-test, the old weights left Aspen Freight's $120,000 churn Green 90 days out, and the new ones flag it Yellow. That is one account, not proof: test the change on your own history, with at least 30 renewals. The monthly churn review in [Churn and Offboarding](../playbooks/churn-and-offboarding.md) collects this data.

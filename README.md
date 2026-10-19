@@ -25,6 +25,7 @@ This repo is markdown-first. Almost everything here is a document you can read, 
 | [`tools/`](tools/) | Small utilities, standard-library Python: a data importer, a weekly run, health scoring, outcome progress, a value report, a renewal window, a renewal forecast, a team rollup, a CS scorecard, and an ROI calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
 | [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
+| [`evals/`](evals/README.md) | Test cases for the prompts, with good and bad reference outputs |
 | [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
 | [`.claude/skills/`](.claude/skills/) | Each prompt packaged as a Claude Code skill |
 
@@ -46,6 +47,8 @@ Terms are defined in the [glossary](glossary.md).
 - [Renewal Forecast](frameworks/renewal-forecast.md): forecast categories from signals, CSM calls, and the calls to challenge
 - [Capacity Model](frameworks/capacity-model.md): weekly CSM hours per account, utilization, and headcount
 - [CS Metrics Scorecard](frameworks/cs-metrics-scorecard.md): fixed definitions for retention, book health, value, forecast, and capacity
+- [CS Charter and Ownership Map](frameworks/cs-charter.md): what CS owns, what it doesn't, and who decides what across functions
+- [AI Usage Policy](frameworks/ai-usage-policy.md): which customer data may go into AI tools, approved tools, human review, and logging
 - [Account Management Engine](frameworks/account-management-engine.md): the weekly loop from account data to ranked CSM actions
 - [Escalation Logic](frameworks/escalation-logic.md): triggers, levels, owners, response targets, and root cause tags
 - [CSM Competency Framework](frameworks/csm-competency-framework.md): what good looks like at each CSM level
@@ -109,9 +112,12 @@ Situational:
 - [Renewal forecast](tools/README.md#renewal-forecast): renewal ARR by quarter, with calls that disagree with the data
 - [Team rollup](tools/README.md#team-rollup): health, risk, outcomes, and workload by CSM
 - [CS scorecard](tools/README.md#cs-scorecard): the leadership scorecard
+- [Back-test](tools/README.md#back-test): did the health score flag lost renewals 90 days ahead, under two weight sets?
+- [Forecast back-test](tools/README.md#forecast-back-test): forecast accuracy, and how much of each category renewed
+- [Evals](evals/README.md): test cases that catch a prompt change breaking its output
 - [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
 - [Repo checker](tools/README.md#repo-checker): checks required sections, links, the index, skills, and tools. Runs in CI on every push
-- [Sample accounts](sample-data/README.md): 12 fictional accounts across three CSMs, raw and scored, with success plans, feature adoption, forecast calls, renewal history, capacity settings, raw exports to import, and sample ROI inputs
+- [Sample accounts](sample-data/README.md): 12 fictional accounts across three CSMs, raw and scored, with success plans, feature adoption, forecast calls, renewal, score, and forecast history, capacity settings, raw exports to import, and sample ROI inputs
 
 ### Essays
 
@@ -167,7 +173,7 @@ The skills only point at the prompt files, so editing a prompt changes its skill
 
 ## Contributing
 
-Start new docs from [`templates/`](templates/README.md), then run `python3 tools/check_repo.py` before pushing. CI runs the same check.
+Start new docs from [`templates/`](templates/README.md). If you change a prompt, run its [evals](evals/README.md). Run `python3 tools/check_repo.py` before pushing. CI runs the same check.
 
 ## Status
 

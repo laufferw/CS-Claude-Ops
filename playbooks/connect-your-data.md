@@ -16,6 +16,7 @@ A team decides to use the tools on real accounts, or a source system changes (a 
 - The target formats in [`sample-data`](../sample-data/README.md): accounts, success plans, and feature adoption
 - The example exports and mapping in [`sample-data/exports`](../sample-data/exports/mapping.json)
 - One shared account ID that every system can export. Usually the CRM record ID
+- An approved [AI Usage Policy](../frameworks/ai-usage-policy.md). Keep real exports in `private/` or outside the repository, never in git
 
 ## Where each field usually lives
 

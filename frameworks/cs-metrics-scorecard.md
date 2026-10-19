@@ -53,7 +53,7 @@ Calculated over the renewals due in the trailing 12 months. These are **renewal-
 | Metric | Formula | Gamed by |
 |---|---|---|
 | Commit and weighted forecast, current quarter | Per the [Renewal Forecast](renewal-forecast.md) | Optimistic calls. Count calls above signals |
-| Forecast accuracy | Renewed ARR / weighted forecast at the start of the quarter | Re-forecasting mid-quarter. Measure against the start-of-quarter number |
+| Forecast accuracy | Renewed ARR, excluding expansion, / weighted forecast at the start of the quarter. Over 100% means too cautious | Re-forecasting mid-quarter. Measure against the start-of-quarter number |
 
 ### Capacity
 
@@ -68,7 +68,7 @@ Calculated over the renewals due in the trailing 12 months. These are **renewal-
 - A one-page scorecard: retention, book health, value realized, forecast, and capacity, each number shown with its calculation
 - A trend when run each month, compared with last month and last quarter
 
-[`tools/cs_scorecard.py`](../tools/cs_scorecard.py) computes everything except time to first value and forecast accuracy, which need close dates, first-value dates, and past forecasts that the sample data doesn't hold.
+[`tools/cs_scorecard.py`](../tools/cs_scorecard.py) computes everything except time to first value, which needs close dates and first-value dates the sample data doesn't hold. Forecast accuracy comes from past forecasts in [`sample-data/forecast-history.csv`](../sample-data/forecast-history.csv). [`tools/forecast_backtest.py`](../tools/forecast_backtest.py) breaks it down by quarter and category.
 
 ## Worked example
 

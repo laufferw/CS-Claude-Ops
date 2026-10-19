@@ -176,18 +176,18 @@ def urgency_for(days_to_renewal):
     return 0.3
 
 
-def score_account(row, as_of, goals=()):
-    """Score one account. goals is its success plan, as load_plans() returns it."""
-    scores = {name: scorer(row) for name, scorer in SCORERS.items()}
-    scores["outcomes"] = score_outcomes(goals)
+def band_signals(scores, red_flags, weights=WEIGHTS):
+    """Turn signal scores into (index, band, coverage, overrides) with the rubric's rules.
+
+    scores maps each signal to 0-100 or None (missing). weights must sum to 100.
+    Shared with backtest.py, so a back-test bands accounts exactly as scoring does.
+    """
     scored = {name: s for name, s in scores.items() if s is not None}
-    missing = [name for name in WEIGHTS if name not in scored]
-    coverage = sum(WEIGHTS[name] for name in scored)
-    index = round_half_up(sum(s * WEIGHTS[name] for name, s in scored.items()) / coverage) if coverage else None
+    coverage = sum(weights[name] for name in scored)
+    index = round_half_up(sum(s * weights[name] for name, s in scored.items()) / coverage) if coverage else None
 
     band = band_for(index) if coverage >= MIN_COVERAGE else "Insufficient data"
     overrides = []
-    red_flags = [f for f in row["red_flags"].split("|") if f.strip()]
     if "non_renewal_notice" in red_flags:
         band = "Red"
         overrides.append("non_renewal_notice -> Red")
@@ -204,6 +204,17 @@ def score_account(row, as_of, goals=()):
             overrides.append("no_measured_outcomes -> capped at Yellow")
         else:
             overrides.append(f"no_measured_outcomes (band already {band})")
+    return index, band, coverage, overrides
+
+
+def score_account(row, as_of, goals=()):
+    """Score one account. goals is its success plan, as load_plans() returns it."""
+    scores = {name: scorer(row) for name, scorer in SCORERS.items()}
+    scores["outcomes"] = score_outcomes(goals)
+    scored = {name: s for name, s in scores.items() if s is not None}
+    missing = [name for name in WEIGHTS if name not in scored]
+    red_flags = [f for f in row["red_flags"].split("|") if f.strip()]
+    index, band, coverage, overrides = band_signals(scores, red_flags)
 
     gaps = sorted(
         ((WEIGHTS[name] * (100 - s), name, s) for name, s in scored.items() if s < 100),

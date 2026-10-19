@@ -15,6 +15,8 @@ A fictional book of 12 accounts across a team of three CSMs, for trying the prom
 | [`feature-adoption.csv`](feature-adoption.csv) | Adoption of each feature per account, for the [adoption check](../frameworks/outcome-library.md#checking-adoption-behind-each-outcome) |
 | [`forecast-calls.csv`](forecast-calls.csv) | Each CSM's forecast call and expected ARR, for the [renewal forecast](../tools/README.md#renewal-forecast) |
 | [`renewal-history.csv`](renewal-history.csv) | Renewals due in the past, with ARR before and after, for retention in the [scorecard](../tools/README.md#cs-scorecard) |
+| [`score-history.csv`](score-history.csv) | Signal scores from past scoring runs, about 90 days before each past renewal, for the [back-test](../tools/README.md#back-test) |
+| [`forecast-history.csv`](forecast-history.csv) | Each past renewal's forecast at the start of its quarter, and what renewed, for the [forecast back-test](../tools/README.md#forecast-back-test) |
 | [`capacity-inputs.json`](capacity-inputs.json) | Hours per account and per CSM, for the [Capacity Model](../frameworks/capacity-model.md) |
 | [`exports/`](exports/mapping.json) | Three raw exports (CRM, product usage, support) and the mapping that imports them to `accounts.csv`. See [Connect Your Data](../playbooks/connect-your-data.md) |
 | [`roi-inputs.json`](roi-inputs.json) | Inputs for the [ROI calculator](../tools/README.md#roi-calculator) for a fictional 8-CSM team |
@@ -97,6 +99,30 @@ One row per renewal that came due, including accounts that churned and are no lo
 | `outcome` | `Renewed`, `Expanded`, `Downgraded`, or `Churned` |
 | `reason` | A [root cause tag](../frameworks/escalation-logic.md#root-cause-tags) for any churn or downgrade |
 
+## Fields in `score-history.csv`
+
+One row per account per saved scoring run. To build it from your own runs, save each week's `scored-accounts.csv`: its `usage_score` to `commercial_score` columns are these signal scores.
+
+| Field | Meaning |
+|---|---|
+| `account_id` | Matches the renewal history |
+| `as_of` | The scoring run's date, YYYY-MM-DD |
+| `usage`, `outcomes`, `engagement`, `support`, `sentiment`, `commercial` | Signal scores, 0 to 100. Blank means missing |
+| `red_flags` | Red flags at that date, as in `accounts.csv` |
+
+## Fields in `forecast-history.csv`
+
+One row per renewal, as forecast on the first day of its quarter.
+
+| Field | Meaning |
+|---|---|
+| `quarter` | The renewal's quarter, such as `2026-Q1` |
+| `account_id`, `account` | Identifiers |
+| `arr` | ARR up for renewal |
+| `category` | The category used at the start of the quarter: `Commit`, `Best case`, `At risk`, or `Lost` |
+| `expected_arr` | Expected ARR at the start of the quarter |
+| `actual_arr` | ARR after the renewal. Zero for a churn |
+
 ## Files in `exports/`
 
 `crm-companies.csv`, `product-usage.csv`, and `support-orgs.csv` look like raw exports: dollar signs in ARR, US-format dates, the last executive meeting as a date rather than days, yes/no columns for red flags, and a usage export that is missing Meridian Analytics. [`mapping.json`](exports/mapping.json) turns them into `accounts.csv` exactly:
@@ -127,5 +153,7 @@ python3 tools/import_data.py sample-data/exports/mapping.json --source crm=sampl
 | Sable Energy, Larkspur Retail, Granite Payroll | Forecast calls above what the signals support |
 | Pinecrest Manufacturing | Renewing next quarter with no forecast call |
 | Aspen Freight, Cobalt Studios | Churned in the last 12 months: in the renewal history, not the book |
-| Dogwood Partners | Churned before the 12-month window, so retention leaves it out |
+| Dogwood Partners | Churned before the 12-month window, so retention and the back-test leave it out |
+| Aspen Freight | Green 90 days out under the old 30/20 weights, Yellow under the current ones; churned from a Best case forecast |
+| Quarry Lane Media (last year) | Red 90 days before its 2026 renewal, then renewed in full: the back-test's false alarm |
 | Bluefin Logistics, Orchard Learning, Willow Biotech | Healthy accounts, each with a goal already Met |

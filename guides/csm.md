@@ -9,7 +9,7 @@ A CSM who owns a book of accounts. It helps you decide where to spend this week,
 ## What you need
 
 - Your accounts, success plans, and feature adoption in the [`sample-data`](../sample-data/README.md) formats. CS Ops sets this up once with [Connect Your Data](../playbooks/connect-your-data.md). Until then, practice on the sample book as Sam Example
-- Claude Code, opened in this repository
+- Claude Code, opened in this repository, under your company's [AI Usage Policy](../frameworks/ai-usage-policy.md). Know which data is never allowed
 - Your forecast call for each account renewing in the next two quarters
 
 ## Your week

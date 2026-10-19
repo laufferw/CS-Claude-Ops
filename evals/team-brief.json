@@ -1,0 +1,20 @@
+{
+  "prompt": "prompts/team-brief.md",
+  "cases": [
+    {
+      "name": "sample-team",
+      "description": "The three-CSM sample team as of 2026-10-01, with this week's forecast calls.",
+      "input": "python3 tools/team_rollup.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --capacity sample-data/capacity-inputs.json --as-of 2026-10-01, and python3 tools/renewal_forecast.py sample-data/accounts.csv --plans sample-data/success-plans.csv --calls sample-data/forecast-calls.csv --as-of 2026-10-01; last week's actions: none",
+      "checks": [
+        {"type": "sections", "values": ["Calls to challenge", "Risk by CSM", "Capacity"], "why": "the sections the prompt requires"},
+        {"type": "contains", "values": ["$271,333", "$463,766", "$788,000", "Cedar Health Partners"], "why": "the current quarter's forecast and the biggest risk"},
+        {"type": "order", "section": "Calls to challenge", "values": ["Sable Energy", "Granite Payroll", "Larkspur Retail"], "why": "every call above signals, largest ARR first"},
+        {"type": "contains", "section": "Capacity", "values": ["Sam Example"], "why": "Sam carries most of the workload"},
+        {"type": "not_contains", "values": ["underperform", "low performer", "performance issue", "struggling"], "why": "describe the book, not the person"},
+        {"type": "max_words", "value": 400, "why": "the prompt's length limit"}
+      ],
+      "good": "evals/outputs/team-brief-sample-team-good.md",
+      "bad": "evals/outputs/team-brief-sample-team-bad.md"
+    }
+  ]
+}

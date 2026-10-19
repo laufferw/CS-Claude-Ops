@@ -40,7 +40,7 @@ python3 tools/renewal_forecast.py sample-data/accounts.csv --plans sample-data/s
 
 ## Start here
 
-1. Run the two commands above and read them side by side.
+1. Run the two commands above and read them side by side. Check your team's ownership against the [CS Charter](../frameworks/cs-charter.md).
 2. Read the [Renewal Forecast](../frameworks/renewal-forecast.md) categories, so you can explain a challenge to a CSM.
 3. Run one [Weekly Team Review](../playbooks/weekly-team-review.md) with your team.
 
