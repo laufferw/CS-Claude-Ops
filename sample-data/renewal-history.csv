@@ -1,0 +1,16 @@
+account_id,account,csm,renewal_date,arr_before,arr_after,outcome,reason
+X03,Dogwood Partners,Priya Example,2025-08-15,80000,0,Churned,customer-org-change
+A06,Orchard Learning,Jordan Example,2025-10-31,35000,38000,Expanded,
+A04,Larkspur Retail,Sam Example,2025-11-20,60000,60000,Renewed,
+A02,Cedar Health Partners,Sam Example,2025-12-15,410000,410000,Renewed,
+A10,Sable Energy,Sam Example,2025-12-31,280000,280000,Renewed,
+A08,Quarry Lane Media,Sam Example,2026-01-15,72000,72000,Renewed,
+A03,Granite Payroll,Sam Example,2026-02-28,110000,95000,Downgraded,commercial
+X01,Aspen Freight,Priya Example,2026-03-15,120000,0,Churned,product-gap
+A07,Pinecrest Manufacturing,Priya Example,2026-03-31,450000,520000,Expanded,
+A12,Willow Biotech,Jordan Example,2026-04-30,190000,190000,Renewed,
+A09,Riverbend Credit Union,Sam Example,2026-05-31,130000,130000,Renewed,
+A01,Bluefin Logistics,Priya Example,2026-06-30,200000,240000,Expanded,
+X02,Cobalt Studios,Jordan Example,2026-07-31,45000,0,Churned,sponsor-change
+A11,Tidewater Clinics,Jordan Example,2026-08-31,55000,55000,Renewed,
+A05,Meridian Analytics,Priya Example,2026-09-30,150000,150000,Renewed,

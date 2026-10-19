@@ -11,7 +11,7 @@ For each account renewing in the window: ARR, renewal date, days to renewal, ban
 Get them in one step with the [renewal window tool](../tools/README.md#renewal-window), and paste its output:
 
 ```
-python3 tools/renewal_window.py sample-data/accounts.csv --as-of 2026-10-01
+python3 tools/renewal_window.py sample-data/accounts.csv --plans sample-data/success-plans.csv --as-of 2026-10-01
 ```
 
 ## Prompt

@@ -8,6 +8,7 @@ Start every new doc from one of these. Each template has the sections the README
 | [`prompt.md`](prompt.md) | A reusable Claude prompt | `prompts/` |
 | [`playbook.md`](playbook.md) | A step-by-step procedure with owners and timings | `playbooks/` |
 | [`spec.md`](spec.md) | A design doc for a tool worth building | `specs/` |
+| [`guide.md`](guide.md) | A start-here guide for one role: what to run each week, and with what | `guides/` |
 
 To use one:
 

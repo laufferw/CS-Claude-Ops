@@ -7,7 +7,9 @@ Checks:
 - Every doc is listed in the README index
 - Every prompt has a skill, every skill points at a prompt that exists, and
   the README's skills table lists every skill
-- The tools run, and sample-data/scored-accounts.csv matches a fresh run
+- The tools run, sample-data/scored-accounts.csv matches a fresh run, and importing
+  the sample exports reproduces sample-data/accounts.csv
+- Every sample CSV row has as many fields as its header
 - Every outcome ID in sample-data/success-plans.csv is in the Outcome Library, and every
   feature in sample-data/feature-adoption.csv is named in it
 
@@ -21,6 +23,7 @@ import csv
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -32,8 +35,9 @@ REQUIRED_SECTIONS = {
     "prompts": ["Purpose", "Inputs", "Prompt", "Output format", "Known failure modes"],
     "playbooks": ["Purpose", "Trigger", "Inputs", "Steps", "Outputs", "Failure modes"],
     "specs": ["Goals", "Non-goals", "Inputs", "Outputs", "Safety and trust", "Failure modes"],
+    "guides": ["Who it's for", "What you need", "Your week", "What you get", "Start here", "Failure modes"],
 }
-INDEXED_FOLDERS = ["frameworks", "specs", "prompts", "playbooks", "essays"]
+INDEXED_FOLDERS = ["guides", "frameworks", "specs", "prompts", "playbooks", "essays"]
 LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 FENCE = re.compile(r"^```")
 
@@ -157,9 +161,40 @@ def check_tools(problems):
     report = run(["tools/value_report.py", "sample-data/accounts.csv", *plans, *adoption])
     if report.returncode != 0:
         problems.append(f"tools/value_report.py failed: {report.stderr.strip()}")
+    exports = "sample-data/exports"
+    imported = run(["tools/import_data.py", f"{exports}/mapping.json", "--source", f"crm={exports}/crm-companies.csv",
+                    "--source", f"usage={exports}/product-usage.csv", "--source", f"support={exports}/support-orgs.csv",
+                    "--as-of", "2026-10-01"])
+    if imported.returncode != 0:
+        problems.append(f"tools/import_data.py failed: {imported.stderr.strip()}")
+    elif imported.stdout != (ROOT / "sample-data" / "accounts.csv").read_text():
+        problems.append("tools/import_data.py: importing sample-data/exports no longer reproduces sample-data/accounts.csv")
+    calls = ["--calls", "sample-data/forecast-calls.csv"]
+    capacity = ["--capacity", "sample-data/capacity-inputs.json"]
+    for args in (["tools/renewal_forecast.py", "sample-data/accounts.csv", *plans, *calls],
+                 ["tools/team_rollup.py", "sample-data/accounts.csv", *plans, *adoption, *capacity],
+                 ["tools/cs_scorecard.py", "sample-data/accounts.csv", *plans, *adoption, *calls, *capacity,
+                  "--history", "sample-data/renewal-history.csv"]):
+        result = run(args)
+        if result.returncode != 0:
+            problems.append(f"{args[0]} failed: {result.stderr.strip()}")
+    with tempfile.TemporaryDirectory() as out:
+        week = run(["tools/run_week.py", "sample-data/accounts.csv", *plans, *adoption, *calls,
+                    "--csm", "Sam Example", "--out", out])
+        if week.returncode != 0 or not (Path(out) / "week.md").exists():
+            problems.append(f"tools/run_week.py failed: {week.stderr.strip()}")
     roi = run(["tools/roi_calculator.py", "sample-data/roi-inputs.json"])
     if roi.returncode != 0:
         problems.append(f"tools/roi_calculator.py failed: {roi.stderr.strip()}")
+
+
+def check_csv_widths(problems):
+    for path in sorted((ROOT / "sample-data").rglob("*.csv")):
+        with open(path, newline="") as f:
+            rows = list(csv.reader(f))
+        for line, row in enumerate(rows[1:], start=2):
+            if len(row) != len(rows[0]):
+                problems.append(f"{path.relative_to(ROOT)} line {line}: {len(row)} fields, header has {len(rows[0])}")
 
 
 def check_outcome_ids(problems):
@@ -182,7 +217,7 @@ def check_outcome_ids(problems):
 
 def main():
     problems = []
-    for check in (check_sections, check_links, check_index, check_skills, check_tools, check_outcome_ids):
+    for check in (check_sections, check_links, check_index, check_skills, check_tools, check_outcome_ids, check_csv_widths):
         check(problems)
     if problems:
         print(f"{len(problems)} problem(s):")

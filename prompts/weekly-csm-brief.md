@@ -73,15 +73,15 @@ Four headed sections. Section 1 is a numbered list. Sections 2 to 4 are short bu
 
 ## Example
 
-From [`sample-data/scored-accounts.csv`](../sample-data/scored-accounts.csv), scored as of 2026-10-01, a correct brief has:
+From Sam Example's six accounts in [`sample-data/scored-accounts.csv`](../sample-data/scored-accounts.csv), scored as of 2026-10-01 (or `scored.csv` from [`tools/run_week.py`](../tools/run_week.py) with `--csm "Sam Example"`), a correct brief has:
 
 - **Top accounts:**
   - Band moves down: Cedar Health Partners (Yellow to Red), Granite Payroll (Green to Yellow, capped by the sponsor departure), and Riverbend Credit Union (Green to Yellow, capped because its success plan has not been measured since June).
   - Red-flag overrides: Quarry Lane Media (non-renewal notice) and Larkspur Retail (payment dispute).
-  - That makes 5, so Sable Energy and Pinecrest Manufacturing miss the cut despite higher priorities than several of these. Neither moved band nor has a red flag.
-- **Renewals in 120 days:** Orchard Learning (30 days), Larkspur Retail (50), Cedar Health Partners (75), Sable Energy (91), and Quarry Lane Media (106).
-- **Expansion:** Bluefin Logistics (50 more seats) and Pinecrest Manufacturing (new plant).
-- **Data gaps:** Meridian Analytics (usage and outcomes missing, coverage 50%, no success plan). Riverbend Credit Union (all 4 goals stale: fix the metrics feed). Sable Energy (1 goal with no baseline). Tidewater Clinics' low usage is normal per the notes, so suggest an override.
+  - That makes 5, so Sable Energy misses the cut despite a higher priority than several of these. It neither moved band nor has a red flag.
+- **Renewals in 120 days:** Larkspur Retail (50 days), Cedar Health Partners (75), Sable Energy (91), and Quarry Lane Media (106).
+- **Expansion:** None this week. No account in Sam's book has an expansion signal.
+- **Data gaps:** Riverbend Credit Union (all 4 goals stale: fix the metrics feed). Sable Energy (1 goal with no baseline).
 
 ## Known failure modes
 

@@ -1,0 +1,13 @@
+Record ID,Company name,Company owner,ARR,Renewal date,Licensed seats,Meetings (last 60 days),Last executive meeting,Latest NPS,CSM confidence,Days past due,Open contract flags,Non-renewal notice,Executive sponsor left,Payment dispute,Last week's health index,Expansion notes,CSM notes
+A01,Bluefin Logistics,Priya Example,"$240,000",06/30/2027,200,4,09/11/2026,9,5,0,0,No,No,No,90,Asked for pricing on 50 more seats for the Denver team,Champion presented results at their all-hands
+A02,Cedar Health Partners,Sam Example,"$410,000",12/15/2026,500,1,06/28/2026,5,2,0,1,No,No,No,52,,Exec sponsor has not replied since July. Contract flag: asked about termination for convenience
+A03,Granite Payroll,Sam Example,"$95,000",02/28/2027,80,2,08/22/2026,8,4,0,0,No,Yes,No,81,,VP Finance (sponsor) left in September. Replacement not yet named
+A04,Larkspur Retail,Sam Example,"$60,000",11/20/2026,40,2,08/07/2026,,3,45,0,No,No,Yes,66,,Disputing Q3 invoice over a seat count disagreement
+A05,Meridian Analytics,Priya Example,"$150,000",09/30/2027,120,3,09/06/2026,8,4,0,0,No,No,No,72,,Usage export broken since the SSO migration. No success plan on file
+A06,Orchard Learning,Jordan Example,"$38,000",10/31/2026,25,3,09/16/2026,10,5,0,0,No,No,No,88,,Renewal paperwork sent. Verbal yes from the buyer
+A07,Pinecrest Manufacturing,Priya Example,"$520,000",03/31/2027,600,2,07/23/2026,7,3,0,0,No,No,No,70,Opening a new plant in Q2 and asked about onboarding it,Open escalation on report load times
+A08,Quarry Lane Media,Sam Example,"$72,000",01/15/2027,60,0,,,2,0,0,Yes,No,No,41,,Sent notice of non-renewal on Sept 22. No exec contact on record
+A09,Riverbend Credit Union,Sam Example,"$130,000",05/31/2027,150,2,08/27/2026,9,4,0,0,No,No,No,79,,"One escalation open on an API timeout. Fix scheduled. Success plan not measured since June, when their metrics feed moved to a new warehouse"
+A10,Sable Energy,Sam Example,"$280,000",12/31/2026,300,1,07/31/2026,7,3,15,1,No,No,No,68,,Contract flag: requested a downgrade to 250 seats at renewal
+A11,Tidewater Clinics,Jordan Example,"$55,000",08/31/2027,50,3,09/03/2026,9,4,0,0,No,No,No,74,,Product is used at month-end close only. Low daily usage is normal for this account
+A12,Willow Biotech,Jordan Example,"$190,000",04/30/2027,160,2,08/17/2026,,4,0,0,No,No,No,80,,No survey response this year

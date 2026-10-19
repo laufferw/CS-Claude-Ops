@@ -1,0 +1,36 @@
+{
+  "_comment": "Maps the three sample exports to the accounts format. Copy it and change the column names to match your own exports. See playbooks/connect-your-data.md.",
+  "target": "accounts",
+  "keys": {
+    "crm": "Record ID",
+    "usage": "account_ref",
+    "support": "Organization external ID"
+  },
+  "fields": {
+    "account_id": "crm:Record ID",
+    "account": "crm:Company name",
+    "csm": "crm:Company owner",
+    "arr": {"from": "crm:ARR", "type": "number"},
+    "renewal_date": {"from": "crm:Renewal date", "type": "date", "format": "%m/%d/%Y"},
+    "licensed_seats": {"from": "crm:Licensed seats", "type": "number"},
+    "active_users": {"from": "usage:active_users_90d_avg", "type": "number"},
+    "usage_trend_90d_pct": {"from": "usage:active_users_change_90d", "type": "number"},
+    "meetings_60d": {"from": "crm:Meetings (last 60 days)", "type": "number"},
+    "days_since_exec_contact": {"from": "crm:Last executive meeting", "type": "days_since", "format": "%m/%d/%Y", "blank": "never"},
+    "open_escalations": {"from": "support:Open escalations", "type": "number"},
+    "ttr_trend": {"from": "support:Resolution time trend", "type": "map",
+                  "map": {"improving": "improving", "flat": "flat", "worsening": "worsening"}},
+    "nps_score": {"from": "crm:Latest NPS", "type": "number"},
+    "csm_confidence": {"from": "crm:CSM confidence", "type": "number"},
+    "payment_days_late": {"from": "crm:Days past due", "type": "number"},
+    "contract_flags": {"from": "crm:Open contract flags", "type": "number"},
+    "red_flags": {"type": "flags", "from": {
+      "non_renewal_notice": "crm:Non-renewal notice",
+      "exec_sponsor_departed": "crm:Executive sponsor left",
+      "payment_dispute": "crm:Payment dispute"
+    }},
+    "prior_index": {"from": "crm:Last week's health index", "type": "number"},
+    "expansion_signal": "crm:Expansion notes",
+    "notes": "crm:CSM notes"
+  }
+}

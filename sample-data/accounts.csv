@@ -1,13 +1,13 @@
 account_id,account,csm,arr,renewal_date,licensed_seats,active_users,usage_trend_90d_pct,meetings_60d,days_since_exec_contact,open_escalations,ttr_trend,nps_score,csm_confidence,payment_days_late,contract_flags,red_flags,prior_index,expansion_signal,notes
-A01,Bluefin Logistics,Sam Example,240000,2027-06-30,200,176,12,4,20,0,improving,9,5,0,0,,90,Asked for pricing on 50 more seats for the Denver team,Champion presented results at their all-hands
+A01,Bluefin Logistics,Priya Example,240000,2027-06-30,200,176,12,4,20,0,improving,9,5,0,0,,90,Asked for pricing on 50 more seats for the Denver team,Champion presented results at their all-hands
 A02,Cedar Health Partners,Sam Example,410000,2026-12-15,500,230,-18,1,95,2,worsening,5,2,0,1,,52,,Exec sponsor has not replied since July. Contract flag: asked about termination for convenience
 A03,Granite Payroll,Sam Example,95000,2027-02-28,80,62,0,2,40,0,flat,8,4,0,0,exec_sponsor_departed,81,,VP Finance (sponsor) left in September. Replacement not yet named
 A04,Larkspur Retail,Sam Example,60000,2026-11-20,40,30,-5,2,55,0,flat,,3,45,0,payment_dispute,66,,Disputing Q3 invoice over a seat count disagreement
-A05,Meridian Analytics,Sam Example,150000,2027-09-30,120,,,3,25,0,improving,8,4,0,0,,72,,Usage export broken since the SSO migration. No success plan on file
-A06,Orchard Learning,Sam Example,38000,2026-10-31,25,22,3,3,15,0,flat,10,5,0,0,,88,,Renewal paperwork sent. Verbal yes from the buyer
-A07,Pinecrest Manufacturing,Sam Example,520000,2027-03-31,600,390,-12,2,70,1,worsening,7,3,0,0,,70,Opening a new plant in Q2 and asked about onboarding it,Open escalation on report load times
+A05,Meridian Analytics,Priya Example,150000,2027-09-30,120,,,3,25,0,improving,8,4,0,0,,72,,Usage export broken since the SSO migration. No success plan on file
+A06,Orchard Learning,Jordan Example,38000,2026-10-31,25,22,3,3,15,0,flat,10,5,0,0,,88,,Renewal paperwork sent. Verbal yes from the buyer
+A07,Pinecrest Manufacturing,Priya Example,520000,2027-03-31,600,390,-12,2,70,1,worsening,7,3,0,0,,70,Opening a new plant in Q2 and asked about onboarding it,Open escalation on report load times
 A08,Quarry Lane Media,Sam Example,72000,2027-01-15,60,9,-30,0,never,0,flat,,2,0,0,non_renewal_notice,41,,Sent notice of non-renewal on Sept 22. No exec contact on record
-A09,Riverbend Credit Union,Sam Example,130000,2027-05-31,150,128,4,2,35,1,improving,9,4,0,0,,79,,One escalation open on an API timeout. Fix scheduled. Success plan not measured since June, when their metrics feed moved to a new warehouse
+A09,Riverbend Credit Union,Sam Example,130000,2027-05-31,150,128,4,2,35,1,improving,9,4,0,0,,79,,"One escalation open on an API timeout. Fix scheduled. Success plan not measured since June, when their metrics feed moved to a new warehouse"
 A10,Sable Energy,Sam Example,280000,2026-12-31,300,225,-8,1,62,0,flat,7,3,15,1,,68,,Contract flag: requested a downgrade to 250 seats at renewal
-A11,Tidewater Clinics,Sam Example,55000,2027-08-31,50,18,15,3,28,0,improving,9,4,0,0,,74,,Product is used at month-end close only. Low daily usage is normal for this account
-A12,Willow Biotech,Sam Example,190000,2027-04-30,160,130,2,2,45,0,flat,,4,0,0,,80,,No survey response this year
+A11,Tidewater Clinics,Jordan Example,55000,2027-08-31,50,18,15,3,28,0,improving,9,4,0,0,,74,,Product is used at month-end close only. Low daily usage is normal for this account
+A12,Willow Biotech,Jordan Example,190000,2027-04-30,160,130,2,2,45,0,flat,,4,0,0,,80,,No survey response this year

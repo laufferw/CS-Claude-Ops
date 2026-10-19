@@ -1,0 +1,14 @@
+{
+  "_comment": "Invented numbers. Hours are CSM hours per account per week. Calibrate from a time study of your own team. See frameworks/capacity-model.md.",
+  "segments": [
+    {"name": "Enterprise", "min_arr": 200000, "hours": 3.0},
+    {"name": "Mid-market", "min_arr": 75000, "hours": 1.5},
+    {"name": "SMB", "min_arr": 0, "hours": 0.5}
+  ],
+  "extra_hours": {
+    "at_risk": 2.0,
+    "renewal_within_120_days": 1.0
+  },
+  "hours_per_csm_per_week": 30,
+  "target_utilization_pct": 85
+}

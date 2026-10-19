@@ -16,16 +16,13 @@ import sys
 from datetime import date
 
 from outcome_progress import load_plans
-from score_accounts import score_account
+from score_accounts import ACCOUNT_COLUMNS, score_account
 
 # Fields from the scored row, then fields carried over from the raw row.
 SCORED_FIELDS = ["account_id", "account", "arr", "renewal_date", "days_to_renewal",
                  "band", "index", "overrides", "top_drivers", "goals"]
 RAW_FIELDS = ["red_flags", "open_escalations", "days_since_exec_contact", "contract_flags", "notes"]
-REQUIRED_COLUMNS = ["account_id", "account", "arr", "renewal_date", "licensed_seats", "active_users",
-                    "usage_trend_90d_pct", "meetings_60d", "days_since_exec_contact",
-                    "open_escalations", "ttr_trend", "nps_score", "csm_confidence",
-                    "payment_days_late", "contract_flags", "red_flags", "prior_index", "expansion_signal", "notes"]
+REQUIRED_COLUMNS = ACCOUNT_COLUMNS
 
 
 def main():

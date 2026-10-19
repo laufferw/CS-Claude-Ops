@@ -4,12 +4,69 @@ Small utilities that run on sample data. Standard-library Python 3, nothing to i
 
 | Tool | What it does |
 |---|---|
+| [`import_data.py`](import_data.py) | Turns raw CRM, product, and support exports into the repo's input formats, with a coverage report. See [Connect Your Data](../playbooks/connect-your-data.md) |
+| [`run_week.py`](run_week.py) | Runs every weekly tool for one CSM, or the whole book, into one folder with a `week.md` of next steps |
 | [`score_accounts.py`](score_accounts.py) | Scores accounts with the [Account Health Scoring](../frameworks/account-health-scoring.md) rubric and adds the [Weekly CSM Brief](../prompts/weekly-csm-brief.md#priority) priority |
 | [`outcome_progress.py`](outcome_progress.py) | Measures each success plan goal against its baseline and target, per the [Outcome Library](../frameworks/outcome-library.md#measuring-progress) rules |
 | [`value_report.py`](value_report.py) | Rolls goal statuses and adoption readings up into a book-level report of the value realized, for CS leadership and the [Outcome Review](../playbooks/outcome-review.md) |
 | [`renewal_window.py`](renewal_window.py) | Lists the accounts renewing in the next 120 days with the fields the [Pre-Renewal Check](../prompts/pre-renewal-check.md) needs |
+| [`renewal_forecast.py`](renewal_forecast.py) | Forecasts renewal ARR by quarter per the [Renewal Forecast](../frameworks/renewal-forecast.md), and lists CSM calls that disagree with the data |
+| [`team_rollup.py`](team_rollup.py) | Rolls the book up by CSM: health, risk, renewals, outcomes, data gaps, and workload per the [Capacity Model](../frameworks/capacity-model.md) |
+| [`cs_scorecard.py`](cs_scorecard.py) | Computes the [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md): retention, book health, value realized, forecast, and capacity |
 | [`roi_calculator.py`](roi_calculator.py) | Estimates the first-year ROI of running a CS team with an AI copilot, in three scenarios |
 | [`check_repo.py`](check_repo.py) | Checks the repo is complete: required sections, links and anchors, the README index, skills, and that the tools run. CI runs it on every push |
+
+## Import data
+
+```
+python3 tools/import_data.py sample-data/exports/mapping.json --source crm=sample-data/exports/crm-companies.csv --source usage=sample-data/exports/product-usage.csv --source support=sample-data/exports/support-orgs.csv --as-of 2026-10-01 > accounts.csv
+```
+
+### Purpose
+
+Get real data into the tools without hand-editing CSVs. The procedure, the mapping reference, and where each field usually lives are in [Connect Your Data](../playbooks/connect-your-data.md).
+
+### Inputs
+
+A JSON mapping (the [sample](../sample-data/exports/mapping.json) maps the three sample exports), one `--source NAME=PATH` per source the mapping names, `--as-of` (the date the exports were taken, for fields stored as dates), and optionally `--output`.
+
+### Outputs
+
+The target format (`accounts`, `success-plans`, or `feature-adoption`) on stdout or to `--output`. On stderr: rows written, fields not mapped, coverage for every column, keys missing from secondary sources, and one error line per row left out. It exits non-zero if any row was left out.
+
+Every row is validated the way the tool that reads it would: accounts are scored, goals are measured. The sample exports import to exactly `sample-data/accounts.csv`, and the repo checker tests that.
+
+### Failure modes
+
+- **A row with more fields than the header** (usually an unquoted comma in a note). The import stops with the file and line number.
+- **Duplicate keys** in a source. The import stops: a join can't pick between two rows.
+- **A value that doesn't fit its type or map**, such as a date in the wrong format or a new picklist value. That row is left out with an error naming the field.
+- **Keys missing from a secondary source.** The row is kept with those fields blank, and a warning lists the keys. Meridian Analytics in the sample has no usage row, as its notes say.
+- **Wrong columns mapped.** The import can't tell that "Active users" means something else in your system. Read the coverage report, and check scores with CSMs (step 7 of the playbook).
+
+## Run week
+
+```
+python3 tools/run_week.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --calls sample-data/forecast-calls.csv --csm "Sam Example" --as-of 2026-10-01
+```
+
+### Purpose
+
+One command for a CSM's Monday: every report, filtered to their book, plus a list of what to do with each.
+
+### Inputs
+
+The accounts and success plans; optionally adoption and forecast calls; `--csm`, as named in the `csm` column (omit it for the whole book); `--as-of`; and `--out` (default `out/<as-of>-<csm>`, which git ignores).
+
+### Outputs
+
+A folder holding `scored.csv`, `renewal-window.csv`, `outcome-progress.csv`, `forecast.md`, `value-report.md`, the filtered `inputs/`, and `week.md`: the book's band counts and drops, then numbered next steps naming the skill for each (weekly brief, renewals, adoption plans, success plans, forecast calls). For Sam Example as of 2026-10-01, `week.md` lists three band drops, four renewals, five accounts with adoption gaps, and two plans to repair.
+
+### Failure modes
+
+- **A CSM name that doesn't match the `csm` column.** It exits with "no accounts for CSM". Names must match exactly.
+- **A tool fails partway.** It exits with that tool's error. Files written before the failure stay in the folder, so check the time on `week.md`.
+- **Stale inputs.** It reports on whatever files it's given. Refresh the import first.
 
 ## Health score calculator
 
@@ -125,15 +182,91 @@ python3 tools/check_repo.py
 
 Prints "All checks passed." or a list of every problem, and exits non-zero on failure. It checks:
 
-- **Required sections** by folder. Frameworks need Purpose, Inputs, Outputs, and Failure modes. Prompts need Purpose, Inputs, Prompt, Output format, and Known failure modes. Playbooks need Purpose, Trigger, Inputs, Steps, Outputs, and Failure modes. Specs need Goals, Non-goals, Inputs, Outputs, Safety and trust, and Failure modes. These match the [templates](../templates/README.md)
+- **Required sections** by folder. Guides need Who it's for, What you need, Your week, What you get, Start here, and Failure modes. Frameworks need Purpose, Inputs, Outputs, and Failure modes. Prompts need Purpose, Inputs, Prompt, Output format, and Known failure modes. Playbooks need Purpose, Trigger, Inputs, Steps, Outputs, and Failure modes. Specs need Goals, Non-goals, Inputs, Outputs, Safety and trust, and Failure modes. These match the [templates](../templates/README.md)
 - **Links:** every relative link points at a file that exists, and every `#anchor` at a heading that exists
-- **Index:** the README links to every doc in `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
+- **Index:** the README links to every doc in `guides/`, `frameworks/`, `specs/`, `prompts/`, `playbooks/`, and `essays/`
 - **Skills:** each prompt has exactly one skill, each skill points at a prompt that exists and has valid frontmatter, and the README's skills table lists every skill
 - **Tools:** each tool runs on the sample data, and `sample-data/scored-accounts.csv` matches a fresh scoring run
 - **Outcome IDs:** every `outcome_id` in `sample-data/success-plans.csv` is in the [Outcome Library](../frameworks/outcome-library.md), or is `custom`
 - **Feature names:** every feature in `sample-data/feature-adoption.csv` is named in the library's "Depends on" column
+- **Import round trip:** importing `sample-data/exports` with its mapping reproduces `sample-data/accounts.csv` exactly
+- **CSV shape:** every row of every sample CSV has as many fields as its header
 
 It does not judge whether the content is right. That is still a review.
+
+## Renewal forecast
+
+```
+python3 tools/renewal_forecast.py sample-data/accounts.csv --plans sample-data/success-plans.csv --calls sample-data/forecast-calls.csv --as-of 2026-10-01 --quarters 2
+```
+
+### Purpose
+
+A quarterly renewal forecast that shows where CSM calls and the data disagree. The rules are in the [Renewal Forecast](../frameworks/renewal-forecast.md) framework.
+
+### Inputs
+
+The accounts and success plans, `--calls` (a [calls CSV](../sample-data/README.md#fields-in-forecast-callscsv); optional), `--as-of`, and `--quarters` (default 2, starting with the current quarter).
+
+### Outputs
+
+Markdown: by quarter, the accounts, ARR up for renewal, commit, best case, weighted, lost, and known downgrades; by account, the band, the signal category, the CSM call, expected ARR, and any disagreement; then the calls to review, most optimistic first. For the sample: 2026-Q4 has $788,000 up for renewal, $271,333 commit, and $463,766 weighted, and three calls are above the signals.
+
+### Failure modes
+
+- **No calls file.** Every account uses its signal category, and every account shows "no call".
+- **An invalid call** (not Commit, Best case, At risk, or Lost). The tool exits with the line number.
+- **Calls for accounts not in the book.** Ignored, with a warning listing them.
+- **Placeholder weights.** The 95/70/40 weights are starting points. See the framework's Calibration section.
+
+## Team rollup
+
+```
+python3 tools/team_rollup.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --capacity sample-data/capacity-inputs.json --as-of 2026-10-01
+```
+
+### Purpose
+
+The director's weekly view across CSMs, and the capacity math behind staffing decisions. See the [Capacity Model](../frameworks/capacity-model.md).
+
+### Inputs
+
+The accounts and success plans; optionally `--adoption` (to count proven goals) and `--capacity` (a [capacity JSON](../sample-data/capacity-inputs.json), for workload and utilization); `--as-of`.
+
+### Outputs
+
+Markdown: one row per CSM, sorted by ARR at risk, with accounts, ARR, band counts, band drops, ARR at risk, renewals within 120 days, goals on track, proven goals, accounts with data gaps, and, with capacity, weekly hours and utilization; then a team row. With capacity, a paragraph on the hours the book needs, the CSMs that means, and who is over target or under half of it. For the sample: Sam Example carries $637,000 at risk and 22 of the team's 33 weekly hours.
+
+### Failure modes
+
+- **Blank `csm` values.** Those accounts are grouped as "(unassigned)". Fix them at the source.
+- **Capacity hours that are guesses.** The output looks precise either way. Calibrate with a time study.
+- **Small books.** The sample has 3 to 6 accounts per CSM, so utilization is low. Read it for the imbalance, not the level.
+
+## CS scorecard
+
+```
+python3 tools/cs_scorecard.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --history sample-data/renewal-history.csv --calls sample-data/forecast-calls.csv --capacity sample-data/capacity-inputs.json --as-of 2026-10-01
+```
+
+### Purpose
+
+The monthly one-page scorecard for a VP or COO, computed with the fixed definitions in the [CS Metrics Scorecard](../frameworks/cs-metrics-scorecard.md).
+
+### Inputs
+
+The accounts and `--plans` (required); optionally `--adoption`, `--history` (a [renewal history CSV](../sample-data/README.md#fields-in-renewal-historycsv)), `--calls`, and `--capacity`; `--as-of`. Each section appears only when its inputs are given.
+
+### Outputs
+
+Markdown in five sections: retention (renewal-cohort GRR, NRR, and logo retention over the trailing 12 months, with ARR lost by reason), book health (ARR by band and at risk), value realized (baselined plan coverage, goals met or on track, goals proven, ARR with a proven outcome), the current quarter's forecast, and capacity. Every rate shows its calculation. For the sample: GRR 92.2%, NRR 97.1%, logo retention 85.7%, and 82.6% of ARR on accounts with a proven outcome.
+
+### Failure modes
+
+- **Retention that differs from Finance's.** These are renewal-cohort rates. Reconcile and label them before they reach the board.
+- **History with an unknown outcome.** It exits naming the value. Outcomes must be Renewed, Expanded, Downgraded, or Churned.
+- **Metrics it can't compute.** Time to first value and forecast accuracy need data the sample doesn't hold. The scorecard says so instead of showing a number.
+- **Small windows.** With few renewals in 12 months, one account moves GRR by points. Show the renewal count with the rate.
 
 ## ROI calculator
 

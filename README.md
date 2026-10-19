@@ -4,15 +4,25 @@ Claude-powered Customer Success Operations: frameworks, specs, prompts, and play
 
 This repo is markdown-first. Almost everything here is a document you can read, copy into Claude, or adapt, not code you have to run.
 
+## Start here
+
+| You are | Read | Then run |
+|---|---|---|
+| A CSM | [CSM guide](guides/csm.md) | `run_week.py` for your book, then `/cs-weekly-brief` |
+| CS Ops or RevOps | [CS Ops guide](guides/cs-ops.md) | `import_data.py` on your exports ([Connect Your Data](playbooks/connect-your-data.md)) |
+| A CS director or manager | [Director guide](guides/cs-director.md) | `team_rollup.py` and `renewal_forecast.py`, then `/cs-team-brief` |
+| A VP or COO | [Executive guide](guides/cs-executive.md) | `cs_scorecard.py`, then `/cs-value-narrative` |
+
 ## What's inside
 
 | Folder | What it holds |
 |---|---|
-| [`frameworks/`](frameworks/) | The models: the outcome library, CSM competencies, account health scoring, escalation logic, the account management engine |
+| [`guides/`](guides/) | Start-here guides by role: CSM, CS Ops, director, and executive |
+| [`frameworks/`](frameworks/) | The models: the outcome library, account health scoring, the renewal forecast, capacity, the metrics scorecard, escalation logic, the account management engine, CSM competencies |
 | [`specs/`](specs/) | Design docs for what's worth building: the CSM Copilot, a HubSpot agent interface, and Adoption as a Service |
 | [`prompts/`](prompts/) | Reusable Claude prompts, each with inputs, output format, and known failure modes |
 | [`playbooks/`](playbooks/) | Step-by-step operating procedures with decision logic |
-| [`tools/`](tools/) | Small utilities that run on sample data: a health score calculator, an outcome progress report, a value report, a renewal window extractor, and an ROI calculator |
+| [`tools/`](tools/) | Small utilities, standard-library Python: a data importer, a weekly run, health scoring, outcome progress, a value report, a renewal window, a renewal forecast, a team rollup, a CS scorecard, and an ROI calculator |
 | [`sample-data/`](sample-data/) | A fictional book of accounts for trying the prompts and tools |
 | [`essays/`](essays/) | Opinionated writing on CS Ops and RevOps as disciplines |
 | [`templates/`](templates/) | Starting points for new frameworks, prompts, playbooks, and specs |
@@ -22,10 +32,20 @@ Terms are defined in the [glossary](glossary.md).
 
 ## Index
 
+### Guides
+
+- [Customer Success Manager](guides/csm.md): what to run each week, and the skill for each customer moment
+- [CS Operations and RevOps](guides/cs-ops.md): connecting the data, the weekly and monthly runs, and calibration
+- [CS Director or Manager](guides/cs-director.md): the team rollup, the forecast review, and capacity
+- [CS Executive (VP or COO)](guides/cs-executive.md): the scorecard, the value story, and staffing
+
 ### Frameworks
 
 - [Outcome Library](frameworks/outcome-library.md): the measurable outcomes customers pick for their success plans, and how progress from baseline is measured
 - [Account Health Scoring](frameworks/account-health-scoring.md): the Account Success Index, its signals, weights, and bands
+- [Renewal Forecast](frameworks/renewal-forecast.md): forecast categories from signals, CSM calls, and the calls to challenge
+- [Capacity Model](frameworks/capacity-model.md): weekly CSM hours per account, utilization, and headcount
+- [CS Metrics Scorecard](frameworks/cs-metrics-scorecard.md): fixed definitions for retention, book health, value, forecast, and capacity
 - [Account Management Engine](frameworks/account-management-engine.md): the weekly loop from account data to ranked CSM actions
 - [Escalation Logic](frameworks/escalation-logic.md): triggers, levels, owners, response targets, and root cause tags
 - [CSM Competency Framework](frameworks/csm-competency-framework.md): what good looks like at each CSM level
@@ -49,6 +69,10 @@ Terms are defined in the [glossary](glossary.md).
 - [Customer Email](prompts/customer-email.md): draft a customer email for the CSM to review and send
 - [QBR Outline](prompts/qbr-outline.md): a slide-by-slide QBR outline built on the customer's outcomes
 - [Internal Account Update](prompts/internal-account-update.md): a short status update on one account for managers or leadership
+- [Success Plan Builder](prompts/success-plan-builder.md): draft a success plan from kickoff notes, or repair unmeasured goals
+- [Adoption Plan](prompts/adoption-plan.md): turn adoption gaps into actions by feature
+- [Value Narrative](prompts/value-narrative.md): the story of value delivered, for a customer executive or the board
+- [Team Brief](prompts/team-brief.md): a director's weekly brief across the team
 - [CSM Competency Evaluation](prompts/csm-competency-evaluation.md): evidence from a CSM's work, mapped to the competency framework
 
 ### Playbooks
@@ -63,8 +87,10 @@ The customer lifecycle, in order:
 - [At-Risk Save Plan](playbooks/at-risk-save-plan.md): what goes into the plan for a Red or escalated account
 - [Churn and Offboarding](playbooks/churn-and-offboarding.md): offboarding, exit interviews, and feeding churn back into scoring
 
-Cross-functional:
+Team and cross-functional:
 
+- [Connect Your Data](playbooks/connect-your-data.md): get real CRM, product, and support data into the tools
+- [Weekly Team Review](playbooks/weekly-team-review.md): the director's weekly meeting on risk, forecast calls, and capacity
 - [Outcome Review](playbooks/outcome-review.md): each quarter, take outcome results to Product, Marketing, Sales, and the Outcome Library
 
 Situational:
@@ -74,13 +100,18 @@ Situational:
 
 ### Tools and sample data
 
+- [Data importer](tools/README.md#import-data): turns raw exports into the repo formats, with a coverage report
+- [Run week](tools/README.md#run-week): every weekly report for one CSM in one folder, with next steps
 - [Health score calculator](tools/score_accounts.py): applies the scoring rubric to a CSV of accounts and their success plans
 - [Outcome progress](tools/README.md#outcome-progress): each success plan goal's progress from baseline to target, and whether the features behind it are in use, for QBRs and renewals
 - [Value report](tools/README.md#value-report): the value a book has realized: proven goals, customer-agreed value, and inputs for the Outcome Review
 - [Renewal window](tools/README.md#renewal-window): the accounts renewing in the next 120 days, ready to paste into the Pre-Renewal Check
+- [Renewal forecast](tools/README.md#renewal-forecast): renewal ARR by quarter, with calls that disagree with the data
+- [Team rollup](tools/README.md#team-rollup): health, risk, outcomes, and workload by CSM
+- [CS scorecard](tools/README.md#cs-scorecard): the leadership scorecard
 - [ROI calculator](tools/README.md#roi-calculator): first-year ROI of a CS copilot, with cash return kept separate from time saved
 - [Repo checker](tools/README.md#repo-checker): checks required sections, links, the index, skills, and tools. Runs in CI on every push
-- [Sample accounts](sample-data/README.md): 12 fictional accounts, raw and scored, their success plans and feature adoption, plus sample ROI inputs
+- [Sample accounts](sample-data/README.md): 12 fictional accounts across three CSMs, raw and scored, with success plans, feature adoption, forecast calls, renewal history, capacity settings, raw exports to import, and sample ROI inputs
 
 ### Essays
 
@@ -99,7 +130,7 @@ Situational:
 
 ### With Claude Code
 
-Open this repo in Claude Code and ask in plain language: "write my weekly brief from sample-data/accounts.csv as of 2026-10-01", or "draft a handoff packet from these notes". Claude picks the matching skill, reads the prompt file, and follows it. You can also call a skill by name, such as `/cs-weekly-brief`.
+Open this repo in Claude Code and ask in plain language: "run my week as Sam Example as of 2026-10-01", "write the team brief for the sample team", or "draft a handoff packet from these notes". Claude picks the matching skill, reads the prompt file, and follows it. You can also call a skill by name, such as `/cs-weekly-brief`.
 
 | Skill | Prompt |
 |---|---|
@@ -114,12 +145,18 @@ Open this repo in Claude Code and ask in plain language: "write my weekly brief 
 | `cs-customer-email` | [Customer Email](prompts/customer-email.md) |
 | `cs-qbr-outline` | [QBR Outline](prompts/qbr-outline.md) |
 | `cs-account-update` | [Internal Account Update](prompts/internal-account-update.md) |
+| `cs-success-plan` | [Success Plan Builder](prompts/success-plan-builder.md) |
+| `cs-adoption-plan` | [Adoption Plan](prompts/adoption-plan.md) |
+| `cs-value-narrative` | [Value Narrative](prompts/value-narrative.md) |
+| `cs-team-brief` | [Team Brief](prompts/team-brief.md) |
 | `cs-competency-evaluation` | [CSM Competency Evaluation](prompts/csm-competency-evaluation.md) |
 
 The skills only point at the prompt files, so editing a prompt changes its skill too.
 
 ### By hand
 
+- Start with the guide for your role in [Start here](#start-here). Each has the commands to run on the sample data.
+- To use your own data, follow [Connect Your Data](playbooks/connect-your-data.md).
 - Start with the [Outcome Library](frameworks/outcome-library.md) to see how value is defined and measured, then [Account Health Scoring](frameworks/account-health-scoring.md) to see how scoring works.
 - Run `python3 tools/outcome_progress.py sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01` for each goal's progress from baseline and its adoption reading, ready for a QBR.
 - Run `python3 tools/value_report.py sample-data/accounts.csv --plans sample-data/success-plans.csv --adoption sample-data/feature-adoption.csv --as-of 2026-10-01` for the value the book has realized, and read [Adoption as a Service](specs/adoption-as-a-service.md) for how to sell it.

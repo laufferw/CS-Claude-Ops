@@ -7,7 +7,7 @@ description: "Write a weekly brief for one CSM's book of accounts: top accounts 
 
 1. Read `prompts/weekly-csm-brief.md` in this repository. It is the source of truth for this task. Follow the current file, not your memory of it.
 1. Check the user has given what its **Inputs** section lists. Ask only for what the prompt cannot work without. Leave smaller gaps to the prompt's own rules for missing data.
-1. If the user gives raw account signals (the `sample-data/accounts.csv` format) rather than scored accounts, score them first: `python3 tools/score_accounts.py <file> --as-of <date>`. Ask for the as-of date if it is not clear; do not assume today for sample data.
+1. If the user gives raw account signals (the `sample-data/accounts.csv` format) rather than scored accounts, score them first: `python3 tools/score_accounts.py <file> --plans <success plans file> --as-of <date>`, or run `python3 tools/run_week.py` for one CSM (see `tools/README.md`). Ask for the as-of date if it is not clear; do not assume today for sample data.
 1. Carry out the instructions in its **Prompt** section, with the user's material in place of the placeholders.
 1. Format the result as its **Output format** section says.
 1. Before replying, check the result against its **Known failure modes** and fix anything you find.

@@ -1,0 +1,7 @@
+account_id,csm_call,expected_arr,note
+A06,Commit,38000,Verbal yes from the buyer. Paperwork out
+A04,Best case,60000,Expect the invoice dispute to settle before renewal
+A02,At risk,410000,Sponsor silent since July. Save plan in progress
+A10,Commit,233333,Will renew at 250 seats instead of 300
+A08,Lost,0,Non-renewal notice received
+A03,Best case,95000,New VP Finance meeting booked for October

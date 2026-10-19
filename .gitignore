@@ -2,3 +2,6 @@
 Thumbs.db
 __pycache__/
 *.pyc
+
+# Output folders from tools/run_week.py
+out/

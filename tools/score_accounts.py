@@ -24,6 +24,11 @@ WEIGHTS = {
     "sentiment": 10,
     "commercial": 10,
 }
+# The columns an accounts CSV must have, in the sample-data/accounts.csv order.
+ACCOUNT_COLUMNS = ["account_id", "account", "csm", "arr", "renewal_date", "licensed_seats", "active_users",
+                   "usage_trend_90d_pct", "meetings_60d", "days_since_exec_contact", "open_escalations",
+                   "ttr_trend", "nps_score", "csm_confidence", "payment_days_late", "contract_flags",
+                   "red_flags", "prior_index", "expansion_signal", "notes"]
 MIN_COVERAGE = 70  # percent of total weight that must be scored
 BAND_ORDER = {"Red": 0, "Yellow": 1, "Green": 2}
 RISK_WEIGHT = {"Red": 1.0, "Yellow": 0.5, "Insufficient data": 0.5, "Green": 0.1}
@@ -221,6 +226,7 @@ def score_account(row, as_of, goals=()):
     result = {
         "account_id": row["account_id"],
         "account": row["account"],
+        "csm": row["csm"],
         "arr": int(arr),
         "renewal_date": row["renewal_date"],
         "days_to_renewal": days_to_renewal,
@@ -243,6 +249,18 @@ def score_account(row, as_of, goals=()):
         "notes": row["notes"],
     })
     return result
+
+
+def load_book(accounts_csv, plans_csv, as_of):
+    """Read and score a book. Return (raw rows, scored rows in the same order, plans).
+
+    Raises ValueError for an unreadable plans file or a row that can't be scored.
+    """
+    plans = load_plans(plans_csv, as_of) if plans_csv else {}
+    with open(accounts_csv, newline="") as f:
+        raw = list(csv.DictReader(f))
+    scored = [score_account(row, as_of, plans.get(row["account_id"], [])) for row in raw]
+    return raw, scored, plans
 
 
 def main():

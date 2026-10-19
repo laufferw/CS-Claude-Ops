@@ -1,12 +1,22 @@
 # Sample Data
 
-A fictional book of 12 accounts for one CSM, for trying the prompts and the scoring rubric without touching real data. Every company, person, and number is invented.
+A fictional book of 12 accounts across a team of three CSMs, for trying the prompts and tools without touching real data. Every company, person, and number is invented.
+
+| CSM | Accounts |
+|---|---|
+| Sam Example | Cedar Health Partners, Granite Payroll, Larkspur Retail, Quarry Lane Media, Riverbend Credit Union, Sable Energy |
+| Priya Example | Bluefin Logistics, Meridian Analytics, Pinecrest Manufacturing |
+| Jordan Example | Orchard Learning, Tidewater Clinics, Willow Biotech |
 
 | File | What it is |
 |---|---|
 | [`accounts.csv`](accounts.csv) | Raw signals per account, the input to scoring |
 | [`success-plans.csv`](success-plans.csv) | Success plan goals, one row per goal, with baselines and targets. The source of the Outcomes signal |
 | [`feature-adoption.csv`](feature-adoption.csv) | Adoption of each feature per account, for the [adoption check](../frameworks/outcome-library.md#checking-adoption-behind-each-outcome) |
+| [`forecast-calls.csv`](forecast-calls.csv) | Each CSM's forecast call and expected ARR, for the [renewal forecast](../tools/README.md#renewal-forecast) |
+| [`renewal-history.csv`](renewal-history.csv) | Renewals due in the past, with ARR before and after, for retention in the [scorecard](../tools/README.md#cs-scorecard) |
+| [`capacity-inputs.json`](capacity-inputs.json) | Hours per account and per CSM, for the [Capacity Model](../frameworks/capacity-model.md) |
+| [`exports/`](exports/mapping.json) | Three raw exports (CRM, product usage, support) and the mapping that imports them to `accounts.csv`. See [Connect Your Data](../playbooks/connect-your-data.md) |
 | [`roi-inputs.json`](roi-inputs.json) | Inputs for the [ROI calculator](../tools/README.md#roi-calculator) for a fictional 8-CSM team |
 | [`scored-accounts.csv`](scored-accounts.csv) | The same accounts scored as of 2026-10-01, sorted by priority. The input to the [Weekly CSM Brief](../prompts/weekly-csm-brief.md) |
 
@@ -64,6 +74,37 @@ One row per account and feature. A feature with no row has no adoption data.
 | `feature` | A feature named in the library's "Depends on" column (case doesn't matter) |
 | `adoption_pct` | Share of the feature's target users who used it for real work in the last 30 days |
 
+## Fields in `forecast-calls.csv`
+
+One row per account the CSM has called. Accounts without a row use their signal category.
+
+| Field | Meaning |
+|---|---|
+| `account_id` | Matches `accounts.csv` |
+| `csm_call` | `Commit`, `Best case`, `At risk`, or `Lost` |
+| `expected_arr` | ARR the CSM expects at renewal. Blank means current ARR (zero for Lost) |
+| `note` | One line on why |
+
+## Fields in `renewal-history.csv`
+
+One row per renewal that came due, including accounts that churned and are no longer in `accounts.csv`.
+
+| Field | Meaning |
+|---|---|
+| `account_id`, `account`, `csm` | Identifiers. Churned accounts keep their own IDs |
+| `renewal_date` | When the renewal was due, YYYY-MM-DD |
+| `arr_before`, `arr_after` | ARR going into the renewal, and after it. Zero after for a churn |
+| `outcome` | `Renewed`, `Expanded`, `Downgraded`, or `Churned` |
+| `reason` | A [root cause tag](../frameworks/escalation-logic.md#root-cause-tags) for any churn or downgrade |
+
+## Files in `exports/`
+
+`crm-companies.csv`, `product-usage.csv`, and `support-orgs.csv` look like raw exports: dollar signs in ARR, US-format dates, the last executive meeting as a date rather than days, yes/no columns for red flags, and a usage export that is missing Meridian Analytics. [`mapping.json`](exports/mapping.json) turns them into `accounts.csv` exactly:
+
+```
+python3 tools/import_data.py sample-data/exports/mapping.json --source crm=sample-data/exports/crm-companies.csv --source usage=sample-data/exports/product-usage.csv --source support=sample-data/exports/support-orgs.csv --as-of 2026-10-01
+```
+
 ## What the accounts exercise
 
 | Account | Case |
@@ -83,4 +124,8 @@ One row per account and feature. A feature with no row has no adoption data.
 | Larkspur Retail, Pinecrest Manufacturing | Faster month-end close Not converting at two accounts: a pattern for Product |
 | Larkspur Retail, Tidewater Clinics | Unexplained progress: on track while the features behind the goal are lightly used |
 | Orchard Learning | No adoption data, so its goals can't be proven |
+| Sable Energy, Larkspur Retail, Granite Payroll | Forecast calls above what the signals support |
+| Pinecrest Manufacturing | Renewing next quarter with no forecast call |
+| Aspen Freight, Cobalt Studios | Churned in the last 12 months: in the renewal history, not the book |
+| Dogwood Partners | Churned before the 12-month window, so retention leaves it out |
 | Bluefin Logistics, Orchard Learning, Willow Biotech | Healthy accounts, each with a goal already Met |

@@ -81,6 +81,17 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **Value report** | The book-level roll-up of goal statuses, proven goals, and customer-agreed value. See the [value report tool](tools/README.md#value-report) |
 | **Outcome Review** | The quarterly review that takes outcome results to Product, Marketing, Sales, and the library. See [Outcome Review](playbooks/outcome-review.md) |
 | **Adoption as a Service** | A paid CS offering that takes a customer from adoption to measured outcomes. See the [spec](specs/adoption-as-a-service.md) |
+| **Renewal forecast** | Renewal ARR by quarter in four categories: Commit, Best case, At risk, Lost. See [Renewal Forecast](frameworks/renewal-forecast.md) |
+| **CSM call** | The forecast category and expected ARR a CSM gives an account each week |
+| **Call above signals** | A CSM call more optimistic than the account's data supports. Reviewed first in the [Weekly Team Review](playbooks/weekly-team-review.md) |
+| **Weighted forecast** | Expected ARR x category weight, summed over a quarter's renewals |
+| **Workload** | The weekly CSM hours a book needs under the [Capacity Model](frameworks/capacity-model.md) |
+| **Utilization** | Workload divided by the hours a CSM has for account work |
+| **Gross renewal rate (GRR)** | ARR kept from renewals due in a period, ignoring expansion, divided by ARR up for renewal. See [CS Metrics Scorecard](frameworks/cs-metrics-scorecard.md) |
+| **Net renewal rate (NRR)** | ARR after renewal, including expansion, divided by ARR up for renewal |
+| **Logo retention** | Accounts that renewed divided by accounts due |
+| **Mapping** | A JSON file that tells [`import_data.py`](tools/README.md#import-data) where each field comes from in raw exports. See [Connect Your Data](playbooks/connect-your-data.md) |
+| **Coverage report** | What the importer prints: how many rows have a value for each field |
 | **Value history** | Goals an account has met and retired from its success plan. Evidence for renewal, no longer scored |
 | **Go-live** | The point at which the customer starts using the product for real work |
 | **First value** | The first measured improvement on a success plan goal, from its baseline. Expected within 90 days of close (see [Onboarding](playbooks/onboarding.md)) |
