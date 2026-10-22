@@ -100,7 +100,7 @@ Terms are defined in the [glossary](glossary.md).
 - [Account Health Scoring](frameworks/account-health-scoring.md): the Account Success Index, its signals, weights, and bands
 - [Renewal Forecast](frameworks/renewal-forecast.md): forecast categories from signals, CSM calls, and the calls to challenge
 - [Capacity Model](frameworks/capacity-model.md): weekly CSM hours per account, utilization, and headcount
-- [CS Metrics Scorecard](frameworks/cs-metrics-scorecard.md): fixed definitions for retention, book health, value, forecast, and capacity
+- [CS Metrics Scorecard](frameworks/cs-metrics-scorecard.md): fixed definitions for retention, book health, value, forecast, and capacity, plus a scale segment section for books run one-to-many
 - [CS Charter and Ownership Map](frameworks/cs-charter.md): what CS owns, what it doesn't, and who decides what across functions
 - [AI Usage Policy](frameworks/ai-usage-policy.md): which customer data may go into AI tools, approved tools, human review, and logging
 - [Account Management Engine](frameworks/account-management-engine.md): the weekly loop from account data to ranked CSM actions

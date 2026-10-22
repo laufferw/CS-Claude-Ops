@@ -111,6 +111,23 @@ All defined in [Escalation Logic](frameworks/escalation-logic.md).
 | **Notice period** | How far ahead of the renewal date either side must give notice to change or end the contract |
 | **Exit interview** | A conversation with a churned customer's decision-maker about why they left |
 
+## Scale segment
+
+Used by the [scale segment section](frameworks/cs-metrics-scorecard.md#scale-segment) of the scorecard.
+
+| Term | Meaning |
+|---|---|
+| **Scale segment** | Accounts covered one-to-many by a pooled team or program owner, with no CSM owning each one |
+| **Gross dollar retention (DRR)** | ARR kept, ignoring expansion, from accounts on the book 12 months ago, divided by their ARR then. Counts contraction between renewals, which GRR misses |
+| **Active builder** | A user who did an agreed build action in the product in the last 28 days. Logins don't count |
+| **Net active builders** | Active builders at period end minus at period start, across the book |
+| **Load-bearing app** | An app the customer depends on: used by at least 3 people besides its builder, or run on a schedule, in each of the last 4 weeks |
+| **Learning path** | A sequence of training a user starts and finishes, tracked in the learning platform |
+| **Holdout** | A random share of eligible accounts kept out of a campaign or program, so its result can be compared with doing nothing |
+| **Re-engagement program** | A program for accounts with a usage trend break or no active builders for 30 days, aimed at getting them back to active |
+| **Motion** | A repeatable piece of CS work, such as a campaign, a session format, a template, or a play |
+| **Graduated motion** | A motion first run on one book that the CS manager adopts as a team standard, on evidence it beat its holdout |
+
 ## Customer signals
 
 | Term | Meaning |
